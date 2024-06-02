@@ -130,17 +130,22 @@ def getrank(id):
         return 1
 def getstat():
     global ranktype,getpoints,leaderboard
-    #print('Loading...')
-    try:
-            f = requests.get(beatmapapi+'s/'+str(beatmapsetid),headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'},timeout=3)
-            #print(f.text)
-            f=f.json()['found']
+    x=1
+    success=0
+    while x<4 and not success:
+        try:
+            tmp=''
+            with requests.get(beatmapapi+'s/'+str(beatmapsetid),headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'},timeout=3, stream=True) as f:
+                tmp+=f.text
+            f=json.loads(tmp)['found']
             f=f['ranked']
 #            print(f)
             ranktypetmp=int(f)
-    except Exception as error:
-        print(error,'(Returning as Unranked)')
-        ranktypetmp=-99
+            success=1
+        except Exception:
+            #print(error,'(Returning as Unranked)')
+            x+=1
+            ranktypetmp=-99
 #    if len(leaderboard)>0:
 #        print(f.json(),'> Leaderboard')
 #    else:
