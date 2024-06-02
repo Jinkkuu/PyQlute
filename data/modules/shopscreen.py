@@ -8,7 +8,9 @@ shopbutton2=0
 shopscroll=0
 bgs=pygame.Surface((0,0))
 downloadqueue=[]
+progress=0
 srank=0
+maxsentry=10
 search=['','']
 def reload_background():
     global bgs
@@ -20,7 +22,7 @@ def reload_background():
     bgs=pygame.transform.scale(bgst, (350,180))
 
 def shop_refresh(usecached):
-    global sbt,sentrynf,sref,serr,sentry
+    global sbt,sentrynf,sref,serr,sentry,progress
     serr=0
     try:
         if not usecached:
@@ -29,25 +31,27 @@ def shop_refresh(usecached):
                 alt='?query='+str(search[0])
             else:
                 alt=''
-            f = requests.get(beatmapapi+'search'+alt+'?limit=100',headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'},timeout=3)
-            f=f.json()['found']
-            sentrynf=f
-        tmp=[]
-        tick=0
+            sentrynf=[]
+            tick=0
+            for progress in range(0,maxsentry+1): 
+                try:
+                    f = requests.get(beatmapapi+'search'+alt+'?limit=10&offset='+str(progress*10),headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'},timeout=3)
+                    f=f.json()['found']
+                    for a in f:
+                        if a['beatmaps'][0]['mode']=='mania':
+                           sentrynf.append(a)
+                except Exception as err:
+                    print(err)
         sentry=[]
+        tmp=[]
         for a in sentrynf:
-            if a['beatmaps'][0]['mode']=='mania':
-                #print(a['artist']+' - '+a['title']+' - '+a['beatmaps'][0]['mode'])
-                if getrank(a['ranked'])==srank:
-                    sentry.append(a)
-                    tmp.append(a['artist']+' - '+a['title'])
-            else:
-                #print('Not a mania map',time.time(),a['artist']+' - '+a['title']+' - '+a['beatmaps'][0]['mode'])
-                del sentrynf[tick]
-            tick+=1
+            if getrank(a['ranked'])==srank:
+                sentry.append(a)
+                tmp.append(a['artist']+' - '+a['title'])
         sbt=tmp
         sref=0
     except Exception as err:
+        print(err,'> Store')
         serr=1
 def downloads():
     global sysbutton,dq,dqs,serr
@@ -86,7 +90,14 @@ def shopdirect():
         textbox((0,80,300),20,text=search[0],center=True,min=True,bg_colour=hcol[0])
         shopbutton2=menu_draw(((0,100,100,20),(300,80,100,20),(100,100,100,20),(200,100,100,20),(300,100,100,20),), ('Refresh','Search','Ranked','Unranked','Special'),settings=True,selected_button=srank+3)
         if sref:
-            render('text', text='Loading...', arg=((20,20), forepallete,'grade','center'),relative=(400*((w/800)-1),100,400,h-100))
+            loading.update()
+            render('rect', arg=((25+(loading.value*(w-485)),h//2-25,40,40), forepallete, False),borderradius=int(40-(loading.value*25)))
+            render('rect', arg=((27+(loading.value*(w-485)),h//2-22,35,35), (0,0,0), False),borderradius=int(35-(loading.value*25)))
+            if progress:
+                te=str(int((progress/maxsentry)*100))+'%'
+            else:
+                te='Loading...'
+            render('text', text=te, arg=((20,20), forepallete,'grade','center'),relative=(400*((w/800)-1),100,400,h-100))
         if len(sb):
             try:
                 t=-20

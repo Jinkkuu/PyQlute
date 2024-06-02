@@ -172,7 +172,7 @@ def drawRhomboid(surf, color, x, y, width, height, offset, thickness=0):
         (x-offset, y + height)]
     pygame.draw.polygon(surf, color, points, thickness)
 def fullscreenchk():
-    global w, h, w, h,background,fieldpos,modsv, beatani,diffani,screen,reload,transani,modsani, button_size_width, firstcom,tal,keymap,fonts,volani,noteheight,logopos,bladeani
+    global w, h, w, h,background,fieldpos,modsv,loading, beatani,diffani,screen,reload,transani,modsani, button_size_width, firstcom,tal,keymap,fonts,volani,noteheight,logopos,bladeani
     reload=False
     if not settingskeystore['fullscreen']:
         if not firstcom:
@@ -217,6 +217,8 @@ def fullscreenchk():
         modsani=[Tween(begin=0, end=1,duration=350,easing=Easing.CUBIC,easing_mode=EasingMode.OUT),0]
         modsani[0].start()
         transani=[Tween(begin=0, end=100,duration=150,easing=Easing.CUBIC,easing_mode=EasingMode.OUT,boomerang=True),0]
+        loading=Tween(begin=0, end=1,duration=500,easing=Easing.CUBIC,easing_mode=EasingMode.OUT,boomerang=True,loop=True)
+        loading.start()
         logopos.start()
         volani=Tween(begin=volvisual, end=vol,duration=250,easing=Easing.CUBIC,easing_mode=EasingMode.OUT)
         volani.start()
