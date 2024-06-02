@@ -29,7 +29,7 @@ jobs:
         pip install pyinstaller pygame tweener requests
     - name: Build with PyInstaller
       run: |
-        pyinstaller --hidden-import=pygame --hidden-import=tweener --onefile --name qlute --add-data "data:data" launcher.py
+        pyinstaller --hidden-import=pygame --noconsole --hidden-import=tweener --onefile --name qlute --add-data "data:data" launcher.py
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
