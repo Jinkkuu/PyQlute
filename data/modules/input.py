@@ -99,6 +99,16 @@ def get_input():
                                 notification('Qluta',desc='what u doin >:^')
                         threading.Thread(target=reloadprofile).start()
                         change=True
+                elif logbutton==2:
+                    if sys.platform=='win32':
+                        os.startfile(settingskeystore['apiurl']+'signup')
+                    elif sys.platform=='darwin':
+                        os.system('open '+settingskeystore['apiurl']+'signup')
+                    else:
+                        try:
+                            os.system('xdg-open '+settingskeystore['apiurl']+'signup')
+                        except OSError:
+                            pass
 
                 if sysbutton:
                     transitionprep(1)

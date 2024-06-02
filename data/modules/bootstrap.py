@@ -351,6 +351,10 @@ nettick=0
 timetaken=0
 welcometext='Welcome to '+str(gamename)
 logbox=[('Started Engine',time.time())]
+def check_gameversion():
+    ver=requests.get('https://github.com/Jinkkuu/PyQlute/releases/latest/download/RELEASE',timeout=10).text.rstrip('\n') # type: ignore
+    if gamever!=ver and gamever!='0.0.0':
+        notification('Notice',desc='Qlute '+str(ver)+' is out!, check on itch.io to update!')
 def gamesession():
     while True:
         main()
@@ -381,6 +385,7 @@ if __name__  ==  "__main__":
             icons[a]=(pygame.image.load(resource_path(syspath+'icons/'+a))) # Icons!
         programIcon = pygame.image.load(resource_path(syspath+'icon.png'))
         threading.Thread(target=ondemand).start()
+        threading.Thread(target=check_gameversion).start()
         #threading.Thread(target=loginwindow).start()
         #for a in range(1,3):
             #threading.Thread(target=gamesession).start(
