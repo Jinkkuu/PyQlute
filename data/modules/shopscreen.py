@@ -35,7 +35,7 @@ def shop_refresh(usecached):
             tick=0
             for progress in range(0,maxsentry+1): 
                 try:
-                    f = requests.get(beatmapapi+'search'+alt+'?limit=10&offset='+str(progress*10),headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'},timeout=3)
+                    f = requests.get(beatmapapi+'search'+alt+'?limit=50&offset='+str(progress*50),headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'},timeout=3)
                     f=f.json()['found']
                     for a in f:
                         if a['beatmaps'][0]['mode']=='mania':
@@ -103,6 +103,9 @@ def shopdirect():
             render('text', text=te, arg=((20,20), forepallete,'grade','center'),relative=(400*((w/800)-1),100,400,h-100))
         if len(sb):
             scrollbar((0,120),(10,h-180),search=shopscroll//80,length=len(sb),colour=hcol[0])
+        else:
+            render('text', text='o-o', arg=((20,20), forepallete,'grade','center'),relative=(400*((w/800)-1),100,400,h-100))
+
         if sbid:
             crok=0
             entry=sentry[sbid-1]
