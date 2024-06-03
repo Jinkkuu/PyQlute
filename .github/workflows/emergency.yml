@@ -82,11 +82,10 @@ jobs:
       run: echo "::set-output name=date::$(date +'%Y.%m.%d')"
     - name: Make changelog
       run: |
-       TZ="America/New_York"
-       current_date=$(date +"%Y-%m-%d")
-       past_date=$(date -d '-1 day' +"%Y-%m-%d")
+       current_date=$(date -u +"%Y-%m-%d")
+       past_date=$(date -u -d '-1 day' +"%Y-%m-%d")
        echo "# What's Changed">CHANGELOG.md
-       commits=$(git log --since="$past_date 00:00:00" --until="$current_date 00:00:00" --format='### %h : %s (By @%cn)' >>CHANGELOG.md
+       echo $(git log --since="$past_date 00:00:00" --until="$current_date 00:00:00" --format='### %h : %s (By @%cn)') >>CHANGELOG.md
     - name: release
       uses: actions/create-release@v1
       id: create_release
