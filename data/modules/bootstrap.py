@@ -177,7 +177,11 @@ def main():
         alttitle=beattitle
     else:
         alttitle=''
-    pygame.display.set_caption(gamename+gs+' '+str(gamever)+' '+alttitle)
+    if gamever=='0.0.0':
+        gameverstr=''
+    else:
+        gameverstr=gamever
+    pygame.display.set_caption(gamename+gs+' '+gamever+' '+alttitle)
     if not firstcom:
         pygame.display.set_icon(programIcon)
     if activity in (9,10):

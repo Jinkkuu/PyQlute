@@ -305,15 +305,22 @@ def ondemand():
             nettick=time.time()
             for a in downloadqueue:
                 try:
-                    r=requests.get(a[1])
-                    filename=r.headers['content-disposition']
-                    filename = re.findall("filename=(.+)", filename)[0]
-                    filename = unquote(filename).replace('"','')
-                    with open(downpath+filename+'.tmp','wb') as tmp:
-                        tmp.write(r.content)
-                    os.rename(downpath+filename+'.tmp',downpath+filename)
+                    with requests.get(a[1],headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'},timeout=3, stream=True) as r:
+                        filename=r.headers['content-disposition']
+                        filename = re.findall("filename=(.+)", filename)[0]
+                        filename = unquote(filename).replace('"','')
+                        block_size=4096
+                        total_size = int(r.headers.get("content-length", 0))//block_size
+                        tick=0
+                        with open(downpath+filename+'.tmp','wb') as f:
+                            for chunk in r.iter_content(chunk_size=block_size): 
+                                tick+=1
+                                a[2]=round(tick/total_size*100,2)
+                                f.write(chunk)
+                        os.rename(downpath+filename+'.tmp',downpath+filename)
                 except Exception as err:
                     print(err)
                 downloadqueue.remove(a)
+
 
         time.sleep(1/10)

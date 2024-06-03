@@ -58,8 +58,11 @@ def downloads():
     if activity==12:
         dq=[]
         dqu=[]
+        dqh=''
         for a in downloadqueue:
-            dqu.append('Downloading - '+str(a[0]))
+            if str(a[2])!='Queued':
+                dqh='%'
+            dqu.append(str(a[2])+dqh+' - '+str(a[0]))
         render('rect', arg=((0,100,w,h-160), hcol[2], False))
         for a in range(1,len(downloadqueue)+1):
             dq.append(((w//2)-200,shopscroll+100+(80*(a-1)),400,80))
