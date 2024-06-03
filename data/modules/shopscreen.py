@@ -102,7 +102,7 @@ def shopdirect():
                 te='Loading...'
             render('text', text=te, arg=((20,20), forepallete,'grade','center'),relative=(400*((w/800)-1),100,400,h-100))
         if len(sb):
-            scrollbar((0,120),(10,h-180),search=shopscroll//80,length=len(sb),color=hcol[0])
+            scrollbar((0,120),(10,h-180),search=shopscroll//80,length=len(sb),colour=hcol[0])
         if sbid:
             crok=0
             entry=sentry[sbid-1]
