@@ -58,7 +58,7 @@ for a in paths:
 keyspeed=6
 keyspeedb=13360/keyspeed
 getpoints=0
-debugmode=True
+debugmode=False
 fps=0
 update=False
 offset=20,20
@@ -181,7 +181,7 @@ def main():
         gameverstr=''
     else:
         gameverstr=gamever
-    pygame.display.set_caption(gamename+gs+' '+gamever+' '+alttitle)
+    pygame.display.set_caption(gamename+gs+' '+gameverstr+' '+alttitle)
     if not firstcom:
         pygame.display.set_icon(programIcon)
     if activity in (9,10):

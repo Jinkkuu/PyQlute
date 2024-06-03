@@ -9,7 +9,7 @@ def get_creation_time(item):
     item_path = os.path.join(gamepath, item)
     return os.path.getctime(item_path)
 def beatmapload():
-    global p2,p1,beatnowmusic,gc,speed,fbt,gametime,beatani,beatmaps,diffani,beattitle,fullbeatmapname,objects,diffp,betaperf,reloaddatabase,maxperf,background,ranktype,diff,diffmode,pref,level,ismusic,bpm,realid,prestart,beatsel,tick,lastms,combotime,songoffset,metadata
+    global p2,p1,beatnowmusic,gc,speed,fbt,gametime,bp1,bp2,beatani,beatmaps,diffani,beattitle,fullbeatmapname,objects,diffp,betaperf,reloaddatabase,maxperf,background,ranktype,diff,diffmode,pref,level,ismusic,bpm,realid,prestart,beatsel,tick,lastms,combotime,songoffset,metadata
     if reloaddatabase:
         p1=[]
         p2=[]
@@ -112,6 +112,13 @@ def beatmapload():
                         diffp.append((objects,difftmp))
                     diffp=sorted(diffp, key=lambda x: x[0])
                     diff=diffp
+                    bp1=[]
+                    bp2=[]
+                    a=0
+                    for b in diff: # type: ignore
+                        bp1.append((((cardsize//2),size,cardsize,size))) # type: ignore
+                        bp2.append(str(b[1]))
+                        a+=1
 #                    print(diffp)
                     pygame.mixer.music.load(gamepath+fbt+'/'+music)
                     pygame.mixer.music.play(-1)

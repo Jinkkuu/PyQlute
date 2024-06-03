@@ -42,6 +42,13 @@ def beatmenu():
                 screen.blit(background, (0,0)) # type: ignore
         except Exception:
             background=0
+        if activity==3:
+            idc=0
+            idcb=len(p2)
+        else:
+            idc=1
+            idcb=len(bp2)
+        scrollbar((w-10,54),(10,h-118),search=-cross[idc],length=idcb)
         a=0
         tmp=(h//60)//2 # type: ignore
         if beatmaps>0: # type: ignore
@@ -51,20 +58,11 @@ def beatmenu():
             else:
                 gotext='->'
         if activity==7:
-            soup=1
             sel=diffcon
-            bp1=[]
-            bp2=[]
-            a=0
-            for b in diff: # type: ignore
-                bp1.append(((w//2-(cardsize//2),(h//2-size)-((size+5)*cross[1])+((size+5)*(a)),cardsize,size))) # type: ignore
-                bp2.append(str(b[1]))
-                a+=1
-            button=menu_draw(bp1,bp2,selected_button=sel+1,startlimit=int(cross[1])-tmp+1,endlimit=int(cross[1])+tmp,styleid=1) # type: ignore
+            button=menu_draw(bp1,bp2,beatmenu=True,selected_button=sel+1,startlimit=int(cross[1])-tmp-1,endlimit=int(cross[1])+tmp+2,crossid=1,styleid=1) # type: ignore
         else:
-            soup=0
             sel=beatsel
-            button=menu_draw(p1,p2,beatmenu=True,selected_button=sel+1,startlimit=int(cross[0])-tmp-1,endlimit=int(cross[0])+tmp+2,styleid=1) # type: ignore
+            button=menu_draw(p1,p2,beatmenu=True,selected_button=sel+1,startlimit=int(cross[0])-tmp-1,endlimit=int(cross[0])+tmp+2,crossid=0,styleid=1) # type: ignore
         if beatmaps==0: # type: ignore
             crok=999
         else:

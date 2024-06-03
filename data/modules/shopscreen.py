@@ -102,13 +102,7 @@ def shopdirect():
                 te='Loading...'
             render('text', text=te, arg=((20,20), forepallete,'grade','center'),relative=(400*((w/800)-1),100,400,h-100))
         if len(sb):
-            try:
-                t=-20
-                t+=(-shopscroll/-(80*(len(sbt)-1)))*((h-180)-((h-180)//len(sb)))
-                render('rect', arg=((0,120,10,h-180), (80,80,80), False))
-                render('rect', arg=((0,100-t,10,(h-180)//len(sb)), hcol[0], False))
-            except Exception:
-                pass
+            scrollbar((0,120),(10,h-180),search=shopscroll//80,length=len(sb),color=hcol[0])
         if sbid:
             crok=0
             entry=sentry[sbid-1]

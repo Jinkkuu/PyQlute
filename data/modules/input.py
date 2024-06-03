@@ -206,14 +206,18 @@ def get_input():
                                             preparemap()
                 elif event.button==4:
                         if not activity==7:
-                            cross[0]-=1
+                            if cross[0]!=0:
+                                cross[0]-=1
                         else:
-                            cross[1]-=1
+                            if cross[1]!=0:
+                                cross[1]-=1
                 elif event.button==5:
                         if not activity==7:
-                            cross[0]+=1
+                            if cross[0]!=len(p2)-1:
+                                cross[0]+=1
                         else:
-                            cross[1]+=1
+                            if cross[1]!=len(bp2)-1:
+                                cross[1]+=1
 
 
         if event.type  ==  pygame.KEYDOWN:

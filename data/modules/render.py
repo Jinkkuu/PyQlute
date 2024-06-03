@@ -55,7 +55,7 @@ def render(type, arg=(0, 0) ,  text='N/A', bordercolor=forepallete, borderradius
         print(error)
         exit()
         crash(str(error)+' (renderer)')
-def menu_draw(instruction, text=None,showicon=False,bradius=10,settings=False,beatmenu=0,ishomemenu=False,ignoremove=False, istextbox=False, selected_button=0,enabled_button=[],enable_border=False, hidebutton=False,bigmode=False,startlimit=1,endlimit=None,styleid=1,isblade=False,icon=0):
+def menu_draw(instruction, text=None,showicon=False,crossid=0,bradius=10,settings=False,beatmenu=0,ishomemenu=False,ignoremove=False, istextbox=False, selected_button=0,enabled_button=[],enable_border=False, hidebutton=False,bigmode=False,startlimit=1,endlimit=None,styleid=1,isblade=False,icon=0):
     global osam
     if endlimit==None:
         endlimit=len(instruction)
@@ -86,7 +86,7 @@ def menu_draw(instruction, text=None,showicon=False,bradius=10,settings=False,be
             tmp=pygame.Rect(tmp[0],tmp[1],tmp[2],tmp[3])
         else:
             size=65
-            tmp=pygame.Rect(w//2-tmp[0],(h//2)-tmp[1]-((size+5)*cross[0])+((size+5)*(a-1)),tmp[2],tmp[3])
+            tmp=pygame.Rect(w//2-tmp[0],(h//2)-tmp[1]-((size+5)*cross[crossid])+((size+5)*(a-1)),tmp[2],tmp[3])
         if tmp.collidepoint(pygame.mouse.get_pos()) and not select:
             select=True
             buttcolour = (buttonc[0]+10,buttonc[1]+10,buttonc[2]+10)
@@ -217,7 +217,7 @@ def fullscreenchk():
         modsani=[Tween(begin=0, end=1,duration=350,easing=Easing.CUBIC,easing_mode=EasingMode.OUT),0]
         modsani[0].start()
         transani=[Tween(begin=0, end=100,duration=150,easing=Easing.CUBIC,easing_mode=EasingMode.OUT,boomerang=True),0]
-        loading=Tween(begin=0, end=1,duration=500,easing=Easing.CUBIC,easing_mode=EasingMode.OUT,boomerang=True,loop=True)
+        loading=Tween(begin=0, end=1,duration=1000,easing=Easing.BOUNCE,easing_mode=EasingMode.OUT,boomerang=True,loop=True)
         loading.start()
         logopos.start()
         volani=Tween(begin=volvisual, end=vol,duration=250,easing=Easing.CUBIC,easing_mode=EasingMode.OUT)
