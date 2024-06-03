@@ -1,5 +1,5 @@
 def get_input():
-    global keys,logintext,textboxid,bgs,reloaddatabase,activity,shopscroll,search,shopref,usecache,srank,modsv,sb,sbt,modsani,sbid,notewidth,noteheight,customid,successfulsignin,issigned,modshow,setupid,gobutton,useroverlay,replaymen,beatnowmusic,beatsel,beatsel,diffani,diffcon,beatnowmusic,change,setbutton,settingskeystore,fpsmode,firstcom,accounts
+    global keys,logintext,textboxid,bgs,reloaddatabase,debugmode,activity,shopscroll,search,shopref,usecache,srank,modsv,sb,sbt,modsani,sbid,notewidth,noteheight,customid,successfulsignin,issigned,modshow,setupid,gobutton,useroverlay,replaymen,beatnowmusic,beatsel,beatsel,diffani,diffcon,beatnowmusic,change,setbutton,settingskeystore,fpsmode,firstcom,accounts
     for event in pygame.event.get():
         if event.type  ==  pygame.QUIT:
             stopnow()
@@ -217,6 +217,8 @@ def get_input():
 
 
         if event.type  ==  pygame.KEYDOWN:
+            if event.key  ==  pygame.K_F5:
+                debugmode=not debugmode
             if event.key  ==  pygame.K_MINUS and not activity==10:
                 volchg(0)
             elif event.key  ==  pygame.K_EQUALS and not activity==10:
