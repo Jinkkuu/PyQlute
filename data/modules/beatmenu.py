@@ -88,7 +88,8 @@ def beatmenu():
                         col=forepallete # type: ignore
                     leadpos=(10-t,(10+((h//2)-(s//2)))+(60*c),220,50) # type: ignore
                     render('rect', arg=(leadpos, blend(opacity,50), False),borderradius=10) # type: ignore
-                    render('text', text=str('#'+str(c+1)+' '+a["username"]), arg=((17-t,leadpos[1]+5), col)) # type: ignore
+                    render('text', text=str('#'+str(c+1)+' '+a["username"][:10]), arg=((17-t,leadpos[1]+5), col)) # type: ignore
+                    render('text', text=a['mods'], arg=((218-t,leadpos[1]+9), col,'min','rtl')) # type: ignore
                     render('text', text=format(int(a['score']),',')+' - '+str(int(a["points"]))+'pp ('+str(int(a['combo']))+'x) '+timeform(int(time.time()-a['time'])), arg=((17-t,leadpos[1]+30), col,'min')) # type: ignore
     #                   render('text', text=, arg=((17,leadpos[1]+28), col,'min'))
                      #(((hits[0]*perfbom)+(hits[1]*(perfbom/2))+(hits[2]*(perfbom/3)))*scoremult)-(hits[3]*(perfbom*2))
