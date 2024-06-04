@@ -211,23 +211,29 @@ def game():
         if settingskeystore['leaderboard'] and len(leaderboard)>0:
             players=1
             t=1
-            current={'username': settingskeystore['username'],'score': score,'points': perf,'current': True}
+            if not modsen[0]:
+                user=settingskeystore['username']
+            elif settingskeystore['username']==None:
+                user='Guest'
+            else:
+                user='Qlutina'
+            current={'username': user,'score': score,'points': perf,'current': True}
             tmpl = leaderboard + [current]
             ranking=51
             #playboard[len(playboard)-1]=(username,(255,255,0),int(end*1000000))
             for tmp in sorted(tmpl, key=lambda x: x['points'],reverse=True):
-                if tmp['username']==settingskeystore['username'] and "current" in tmp:
+                if tmp['username'] in (settingskeystore['username'],user) and "current" in tmp:
                     pcolor=blend(opacity,50)
                     pcol=(252, 255, 166)
-                elif tmp['username']==settingskeystore['username']:
+                elif tmp['username'] in (settingskeystore['username'],user):
                     pcolor=blend(opacity,20)
                     pcol=(166, 207, 255)
                 else:
                     pcol=forepallete
                     pcolor=blend(opacity,20)
-                if tmp['username']==username:
+                if tmp['username']==user:
                     ranking=players
-                if players<5 or players==ranking:
+                if players<=5 or players==ranking:
                     render('rect', arg=((-30,65+(50*(t)),225,50), pcolor, False),borderradius=10)
                     #render('text',text='#'+str(players),arg=((20, 80+(50*(t))),(pcolor[0]-20,pcolor[1]-20,pcolor[2]-20)))
                     render('text',text=tmp['username'],arg=((20, 70+(50*(t))),pcol)) #'#'+str(players)+' '+
