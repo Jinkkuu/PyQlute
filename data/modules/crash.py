@@ -1,6 +1,7 @@
 def crash(text):
     bypass=0
     print(text)
+    pygame.mouse.set_visible(True)
     while not bypass:
         fullscreenchk()
         buttonm=((w//4+10, h//4+h//2-40, w//4-20, 30), (w//4+w//2-w//4-5, h//4+h//2-40, w//4-5, 30), )
