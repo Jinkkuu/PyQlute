@@ -5,7 +5,6 @@ bgdefaultcolour=(45,47,100)
 mainmenucolor=(67, 124, 191),(92, 90, 145),(179, 72, 62)
 dcolour=(40,40,40) # default colour for top bar and blades~
 accounts=0
-osam=0
 def mainmenu():
     global debugmode, activity,beatnowmusic, totperf,totscore,msg,menubutton,topbutton,accounts,bladeani,background
     if not bladeani[1] and activity==1:

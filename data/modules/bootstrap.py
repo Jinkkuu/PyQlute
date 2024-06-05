@@ -171,10 +171,8 @@ def notification(title,desc=''):
 def main():
     global fps, activity,oneperf,change,upd,noteani,voltime,delta,transi,volvisual,volvismo,notemsg,flashylights,logopos,oneperfk,mtext, ingame, screen, settingskeystore,reloaddatabase,totrank, debugmode,sa,bgcolour,tick,scale,size,cardsize,bgtime,replaymen,allowed,posmouse,drawtime,scoremult,msg
     if change:
-        tmp=open(datapath+'settings', 'w')
-        tmp.write(json.dumps(settingskeystore))
-        tmp.close()
-        change=False
+        reloadsettings()
+        change=0
     for a in menupos:
         try:
             a[0].update()
@@ -208,7 +206,7 @@ def main():
     if time.time()-sa>0.1:
         sa=time.time()
         fps=int(clock.get_fps())
-    allowed=[0,1,2,3,5,6,7,8,11,12,99]
+    allowed=[0,1,2,3,5,6,7,8,11,12,13]
     upd=time.time()
     fullscreenchk()
     size=60
@@ -266,6 +264,7 @@ def main():
     shopdirect()
     gameedit()
     loginscreen()
+    controlsetup()
     downloads()
     if useroverlay:
         render('rect', arg=((0,-15,w,h//2), (60,60,60), False), borderradius=15)

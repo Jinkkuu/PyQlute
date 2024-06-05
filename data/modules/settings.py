@@ -11,14 +11,23 @@ settingstemplate={
         'apiurl' : 'https://qlute.pxki.us.to/',
         'bgmm' : True,
         'sreplay':True,
-        'fps' : 480
+        'fps' : 480,
+        'Key1' : 'd',
+        'Key2' : 'f',
+        'Key3' : 'j',
+        'Key4' : 'k'
     }
+def reloadsettings():
+    tmp=open(datapath+'settings', 'w')
+    tmp.write(json.dumps(settingskeystore))
+    tmp.close()
 if os.path.isfile(datapath+'settings'):
     print('Using SettingsV2...')
     settingskeystore=json.load(open(datapath+'settings'))
     for a in settingstemplate:
         if not a in settingskeystore:
             settingskeystore[a]=settingstemplate[a]
+            reloadsettings()
     print('Completed')
 else:
     settingskeystore=settingstemplate
@@ -60,7 +69,15 @@ def customization():
             render('text', text='Adjust by using arrow keys UP / DOWN', arg=((0,0), forepallete,'center'),relative=((w//2)-(notewidth//2),(h//2)-(noteheight//2)+noteheight+20,notewidth,0))
 
         sysbutton=menu_draw(((-10,h-60,100,60),),('Back',),bradius=0,styleid=3)
-
+cset=0
+def controlsetup():
+    global sysbutton,cset
+    if activity==13:
+        render('rect', arg=((0,0,w,h), (42,40,95), False))
+        render('rect', arg=((0,h-60,w,60), hcol[0], False))
+        render('text', text='Controls', arg=((20,20), forepallete,'grade'))
+        render('text', text='Click the one you want to change', arg=((20,80), forepallete))
+        sysbutton=menu_draw(((-10,h-60,100,60),(w//2-160,h//2-80,80,80),(w//2-80,h//2-80,80,80),(w//2,h//2-80,80,80),(w//2+80,h//2-80,80,80),),('Back',settingskeystore['Key1'].upper(),settingskeystore['Key2'].upper(),settingskeystore['Key3'].upper(),settingskeystore['Key4'].upper()),bradius=0,styleid=3,selected_button=cset+1)
 def settingspage():
     global settingskeystore, activity,catbutton, screen, firstcom, change, fpsmode,totperf,totscore,msg,logotime,setbutton,sysbutton
     if activity==2:
@@ -73,7 +90,7 @@ def settingspage():
             user='Guest'
         else:
             user=settingskeystore['username']
-        setuplist={'general': {'Leaderboards':settingskeystore['leaderboard'],'Effects':settingskeystore['effects'],'Save Replays':settingskeystore['sreplay'],'Enable BG':settingskeystore['bgmm']},'skinning':{'Change Skins':'->','Note Width':'->','Note Height':'->','Note Colour':'->','Background Colour':'->','HealthBar Colour':'->','Insanity Level':'->',},'audio':{'Hitsounds':settingskeystore['hitsound']},'graphics':{'FPS':tmp,'Fullscreen':settingskeystore['fullscreen']},'debug':{},'account':{'Username':user}}
+        setuplist={'general': {'Leaderboards':settingskeystore['leaderboard'],'Effects':settingskeystore['effects'],'Save Replays':settingskeystore['sreplay'],'Enable BG':settingskeystore['bgmm'],'Controls':'->'},'skinning':{'Change Skins':'->','Note Width':'->','Note Height':'->','Note Colour':'->','Background Colour':'->','HealthBar Colour':'->','Insanity Level':'->',},'audio':{'Hitsounds':settingskeystore['hitsound']},'graphics':{'FPS':tmp,'Fullscreen':settingskeystore['fullscreen']},'debug':{},'account':{'Username':user}}
         #setuplist=['FPS: '+tmp,'Fullscreen: '+str(settingskeystore['fullscreen']),'Effects: '+str(settingskeystore['effects']),'Allow Skins: '+str(settingskeystore['skinning']),'Hitsounds: '+str(settingskeystore['hitsound']),'Leaderboards: '+str(settingskeystore['leaderboard']),'Debug Info','Crash Test']
         setuplistpos=[]
 #        for a in range(1,6):
@@ -127,6 +144,8 @@ def settingspage():
                 msg='Auto Save Replays'
             elif setbutton == 4 and setupid==1:
                 msg="Show song's Background at the main menu"
+            elif setbutton == 5 and setupid==1:
+                msg='Change your controls for your gameplay'
         render('rect', arg=((0,h-60,w,60), hcol[0], False))
         render('rect', arg=((0,0,w,100), (62,60,115), False))
 #        b=0

@@ -1,5 +1,5 @@
 def get_input():
-    global keys,logintext,textboxid,bgs,reloaddatabase,debugmode,activity,shopscroll,search,shopref,usecache,srank,modsv,sb,sbt,modsani,sbid,notewidth,noteheight,customid,successfulsignin,issigned,modshow,setupid,gobutton,useroverlay,replaymen,beatnowmusic,beatsel,beatsel,diffani,diffcon,beatnowmusic,change,setbutton,settingskeystore,fpsmode,firstcom,accounts
+    global keys,logintext,textboxid,bgs,reloaddatabase,debugmode,cset,activity,shopscroll,search,shopref,usecache,srank,modsv,sb,sbt,modsani,sbid,notewidth,noteheight,customid,successfulsignin,issigned,modshow,setupid,gobutton,useroverlay,replaymen,beatnowmusic,beatsel,beatsel,diffani,diffcon,beatnowmusic,change,setbutton,settingskeystore,fpsmode,firstcom,accounts
     for event in pygame.event.get():
         if event.type  ==  pygame.QUIT:
             stopnow()
@@ -150,10 +150,16 @@ def get_input():
                   settingskeystore['effects'] = not settingskeystore['effects']
                 elif setbutton == 4 and setupid==1:
                   settingskeystore['bgmm'] = not settingskeystore['bgmm']
+                elif setbutton == 5 and setupid==1:
+                    transitionprep(13)
+                    cset=-1
                 elif sysbutton:
                     transitionprep(1)
-
-
+            elif activity==13:
+                if sysbutton==1:
+                    transitionprep(1)
+                elif sysbutton:
+                    cset=sysbutton-1
             elif activity==3 or activity==7:
                 if event.button==1:
                     if sysbutton  ==  1:
@@ -325,19 +331,19 @@ def get_input():
                         replaymen=not replaymen
                     else:
                         transitionprep(3)
+            elif activity==13:
+                settingskeystore['Key'+str(cset)]=event.unicode
+                if cset!=4 and not cset<0:
+                    cset+=1
+                elif cset==4:
+                    cset=-1
+                    reloadsettings()
+                    transitionprep(2)
             elif activity==4:
-                if event.key  ==  pygame.K_d:
-                    keys[0]=1
-                    keyslight[0]=time.time()
-                if event.key  ==  pygame.K_f:
-                    keys[1]=1
-                    keyslight[1]=time.time()
-                if event.key  ==  pygame.K_j:
-                    keys[2]=1
-                    keyslight[2]=time.time()
-                if event.key  ==  pygame.K_k:
-                    keys[3]=1
-                    keyslight[3]=time.time()
+                for a in range(0,4):
+                    if event.unicode  ==  settingskeystore['Key'+str(a+1)]:
+                        keys[a]=1
+                        keyslight[a]=time.time()
                 if event.key  ==  pygame.K_BACKQUOTE:
                     beatnowmusic=1
                     resetscore()
@@ -345,11 +351,6 @@ def get_input():
             if activity==4:
                 if event.key  ==  pygame.K_t:
                     tip=0
-                if event.key  ==  pygame.K_d:
-                    keys[0]=0
-                if event.key  ==  pygame.K_f:
-                    keys[1]=0
-                if event.key  ==  pygame.K_j:
-                    keys[2]=0
-                if event.key  ==  pygame.K_k:
-                    keys[3]=0
+                for a in range(0,4):
+                    if event.unicode  ==  settingskeystore['Key'+str(a+1)]:
+                        keys[a]=0
