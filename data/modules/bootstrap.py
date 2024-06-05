@@ -154,6 +154,11 @@ noteani=[Tween(begin=0, end=100,duration=150,easing=Easing.CUBIC,easing_mode=Eas
 notemaxh=1
 useroverlay=0
 upd=0
+menupos=[]
+mdur=250
+measetype=Easing.BOUNCE
+for a in range(1,len(mtext)+1):
+    menupos.append([Tween(begin=0),0])
 hittext='PERFECT!','GREAT','MEH','MISS'
 hitcolour=(100, 120, 200),(100, 200, 100),(200, 200, 100),(200, 100, 100)
 def notification(title,desc=''):
@@ -170,6 +175,11 @@ def main():
         tmp.write(json.dumps(settingskeystore))
         tmp.close()
         change=False
+    for a in menupos:
+        try:
+            a[0].update()
+        except Exception as err:
+            print(err,time.time())
     if gameedition!=gameeditions[0]:
         gs='/'+gameedition
     else:

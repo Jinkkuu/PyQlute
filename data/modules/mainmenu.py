@@ -1,14 +1,11 @@
-mtext='Play','Edit','Browse','Leave'#,'TB'
+mtext='Play','Edit','Browse','Leave'
 toptext='Settings','Account','Downloads'
-menupos=[]
 opacity=10
 bgdefaultcolour=(45,47,100)
 mainmenucolor=(67, 124, 191),(92, 90, 145),(179, 72, 62)
 dcolour=(40,40,40) # default colour for top bar and blades~
 accounts=0
 osam=0
-for a in range(1,len(mtext)+1):
-    menupos.extend([0])
 def mainmenu():
     global debugmode, activity,beatnowmusic, totperf,totscore,msg,menubutton,topbutton,accounts,bladeani,background
     if not bladeani[1] and activity==1:
@@ -28,7 +25,7 @@ def mainmenu():
         tmenu=[]
         #wid=90*(w//640)
         wid=90*2
-        hei=150
+        hei=149
         scale=0.9
         wod=45
         if wid>90*2:
@@ -40,7 +37,7 @@ def mainmenu():
             mmenu.append((bla+(w//2-((wid*scale)*(len(mtext)/2))+((wid*scale)*(a-1))),h//2-(75*scale),wid*scale,hei*scale))
         for a in range(1,len(toptext)+1):
             tmenu.append((w-((20*7)*(a))+24,0,20*7,wod))
-        drawRhomboid(screen,dcolour,bla-25,h//2-(76*scale),w+80,hei*scale,26)
+        drawRhomboid(screen,dcolour,bla-25,h//2-(76*scale)+1,w+80,hei*scale,26)
         menubutton=menu_draw(mmenu, text=mtext,isblade=True,ishomemenu=True)
 #        for a in range(1,len(rankdiffc)+1):
 #            render('rect',arg=((0+(60*(a-1)),h-150,50,20),rankdiffc[a-1],False),borderradius=20)
@@ -85,3 +82,5 @@ def mainmenu():
 #        render('rect', arg=((-10,150,350,60), (maxt(40,bgcolour),maxt(40,bgcolour),maxt(100,bgcolour)), False),borderradius=10)
 #        render('text', text='WILL CHANGE', arg=((25,155), (255,255,maxt(0,bgcolour)),'grade'))
         song_progress()
+
+

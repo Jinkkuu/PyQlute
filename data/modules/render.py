@@ -57,6 +57,8 @@ def render(type, arg=(0, 0) ,  text='N/A', bordercolor=forepallete, borderradius
         crash(str(error)+' (renderer)')
 def menu_draw(instruction, text=None,showicon=False,crossid=0,bradius=10,settings=False,beatmenu=0,ishomemenu=False,ignoremove=False, istextbox=False, selected_button=0,enabled_button=[],enable_border=False, hidebutton=False,bigmode=False,startlimit=1,endlimit=None,styleid=1,isblade=False,icon=0):
     global osam
+    fmove=0
+    pmove=0
     if endlimit==None:
         endlimit=len(instruction)
     elif endlimit>=len(instruction):
@@ -121,18 +123,26 @@ def menu_draw(instruction, text=None,showicon=False,crossid=0,bradius=10,setting
                     buttcolour=mainmenucolor[1][0]-(10*(a-2)),mainmenucolor[1][1]-(10*(a-2)),mainmenucolor[1][2]-(10*(a-2))
                 if ishomemenu:
                     if not ignoremove:
-                        if button==a and not int(menupos[a-1])>19:
-                            menupos[a-1]+=300*drawtime
-                        elif button==a and int(menupos[a-1])==20:
-                            pass
-                        elif int(menupos[a-1])>0:
-                            menupos[a-1]-=300*drawtime
-                        moveid=menupos[a-1]
+                        moveid=menupos[a-1][0].value
+                        if a!=len(menupos):
+                            pmove=menupos[a][0].value//2
+                        fmove=menupos[a-2][0].value//2
+                        
+                        if button==a:
+                            if not menupos[a-1][1]:
+                                menupos[a-1][0]=Tween(begin=moveid, end=20,duration=mdur,easing=measetype,easing_mode=EasingMode.OUT)
+                                menupos[a-1][1]=1
+                                menupos[a-1][0].start()
+                        elif button!=a:
+                            if menupos[a-1][1]:
+                                menupos[a-1][0]=Tween(begin=moveid, end=0,duration=mdur,easing=measetype,easing_mode=EasingMode.OUT)
+                                menupos[a-1][1]=0
+                                menupos[a-1][0].start()
                     else:
                         moveid=0
                 if button==a:
                     buttcolour=buttcolour[0]+5,buttcolour[1]+5,buttcolour[2]+5
-                drawRhomboid(screen, buttcolour, tmp[0]-(moveid//2), tmp[1]-moveid, tmp[2]+moveid, tmp[3],25, 0)
+                drawRhomboid(screen, buttcolour, fmove+tmp[0]-(moveid//2)-pmove, tmp[1], tmp[2]+moveid, tmp[3],25, 0)
             if not text == None:
                 if bigmode:
                     render('text', text=text[a-1], arg=((0,0), forepallete,'center','grade'),relative=instruction[a-1])
@@ -155,7 +165,7 @@ def menu_draw(instruction, text=None,showicon=False,crossid=0,bradius=10,setting
                                     sd=0
                                 else:
                                     sd=(d*f)
-                                render('text', text=e.replace('[no video]','').rstrip(' '), arg=((0,0), tcol,'center'),relative=(tmp[0],tmp[1]-home+sd,tmp[2],d))
+                                render('text', text=e.replace('[no video]','').rstrip(' '), arg=((0,0), tcol,'center'),relative=(fmove+tmp[0]-pmove,tmp[1]+sd,tmp[2],d))
                                 f+=1
                         else:
                             render('text', text=text[a-1], arg=((0,0), forepallete,'center','min'),relative=tmp)
