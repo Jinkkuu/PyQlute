@@ -293,6 +293,14 @@ def get_input():
                         else:
                             preparemap()
                 if activity==3:
+                    if event.key == pygame.K_END:
+                        if len(fullbeatmapname)!=0:
+                            beatsel=len(p2)-1
+                            beatnowmusic=1
+                    if event.key == pygame.K_HOME:
+                        if len(fullbeatmapname)!=0:
+                            beatsel=0
+                            beatnowmusic=1
                     if event.key == pygame.K_F2:
                         if len(fullbeatmapname)!=0:
                             beatsel=random.randint(1,len(fullbeatmapname))-1
