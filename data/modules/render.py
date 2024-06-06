@@ -83,7 +83,7 @@ def menu_draw(instruction, text=None,showicon=False,crossid=0,bradius=10,setting
             buttonc=219, 219, 219
             tcol=0,0,0
     select=False
-    for a in range(startlimit,  endlimit+1):	
+    for a in range(startlimit,  endlimit+1):
         tmp=instruction[a-1]
         if not beatmenu:
             tmp=pygame.Rect(tmp[0],tmp[1],tmp[2],tmp[3])
@@ -118,7 +118,7 @@ def menu_draw(instruction, text=None,showicon=False,crossid=0,bradius=10,setting
             else:
                 if a==1:
                     buttcolour=mainmenucolor[0]
-                elif text[a-1]=='Leave':
+                elif text[a-1] in ('Leave','Back'):
                     buttcolour=mainmenucolor[2]
                 else:
                     buttcolour=mainmenucolor[1][0]-(10*(a-2)),mainmenucolor[1][1]-(10*(a-2)),mainmenucolor[1][2]-(10*(a-2))
@@ -183,7 +183,7 @@ def drawRhomboid(surf, color, x, y, width, height, offset, thickness=0):
         (x-offset, y + height)]
     pygame.draw.polygon(surf, color, points, thickness)
 def fullscreenchk():
-    global w, h, w, h,background,fieldpos,modsv,loading, beatani,diffani,screen,reload,transani,modsani, button_size_width, firstcom,tal,keymap,fonts,volani,noteheight,logopos,bladeani
+    global w, h, w, h,background,fieldpos,modsv,loading, bani,beatani,diffani,screen,reload,transani,modsani, button_size_width, firstcom,tal,keymap,fonts,volani,noteheight,logopos,bladeani
     reload=False
     if not settingskeystore['fullscreen']:
         if not firstcom:
@@ -224,6 +224,7 @@ def fullscreenchk():
         diffani=[Tween(begin=-1, end=0,duration=1,easing=Easing.CUBIC,easing_mode=EasingMode.OUT),0]
         diffani[0].start()
         bladeani=[Tween(begin=0, end=101,duration=500,easing=Easing.CUBIC,easing_mode=EasingMode.OUT),0]
+        bani=Tween(begin=0, end=1,duration=200,easing=Easing.CUBIC,easing_mode=EasingMode.OUT,boomerang=1)
         modsv=0
         modsani=[Tween(begin=0, end=1,duration=350,easing=Easing.CUBIC,easing_mode=EasingMode.OUT),0]
         modsani[0].start()

@@ -1,12 +1,15 @@
-mtext='Play','Edit','Browse','Leave'
+mtext=('Play','Edit','Browse','Leave'),('Solo','Multi','Back')
+meid=0
+meidt=meid
 toptext='Settings','Account','Downloads'
 opacity=10
 bgdefaultcolour=(45,47,100)
 mainmenucolor=(67, 124, 191),(92, 90, 145),(179, 72, 62)
 dcolour=(40,40,40) # default colour for top bar and blades~
 accounts=0
+wod=45
 def mainmenu():
-    global debugmode, activity,beatnowmusic, totperf,totscore,msg,menubutton,topbutton,accounts,bladeani,background
+    global debugmode, meid,activity,beatnowmusic, totperf,totscore,msg,menubutton,topbutton,accounts,bladeani,background
     if not bladeani[1] and activity==1:
         bladeani[1]=1
         bladeani[0].start()
@@ -14,6 +17,12 @@ def mainmenu():
         bladeani[1]=0
     if activity==1:
         bladeani[0].update()
+        if bani.value==1:
+            meid=meidt
+        bani.update()
+        ba=bani.value*w
+        if meid:
+            ba=-ba
         try:
             if background and settingskeystore['bgmm']:
                 screen.blit(background, (0,0))
@@ -21,27 +30,22 @@ def mainmenu():
             print(err)
             background=0
         mmenu=[]
-        tmenu=[]
         #wid=90*(w//640)
         wid=90*2
         hei=149
         scale=0.9
-        wod=45
         if wid>90*2:
             wid=90*2
         ani=((100-bladeani[0].value)/100)
         bla=(ani*w)
         anib=bladeani[0].value/100
-        for a in range(1,len(mtext)+1):
-            mmenu.append((bla+(w//2-((wid*scale)*(len(mtext)/2))+((wid*scale)*(a-1))),h//2-(75*scale),wid*scale,hei*scale))
+        tmenu=[]
         for a in range(1,len(toptext)+1):
             tmenu.append((w-((20*7)*(a))+24,0,20*7,wod))
+        for a in range(1,len(mtext[meid])+1):
+            mmenu.append((ba+bla+(w//2-((wid*scale)*(len(mtext[meid])/2))+((wid*scale)*(a-1))),h//2-(75*scale),wid*scale,hei*scale))
         drawRhomboid(screen,dcolour,bla-25,h//2-(76*scale)+1,w+80,hei*scale,26)
-        menubutton=menu_draw(mmenu, text=mtext,isblade=True,ishomemenu=True)
-#        for a in range(1,len(rankdiffc)+1):
-#            render('rect',arg=((0+(60*(a-1)),h-150,50,20),rankdiffc[a-1],False),borderradius=20)
-#        render('text', text=gametime/lastms, arg=((20,h-80), forepallete))
-        #print(1-((gametime/(lastms+1000))))
+        menubutton=menu_draw(mmenu, text=mtext[meid],isblade=True,ishomemenu=True)
         if gametime>=lastms+1000 or gametime<=-1:
             song_change(1)
         if beatmaps!=0:
@@ -71,11 +75,13 @@ def mainmenu():
             render('text', text='Local release', arg=((0,0), (255,255,0),'center'),relative=(w//2,h-35,0,0))
         if menubutton == 1:
             msg=' You have '+str(format(beatmaps,','))+' Songs '
-        elif menubutton == 2:
+        elif menubutton == 2 and meid:
+            msg='Play with the world!'
+        elif menubutton == 2 and not meid:
             msg='Time to make beatmaps!'
-        elif menubutton == 3:
+        elif menubutton == 3 and not meid:
             msg='Browse our catalog'
-        elif menubutton == 4:
+        elif menubutton == 4 and not meid:
             msg='See ya next time~'
 
 #        render('rect', arg=((-10,150,350,60), (maxt(40,bgcolour),maxt(40,bgcolour),maxt(100,bgcolour)), False),borderradius=10)

@@ -30,7 +30,6 @@ skinpath=datapath+'skins/'
 username='Guest'
 propath=datapath+'profiles/'
 profilepath=propath+username+'/'
-gameupdateurl='https://github.com/pxkidoescoding/Qlute/'
 gameauthor='Pxki Games'
 print('Starting Game...')
 button_size_height=33
@@ -157,7 +156,9 @@ upd=0
 menupos=[]
 mdur=250
 measetype=Easing.BOUNCE
-for a in range(1,len(mtext)+1):
+multilist=[]
+multitime=0
+for a in range(1,len(mtext[meid])+1):
     menupos.append([Tween(begin=0),0])
 hittext='PERFECT!','GREAT','MEH','MISS'
 hitcolour=(100, 120, 200),(100, 200, 100),(200, 200, 100),(200, 100, 100)
@@ -206,7 +207,7 @@ def main():
     if time.time()-sa>0.1:
         sa=time.time()
         fps=int(clock.get_fps())
-    allowed=[0,1,2,3,5,6,7,8,11,12,13]
+    allowed=[0,1,2,3,5,6,7,8,11,12,13,14]
     upd=time.time()
     fullscreenchk()
     size=60
@@ -266,6 +267,7 @@ def main():
     loginscreen()
     controlsetup()
     downloads()
+    multiplayer()
     if useroverlay:
         render('rect', arg=((0,-15,w,h//2), (60,60,60), False), borderradius=15)
         posy=10
@@ -409,4 +411,4 @@ if __name__  ==  "__main__":
                 sys.exit()
             main()
     except Exception as error:
-        crash(str(error))
+        crasha(str(error))

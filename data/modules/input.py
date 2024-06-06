@@ -1,5 +1,5 @@
 def get_input():
-    global keys,logintext,textboxid,bgs,reloaddatabase,debugmode,cset,activity,shopscroll,search,shopref,usecache,srank,modsv,sb,sbt,modsani,sbid,notewidth,noteheight,customid,successfulsignin,issigned,modshow,setupid,gobutton,useroverlay,replaymen,beatnowmusic,beatsel,beatsel,diffani,diffcon,beatnowmusic,change,setbutton,settingskeystore,fpsmode,firstcom,accounts
+    global keys,logintext,textboxid,bgs,reloaddatabase,debugmode,meidt,cset,activity,shopscroll,search,shopref,usecache,srank,modsv,sb,sbt,modsani,sbid,notewidth,noteheight,customid,successfulsignin,issigned,modshow,setupid,gobutton,useroverlay,replaymen,beatnowmusic,beatsel,beatsel,diffani,diffcon,beatnowmusic,change,setbutton,settingskeystore,fpsmode,firstcom,accounts
     for event in pygame.event.get():
         if event.type  ==  pygame.QUIT:
             stopnow()
@@ -8,15 +8,27 @@ def get_input():
                 pygame.mixer.Sound(samplepath+'click.wav').play()
             if activity==1:
                 if menubutton  ==  1:
-                    transitionprep(3)
+                    if meid:
+                        transitionprep(3)
+                    else:
+                        bani.start()
+                        meidt=not meid
                 elif menubutton  ==  2:
-                    transitionprep(9)
+                    if not meid:
+                        transitionprep(9)
+                    else:
+                        transitionprep(14)
                 elif menubutton  ==  3:
-                    transitionprep(6)
-                    shopscroll=0
-                    sbid=0
+                    if not meid:
+                        transitionprep(6)
+                        shopscroll=0
+                        sbid=0
+                    else:
+                        bani.start()
+                        meidt=not meid
                 elif menubutton  ==  4:
-                    stopnow()
+                    if not meid:
+                        stopnow()
                 elif menubutton  ==  5:
                     notification('S-Ranker',desc='Like to show off. huh?')
                 elif topbutton  ==  1:
@@ -31,6 +43,9 @@ def get_input():
                     transitionprep(12)
             elif activity==0:
                 transitionprep(1)
+            elif activity==14:
+                if sysbutton:
+                    transitionprep(1)
             elif activity==12:
                 if sysbutton==1:
                     transitionprep(1)

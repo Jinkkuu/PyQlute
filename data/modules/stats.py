@@ -269,13 +269,14 @@ def reloadprofile():
             totrank=0
 
 def ondemand():
-    global totperf,totscore,totrank,nettick,issigned,qlutaerror,menunotice,pingspeed,downloadqueue,level
+    global totperf,totscore,totrank,nettick,issigned,qlutaerror,menunotice,pingspeed,downloadqueue,level,multitime,multilist
     qlutaerror=True
     pingspeed=0
     while True:
         if stop:
             exit()
         if int(time.time()-nettick)>9:
+            multilist=requests.get(settingskeystore['apiurl']+'api/getmultilist',headers={'User-Agent': 'QluteClient-'+str(gamever)},timeout=5).json()
             if issigned:
                 try:
                     reloadprofile()
