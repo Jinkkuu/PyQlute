@@ -67,7 +67,7 @@ def beatmenu():
             crok=999
         else:
             crok=0
-        if restricted: # type: ignore
+        if restricted or not isquest: # type: ignore
             crub=999
         else:
             crub=0

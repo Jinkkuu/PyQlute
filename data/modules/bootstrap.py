@@ -23,6 +23,7 @@ sylphenginever=gamever
 gameverspl=gamever.split('.')
 #gameminserve=int(gameverspl[0])+((1+float(gameverspl[1]))*float(gameverspl[2]))
 bypass_multiplayer=1
+isquest=0
 gamepath=datapath+'beatmaps/'
 samplepath=syspath+'samples/'
 downpath=datapath+'downloads/'
