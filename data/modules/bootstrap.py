@@ -31,6 +31,7 @@ username='Guest'
 propath=datapath+'profiles/'
 profilepath=propath+username+'/'
 gameauthor='Pxki Games'
+level=0
 print('Starting Game...')
 button_size_height=33
 stop=0
@@ -207,7 +208,7 @@ def main():
     if time.time()-sa>0.1:
         sa=time.time()
         fps=int(clock.get_fps())
-    allowed=[0,1,2,3,5,6,7,8,11,12,13,14]
+    allowed=[0,1,2,3,5,6,7,8,11,12,13,14,15]
     upd=time.time()
     fullscreenchk()
     size=60
