@@ -276,7 +276,8 @@ def ondemand():
         if stop:
             exit()
         if int(time.time()-nettick)>9:
-            multilist=requests.get(settingskeystore['apiurl']+'api/getmultilist',headers={'User-Agent': 'QluteClient-'+str(gamever)},timeout=5).json()
+            if not bypass_multiplayer:
+                multilist=requests.get(settingskeystore['apiurl']+'api/getmultilist',headers={'User-Agent': 'QluteClient-'+str(gamever)},timeout=5).json()
             if issigned:
                 try:
                     reloadprofile()

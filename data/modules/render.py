@@ -56,7 +56,7 @@ def render(type, arg=(0, 0) ,  text='N/A', bordercolor=forepallete, borderradius
         print(error)
         exit()
         crash(str(error)+' (renderer)')
-def menu_draw(instruction, text=None,showicon=False,crossid=0,bradius=10,settings=False,beatmenu=0,ishomemenu=False,ignoremove=False, istextbox=False, selected_button=0,enabled_button=[],enable_border=False, hidebutton=False,bigmode=False,startlimit=1,endlimit=None,styleid=1,isblade=False,icon=0):
+def menu_draw(instruction, text=None,showicon=False,newline=' - ',crossid=0,bradius=10,settings=False,beatmenu=0,ishomemenu=False,ignoremove=False, istextbox=False, selected_button=0,enabled_button=[],enable_border=False, hidebutton=False,bigmode=False,startlimit=1,endlimit=None,styleid=1,isblade=False,icon=0):
     global osam
     fmove=0
     pmove=0
@@ -158,7 +158,7 @@ def menu_draw(instruction, text=None,showicon=False,crossid=0,bradius=10,setting
                             screen.blit(b, (instruction[a-1][0], instruction[a-1][1]))
                     if not showicon:
                         if not settings:
-                            s=text[a-1].split(' - ')
+                            s=text[a-1].split(newline)
                             d=instruction[a-1][3]//len(s)
                             f=0
                             for e in s[::-1]:
