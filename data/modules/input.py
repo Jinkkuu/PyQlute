@@ -373,8 +373,7 @@ def get_input():
                         keys[a]=1
                         keyslight[a]=time.time()
                 if event.key  ==  pygame.K_BACKQUOTE:
-                    beatnowmusic=1
-                    resetscore()
+                    preparemap()
         if event.type  ==  pygame.KEYUP:
             if activity==4:
                 if event.key  ==  pygame.K_t:

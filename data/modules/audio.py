@@ -1,4 +1,6 @@
 bpm=60000
+pausedur=3
+isplaying=0
 def spectrum():
     global bars
     for a in range(1,len(bars)+1):
@@ -9,7 +11,7 @@ def get_creation_time(item):
     item_path = os.path.join(gamepath, item)
     return os.path.getctime(item_path)
 def beatmapload():
-    global p2,p1,beatnowmusic,gc,speed,fbt,gametime,bp1,bp2,beatani,beatmaps,diffani,beattitle,fullbeatmapname,objects,diffp,betaperf,reloaddatabase,maxperf,background,ranktype,diff,diffmode,pref,level,ismusic,bpm,realid,prestart,beatsel,tick,lastms,combotime,songoffset,metadata
+    global p2,p1,beatnowmusic,gc,speed,fbt,pausetime,isplaying,gametime,bp1,bp2,beatani,beatmaps,diffani,beattitle,fullbeatmapname,objects,diffp,betaperf,reloaddatabase,maxperf,background,ranktype,diff,diffmode,pref,level,ismusic,bpm,realid,prestart,beatsel,tick,lastms,combotime,songoffset,metadata
     if reloaddatabase:
         p1=[]
         p2=[]
@@ -56,16 +58,20 @@ def beatmapload():
         #pygame.mixer.music.play(-1,(time.time()-gametime))
     try:
         if beatnowmusic:
+            pausetime=time.time()+pausedur
             fbt=fullbeatmapname[beatsel]
             beatani=[Tween(begin=cross[0], end=beatsel,duration=350,easing=Easing.CUBIC,easing_mode=EasingMode.OUT),0]
             beatani[0].start()
             diffani=[Tween(begin=-1, end=0,duration=1,easing=Easing.CUBIC,easing_mode=EasingMode.OUT),0]
             diffani[0].start()
             gc=time.time()
+            if activity==4:
+                gc+=pausedur
             ranktype=3
             gametime=0
             tick=0
             ismusic=False
+            loop=-1
             if len(fullbeatmapname)!=0:
                 aga=0
                 if os.path.isdir(gamepath+fbt):
@@ -80,15 +86,11 @@ def beatmapload():
             if ismusic:
                 #if not int(time.time()-wait)<=-1:
                 if 1==1:
+                    isplaying=0
                     beatnowmusic=0
                     realid=fbt
                     diff=[]
                     pref=''
-                    if activity in allowed:
-                        loop=-1
-                        #print(loop)
-                    else:
-                        loop=0
                     for a in ah:
                         if a.endswith('.osu'):
                             ax=re.findall(r'\[(.*?)\]', a)
@@ -120,9 +122,8 @@ def beatmapload():
                         bp2.append(str(b[1]))
                         a+=1
 #                    print(diffp)
-                    pygame.mixer.music.load(gamepath+fbt+'/'+music)
-                    pygame.mixer.music.play(-1)
                     #print(ids)
+                    pygame.mixer.music.load(gamepath+fbt+'/'+music)
                     reloadstats()
                     betaperf=0
                     ptick=0
@@ -140,6 +141,7 @@ def beatmapload():
                     if betaperf>1500:
                         betaperf=1500
                     lastms=int(objects[-1].split(',')[2])
+                    print(isplaying)
 #                    else:
 #                        ranktype=
             else:
@@ -151,6 +153,18 @@ def beatmapload():
 #            sys.exit()
     except Exception:
         song_change(1)
+    a=0
+    if beatmaps>0 and ismusic:
+        if activity==4 and time.time()-pausetime>=0:
+            a=1
+            loop=0
+        elif not activity==4:
+            a=1
+            loop=-1
+        if a and not isplaying:
+            pygame.mixer.music.play(loop)
+            print(isplaying)
+            isplaying=1
 def volchg(t):
     global vol,voltime,volani
     voltime=time.time()+1

@@ -165,6 +165,7 @@ for a in range(1,len(mtext[meid])+1):
     menupos.append([Tween(begin=0),0])
 hittext='PERFECT!','GREAT','MEH','MISS'
 hitcolour=(100, 120, 200),(100, 200, 100),(200, 200, 100),(200, 100, 100)
+preparedmap=0
 def notification(title,desc=''):
     global noteani,notemsg
     if os.path.isfile(samplepath+'notify.wav'):
@@ -173,7 +174,7 @@ def notification(title,desc=''):
     noteani=[Tween(begin=0, end=notemaxh,duration=500,easing=Easing.CUBIC,easing_mode=EasingMode.OUT,boomerang=True),0]
     noteani[0].start()
 def main():
-    global fps, activity,oneperf,change,upd,noteani,voltime,delta,transi,volvisual,volvismo,notemsg,flashylights,logopos,oneperfk,mtext, ingame, screen, settingskeystore,reloaddatabase,totrank, debugmode,sa,bgcolour,tick,scale,size,cardsize,bgtime,replaymen,allowed,posmouse,drawtime,scoremult,msg
+    global fps, activity,oneperf,preparedmap,beatnowmusic,change,upd,noteani,voltime,delta,transi,volvisual,volvismo,notemsg,flashylights,logopos,oneperfk,mtext, ingame, screen, settingskeystore,reloaddatabase,totrank, debugmode,sa,bgcolour,tick,scale,size,cardsize,bgtime,replaymen,allowed,posmouse,drawtime,scoremult,msg
     if change:
         reloadsettings()
         change=0
@@ -186,6 +187,9 @@ def main():
         gs='/'+gameedition
     else:
         gs=''
+    if preparedmap and activity==4:
+        beatnowmusic=1
+        preparedmap=0
     msg=''
     if beattitle!=None and activity==4:
         alttitle=beattitle

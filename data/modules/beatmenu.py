@@ -221,7 +221,7 @@ def timeform(t):
         fix='s'
     return str(x)+fix
 def preparemap():
-    global beatnowmusic
-    beatnowmusic=1
-    resetscore() # type: ignore
+    global beatnowmusic,preparedmap
+    preparedmap=1
     transitionprep(4) # type: ignore
+    resetscore() # type: ignore

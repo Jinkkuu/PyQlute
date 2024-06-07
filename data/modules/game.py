@@ -8,16 +8,25 @@ def clockify(clo):
     minraw=int(clo/60)
     if minraw>98:
         minraw=99
+    seco=int(clo-(60*minraw))
+    if seco<0:
+        pre='-'
+        seco=-seco
+    else:
+        pre=''
     min="{:02d}".format(int(minraw))
-    sec="{:02d}".format(int(clo-(60*minraw)))
-    return str(min)+':'+str(sec)
+    sec="{:02d}".format(seco)
+    return pre+str(min)+':'+str(sec)
 def song_progress():
     if not lastms<1:
         slop=(gametime/lastms)
         if slop>1:
             slop=1
+        elif slop<0:
+            slop=0
+        endtime=clockify(int((lastms-gametime)//1000)/speed).replace('-','')
         render('text',text=clockify(int(gametime//1000)/speed),arg=((25,h-50),forepallete))
-        render('text',text='-'+clockify(int((lastms-gametime)//1000)/speed),arg=((w-25,h-50),forepallete,'rtl'))
+        render('text',text='-'+endtime,arg=((w-25,h-50),forepallete,'rtl'))
         render('rect', arg=((10,h-20,w-20,10), (50,50,50), False),borderradius=10)
         render('rect', arg=((10,h-20,slop*(w-20),10), (255,255,255), False),borderradius=10)
 def iscatched(block,isauto,ob,fir,id):
