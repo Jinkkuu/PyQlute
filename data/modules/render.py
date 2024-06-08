@@ -113,13 +113,12 @@ def menu_draw(instruction, text=None,usecolour=False,showicon=False,newline=' - 
                     buttcolour=mainmenucolor[2]
                 else:
                     buttcolour=mainmenucolor[1][0]-(10*(a-2)),mainmenucolor[1][1]-(10*(a-2)),mainmenucolor[1][2]-(10*(a-2))
+            if button==a:
+                buttcolour=buttcolour[0]+5,buttcolour[1]+5,buttcolour[2]+5
 
             if not isblade:
                 if selected_button==a or (enabled_button!=[] and enabled_button[a-1]):
                     buttcolour=b
-#                    enable_border=True
-#                else:
-#                    enable_border=False
                 if settings:
                     render('rect', arg=(tmp, buttcolour, False))
                 else:
@@ -142,8 +141,6 @@ def menu_draw(instruction, text=None,usecolour=False,showicon=False,newline=' - 
                                 menupos[a-1][0]=Tween(begin=moveid, end=0,duration=mdur,easing=measetype,easing_mode=EasingMode.OUT)
                                 menupos[a-1][1]=0
                                 menupos[a-1][0].start()
-                if button==a:
-                    buttcolour=buttcolour[0]+5,buttcolour[1]+5,buttcolour[2]+5
                 drawRhomboid(screen, buttcolour, fmove+tmp[0]-(moveid//2)-pmove, tmp[1], tmp[2]+moveid, tmp[3],25, 0)
             if not text == None:
                 if bigmode:
