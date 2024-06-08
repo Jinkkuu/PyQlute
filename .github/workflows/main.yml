@@ -49,7 +49,7 @@ jobs:
       id: check_commits
       run: |
           # Get the date in UTC
-          past_date=$(date -d '-1 day' +"%Y-%m-%d")
+          past_date=$(date -u -d '-1 day' +"%Y-%m-%d")
           
           # Get the list of commits made today
           commits=$(git log --since="$past_date 00:00:00" --until="$past_date 23:59:59" --format='%H')
