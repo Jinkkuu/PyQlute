@@ -13,15 +13,17 @@ def print_card(pp,score,name,pos,rank,isgrayed=False,home=False,hide=False):
         dim=35
         render('rect',arg=((pos[0],pos[1],300,80),(tmp),False),borderradius=10)
         if rank or hide:
-            if not pp<1 or not hide:
+            if pp>0 and not hide:
                 render('text', text='#'+str(format(rank,',')), arg=((pos[0]+290,pos[1]+30), (tmp[0]+dim,tmp[1]+dim,tmp[2]+dim),'grade','rtl'))
             if restricted and not hide:
                 render('text', text="You are Restricted", arg=((pos[0]+10,pos[1]+40), tmpt,'min'))
             elif hide:
                 render('text', text="Offline", arg=((pos[0]+10,pos[1]+40), tmpt,'min'))
-            else:
+            elif pp>0:
                 render('text', text='Accuracy - '+str(round(score,2))+'%', arg=((pos[0]+10,pos[1]+60), tmpt,'min'))
                 render('text', text=str(format(int(pp),','))+'pp (Lv. '+str(format(level,','))+')', arg=((pos[0]+10,pos[1]+40), tmpt,'min'))
+            else:
+                render('text', text='Never played', arg=((pos[0]+10,pos[1]+40), tmpt,'min'))
         else:
             render('text', text='Not Logged in', arg=((pos[0]+10,pos[1]+40), tmpt,'min')) # type: ignore
         render('text', text=name, arg=((pos[0]+10,pos[1]+10), tmpt,'bold'))
