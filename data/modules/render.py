@@ -56,10 +56,11 @@ def render(type, arg=(0, 0) ,  text='N/A', bordercolor=forepallete, borderradius
         print(error)
         exit()
         crash(str(error)+' (renderer)')
-def menu_draw(instruction, text=None,showicon=False,newline=' - ',crossid=0,bradius=10,settings=False,beatmenu=0,ishomemenu=False,ignoremove=False, istextbox=False, selected_button=0,enabled_button=[],enable_border=False, hidebutton=False,bigmode=False,startlimit=1,endlimit=None,styleid=1,isblade=False,icon=0):
+def menu_draw(instruction, text=None,usecolour=False,showicon=False,newline=' - ',crossid=0,bradius=10,settings=False,beatmenu=0,ishomemenu=False,ignoremove=False, istextbox=False, selected_button=0,enabled_button=[],enable_border=False, hidebutton=False,bigmode=False,startlimit=1,endlimit=None,styleid=1,isblade=False,icon=0):
     global osam
     fmove=0
     pmove=0
+    moveid=0
     if endlimit==None:
         endlimit=len(instruction)
     elif endlimit>=len(instruction):
@@ -105,6 +106,14 @@ def menu_draw(instruction, text=None,showicon=False,newline=' - ',crossid=0,brad
         b = (102,100,175)
         #drawRhomboid(screen, (255,255,255), 50, 50, 300, 200, 100, 3)
         if not hidebutton:
+            if usecolour:
+                if a==1:
+                    buttcolour=mainmenucolor[0]
+                elif text[a-1] in ('Leave','Back'):
+                    buttcolour=mainmenucolor[2]
+                else:
+                    buttcolour=mainmenucolor[1][0]-(10*(a-2)),mainmenucolor[1][1]-(10*(a-2)),mainmenucolor[1][2]-(10*(a-2))
+
             if not isblade:
                 if selected_button==a or (enabled_button!=[] and enabled_button[a-1]):
                     buttcolour=b
@@ -116,12 +125,6 @@ def menu_draw(instruction, text=None,showicon=False,newline=' - ',crossid=0,brad
                 else:
                     render('rect', arg=((tmp), buttcolour, False),borderradius=bradius)
             else:
-                if a==1:
-                    buttcolour=mainmenucolor[0]
-                elif text[a-1] in ('Leave','Back'):
-                    buttcolour=mainmenucolor[2]
-                else:
-                    buttcolour=mainmenucolor[1][0]-(10*(a-2)),mainmenucolor[1][1]-(10*(a-2)),mainmenucolor[1][2]-(10*(a-2))
                 if ishomemenu:
                     if not ignoremove:
                         moveid=menupos[a-1][0].value
@@ -139,8 +142,6 @@ def menu_draw(instruction, text=None,showicon=False,newline=' - ',crossid=0,brad
                                 menupos[a-1][0]=Tween(begin=moveid, end=0,duration=mdur,easing=measetype,easing_mode=EasingMode.OUT)
                                 menupos[a-1][1]=0
                                 menupos[a-1][0].start()
-                    else:
-                        moveid=0
                 if button==a:
                     buttcolour=buttcolour[0]+5,buttcolour[1]+5,buttcolour[2]+5
                 drawRhomboid(screen, buttcolour, fmove+tmp[0]-(moveid//2)-pmove, tmp[1], tmp[2]+moveid, tmp[3],25, 0)

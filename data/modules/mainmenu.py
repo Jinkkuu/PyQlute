@@ -41,11 +41,11 @@ def mainmenu():
         anib=bladeani[0].value/100
         tmenu=[]
         for a in range(1,len(toptext)+1):
-            tmenu.append((w-((20*7)*(a))+24,0,20*7,wod))
+            tmenu.append((w-((20*7)*(a)),0,20*7,wod))
         for a in range(1,len(mtext[meid])+1):
             mmenu.append((ba+bla+(w//2-((wid*scale)*(len(mtext[meid])/2))+((wid*scale)*(a-1))),h//2-(75*scale),wid*scale,hei*scale))
         drawRhomboid(screen,dcolour,bla-25,h//2-(76*scale)+1,w+80,hei*scale,26)
-        menubutton=menu_draw(mmenu, text=mtext[meid],isblade=True,ishomemenu=True)
+        menubutton=menu_draw(mmenu, text=mtext[meid],isblade=True,ishomemenu=True,usecolour=True)
         if gametime>=lastms+1000 or gametime<=-1:
             song_change(1)
         if beatmaps!=0:
@@ -53,7 +53,7 @@ def mainmenu():
         else:
             render('text', text='nothing...', arg=((20,anib*55), (255,255,255)))
         render('rect',arg=((0,0,w,45),dcolour,False))#,surf=surface[0])
-        topbutton=menu_draw(tmenu, text=toptext,isblade=True,ignoremove=True,ishomemenu=True)
+        topbutton=menu_draw(tmenu, text=toptext,ignoremove=True,ishomemenu=True,bradius=0,usecolour=True)
         if not qlutaerror:
             print_card(totperf,totacc,settingskeystore['username'],(w//2-150,h//2+120),totrank,home=True,isgrayed=restricted)
         if menunotice!='':
