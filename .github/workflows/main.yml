@@ -49,10 +49,10 @@ jobs:
       id: check_commits
       run: |
           # Get the date in UTC
-          past_date=$(date -u -d '-1 day' +"%Y-%m-%d")
+          current_date=$(date -u +"%Y-%m-%d")
           
           # Get the list of commits made today
-          commits=$(git log --since="$past_date 00:00:00" --until="$past_date 23:59:59" --format='%H')
+          commits=$(git log --since="$current_date 00:00:00" --until="$current_date 23:59:59" --format='%H')
           
           # Fail the job if no commits are found
           if [ -z "$commits" ]; then
@@ -100,9 +100,9 @@ jobs:
       run: echo "::set-output name=date::$(date +'%Y.%m.%d')"
     - name: Make changelog
       run: |
-       past_date=$(date -u -d '-1 day' +"%Y-%m-%d")
+       current_date=$(date -u +"%Y-%m-%d")
        echo "# What's Changed">CHANGELOG.md
-       echo $(git log --since="$past_date 00:00:00" --until="$past_date 23:59:59" --format='### %h : %s (By @%cn)') >>CHANGELOG.md
+       echo $(git log --since="$current_date 00:00:00" --until="$current_date 23:59:59" --format='### %h : %s (By @%cn)') >>CHANGELOG.md
     - name: release
       uses: actions/create-release@v1
       id: create_release
