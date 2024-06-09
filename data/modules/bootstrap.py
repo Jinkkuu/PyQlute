@@ -136,7 +136,7 @@ hits=[0,0,0,0]
 #hitperfect=keymap[0][1]
 #hitperfect=keymap[0][1]
 last=0
-ismulti=False # Enabling this means Leaderboard is shown
+ismulti=False # Enabling this would tell the game your in a multiplayer session
 keys=[0,0,0,0]
 keyslight=[0,0,0,0]
 pos=(64,192,320,448)
@@ -215,7 +215,7 @@ def main():
     if time.time()-sa>0.1:
         sa=time.time()
         fps=int(clock.get_fps())
-    allowed=[0,1,2,3,5,6,7,8,11,12,13,14,15]
+    allowed=[0,1,2,3,5,6,7,8,11,12,13,14,15,16]
     upd=time.time()
     fullscreenchk()
     size=60
@@ -419,7 +419,7 @@ if __name__  ==  "__main__":
         icons={}
         for a in os.listdir(resource_path(syspath+'icons/')):
             icons[a]=(pygame.image.load(resource_path(syspath+'icons/'+a))) # Icons!
-        micon=(icons['logomini.png'],icons['edit.png'],icons['browse.png'],icons['exit.png'])
+        micon=(icons['logomini.png'],icons['edit.png'],icons['browse.png'],icons['exit.png']),(icons['user.png'],icons['online.png'],icons['exit.png'],)
         programIcon = pygame.image.load(resource_path(syspath+'icon.png'))
         threading.Thread(target=ondemand).start()
         threading.Thread(target=check_gameversion).start()

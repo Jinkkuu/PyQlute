@@ -79,7 +79,7 @@ def controlsetup():
         render('text', text='Click the one you want to change', arg=((20,80), forepallete))
         sysbutton=menu_draw(((-10,h-60,100,60),(w//2-160,h//2-80,80,80),(w//2-80,h//2-80,80,80),(w//2,h//2-80,80,80),(w//2+80,h//2-80,80,80),),('Back',settingskeystore['Key1'].upper(),settingskeystore['Key2'].upper(),settingskeystore['Key3'].upper(),settingskeystore['Key4'].upper()),bradius=0,styleid=3,selected_button=cset+1)
 def settingspage():
-    global settingskeystore, activity,catbutton, screen, firstcom, change, fpsmode,totperf,totscore,msg,logotime,setbutton,sysbutton
+    global settingskeystore, activity,catbutton, screen, firstcom, change, fpsmode,totperf,totscore,msg,setbutton,sysbutton,setupid
     if activity==2:
         #settingskeystore[2], settingskeystore[1], fullscreen
         if str(fpsmodes[fpsmode])!='1000':
@@ -91,13 +91,11 @@ def settingspage():
         else:
             user=settingskeystore['username']
         setuplist={'general': {'Leaderboards':settingskeystore['leaderboard'],'Effects':settingskeystore['effects'],'Save Replays':settingskeystore['sreplay'],'Enable BG':settingskeystore['bgmm'],'Controls':'->'},'skinning':{'Change Skins':'->','Note Width':'->','Note Height':'->','Note Colour':'->','Background Colour':'->','HealthBar Colour':'->','Insanity Level':'->',},'audio':{'Hitsounds':settingskeystore['hitsound']},'graphics':{'FPS':tmp,'Fullscreen':settingskeystore['fullscreen']},'debug':{},'account':{'Username':user}}
-        #setuplist=['FPS: '+tmp,'Fullscreen: '+str(settingskeystore['fullscreen']),'Effects: '+str(settingskeystore['effects']),'Allow Skins: '+str(settingskeystore['skinning']),'Hitsounds: '+str(settingskeystore['hitsound']),'Leaderboards: '+str(settingskeystore['leaderboard']),'Debug Info','Crash Test']
         setuplistpos=[]
-#        for a in range(1,6):
-#            setuplist.append('Unknown')
         b=0
         render('rect', arg=((0,0,w,h), (42,40,95), False))
         if setupid==2:
+            setupid=1
             render('rect', arg=((w-400,100,400,h-100), (20,20,20), False))
             showplayfield((w-200,-30))
             render('rect', arg=((w-380,110,200,10), (0,180,0), False),borderradius=10)

@@ -222,5 +222,8 @@ def timeform(t):
 def preparemap():
     global beatnowmusic,preparedmap
     preparedmap=1
-    transitionprep(4) # type: ignore
+    if ismulti:
+        transitionprep(16)
+    else:
+        transitionprep(4) # type: ignore
     resetscore() # type: ignore

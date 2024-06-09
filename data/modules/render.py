@@ -54,7 +54,7 @@ def render(type, arg=(0, 0) ,  text='N/A', bordercolor=forepallete, borderradius
         print(error)
         exit()
         crash(str(error)+' (renderer)')
-def menu_draw(instruction, text=None,forcetext=False,usecolour=False,iconoffset=(0,0),textoffset=(0,0),showicon=False,newline=' - ',crossid=0,bradius=10,settings=False,beatmenu=0,ishomemenu=False,ignoremove=False, istextbox=False, selected_button=0,enabled_button=[],enable_border=False, hidebutton=False,bigmode=False,startlimit=1,endlimit=None,styleid=1,isblade=False,icon=0):
+def menu_draw(instruction, text=None,forcetext=False,usecolour=False,align=1,iconoffset=(0,0),textoffset=(0,0),showicon=False,newline=' - ',crossid=0,bradius=10,settings=False,beatmenu=0,ishomemenu=False,ignoremove=False, istextbox=False, selected_button=0,enabled_button=[],enable_border=False, hidebutton=False,bigmode=False,startlimit=1,endlimit=None,styleid=1,isblade=False,icon=0):
     global osam
     fmove=0
     pmove=0
@@ -162,7 +162,11 @@ def menu_draw(instruction, text=None,forcetext=False,usecolour=False,iconoffset=
                                     sd=0
                                 else:
                                     sd=(d*f)
-                                render('text', text=e.replace('[no video]','').rstrip(' '), arg=((0,0), tcol,'center'),relative=(fmove+tmp[0]-pmove+textoffset[0],tmp[1]+textoffset[1]+sd,tmp[2],d))
+                                if align:
+                                    ali='center'
+                                else:
+                                    ali='nada'
+                                render('text', text=e.replace('[no video]','').rstrip(' '), arg=((fmove+tmp[0]-pmove+textoffset[0],tmp[1]+textoffset[1]+sd), tcol,ali),relative=(fmove+tmp[0]-pmove+textoffset[0],tmp[1]+textoffset[1]+sd,tmp[2],d))
                                 f+=1
                         else:
                             render('text', text=text[a-1], arg=((0,0), forepallete,'center','min'),relative=tmp)
@@ -210,11 +214,6 @@ def fullscreenchk():
         reload=True
     if not firstcom:
         firstcom=True
-        logopos=Tween(begin=0, 
-               end=100, #-100?
-               duration=1200,
-               easing=Easing.CUBIC,
-               easing_mode=EasingMode.OUT,boomerang=True)
         beatani=[Tween(begin=cross[0], end=beatsel,duration=350,easing=Easing.CUBIC,easing_mode=EasingMode.OUT),0]
         beatani[0].start()
         diffani=[Tween(begin=-1, end=0,duration=1,easing=Easing.CUBIC,easing_mode=EasingMode.OUT),0]
@@ -224,10 +223,9 @@ def fullscreenchk():
         modsv=0
         modsani=[Tween(begin=0, end=1,duration=350,easing=Easing.CUBIC,easing_mode=EasingMode.OUT),0]
         modsani[0].start()
-        transani=[Tween(begin=0, end=1,duration=150*3,easing=Easing.CUBIC,easing_mode=EasingMode.OUT,boomerang=True),0]
+        transani=[Tween(begin=0, end=1,duration=150*2,easing=Easing.CUBIC,easing_mode=EasingMode.OUT,boomerang=True),0]
         loading=Tween(begin=0, end=1,duration=1000,easing=Easing.BOUNCE,easing_mode=EasingMode.OUT,boomerang=True,loop=True)
         loading.start()
-        logopos.start()
         volani=Tween(begin=volvisual, end=vol,duration=250,easing=Easing.CUBIC,easing_mode=EasingMode.OUT)
         volani.start()
     ins=1

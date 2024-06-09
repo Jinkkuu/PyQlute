@@ -45,7 +45,7 @@ def mainmenu():
         for a in range(1,len(mtext[meid])+1):
             mmenu.append((ba+bla+(w//2-((wid*scale)*(len(mtext[meid])/2))+((wid*scale)*(a-1))),h//2-(75*scale),wid*scale,hei*scale))
         drawRhomboid(screen,dcolour,bla-25,h//2-(76*scale)+1,w+80,hei*scale,26)
-        menubutton=menu_draw(mmenu, text=mtext[meid],isblade=True,textoffset=(-10,25),iconoffset=(-7,-5),icon=micon,ishomemenu=True,forcetext=True,usecolour=True)
+        menubutton=menu_draw(mmenu, text=mtext[meid],isblade=True,textoffset=(-10,25),iconoffset=(-7,-5),icon=micon[meid],ishomemenu=True,forcetext=True,usecolour=True)
         if gametime>=lastms+1000 or gametime<=-1:
             song_change(1)
         render('rect',arg=((0,0,w,45),dcolour,False))#,surf=surface[0])

@@ -1,5 +1,5 @@
 def get_input():
-    global keys,logintext,textboxid,bgs,reloaddatabase,room,debugmode,meidt,cset,activity,shopscroll,search,shopref,usecache,srank,modsv,sb,sbt,modsani,sbid,notewidth,noteheight,customid,successfulsignin,issigned,modshow,setupid,gobutton,useroverlay,replaymen,beatnowmusic,beatsel,beatsel,diffani,diffcon,beatnowmusic,change,setbutton,settingskeystore,fpsmode,firstcom,accounts
+    global keys,logintext,textboxid,bgs,ismulti,multitext,reloaddatabase,room,debugmode,meidt,cset,activity,shopscroll,search,shopref,usecache,srank,modsv,sb,sbt,modsani,sbid,notewidth,noteheight,customid,successfulsignin,issigned,modshow,setupid,gobutton,useroverlay,replaymen,beatnowmusic,beatsel,beatsel,diffani,diffcon,beatnowmusic,change,setbutton,settingskeystore,fpsmode,firstcom,accounts
     for event in pygame.event.get():
         if event.type  ==  pygame.QUIT:
             transitionprep(-1)
@@ -20,6 +20,7 @@ def get_input():
                         if issigned:
                             transitionprep(14)
                             sbid=0
+                            ismulti=1
                         else:
                             transitionprep(10)
                 elif menubutton  ==  3:
@@ -45,10 +46,20 @@ def get_input():
                     transitionprep(12)
             elif activity==0:
                 transitionprep(1)
+            elif activity==16:
+                if sysbutton==1:
+                    transitionprep(14)
+                elif sysbutton==2:
+                    requests.get(settingskeystore['apiurl']+'api/createroom?'+str(settingskeystore['username'])+'?'+str(settingskeystore['password'])+'?'+str(multitext)+'?'+str(beatmapsetid)+'?'+str(beatmapid)+'?'+str(songtitle),headers={'User-Agent': 'QluteClient-'+str(gamever)},timeout=5)
+                    reloadrooms()
+                    transitionprep(14)
+                elif beat:
+                    transitionprep(3)
             elif activity==14:
                 if sysbutton==1:
                     transitionprep(1)
                 elif sysbutton==2:
+                    multitext=settingskeystore['username']+"'s lovely playroom"
                     transitionprep(16)
                 elif sbid==mu:
                     notification('QlutaBot',desc='Joining Room...')
@@ -193,7 +204,10 @@ def get_input():
                 if event.button==1:
                     if sysbutton  ==  1:
                         if not activity==7:
-                            transitionprep(1)
+                            if ismulti:
+                                transitionprep(16)
+                            else:
+                                transitionprep(1)
                         else:
                             activity=3
                     elif sysbutton == 2:
@@ -289,13 +303,20 @@ def get_input():
             # formation 
             elif event.key  ==  pygame.K_q and not activity==10 or event.key  ==  pygame.K_ESCAPE :
                 if activity==4:
-                    transitionprep(3)           
+                    transitionprep(3)
+                elif activity==1:
+                    if meid:
+                        bani.start()
+                        meidt=not meid
+                    else:
+                        transitionprep(-1)           
                 elif not activity==7:
-                    transitionprep(1)
+                    if ismulti:
+                        transitionprep(16)
+                    else:
+                        transitionprep(1)
                 elif activity==7:
                     activity=3
-                elif not activity==1:
-                    transitionprep(-1)
             else: 
                 if activity==10:
                     logintext[textboxid] += event.unicode

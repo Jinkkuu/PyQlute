@@ -76,7 +76,6 @@ def reloadstats(reloadleaderboard=False):
     #perfect=60
     great=perfect*2
     ok=perfect*3
-    ismulti=modsen[4]
     for a in range(2,len(modsen)+1):
         if modsen[a-1] and a==2:
             scoremult+=inc*3
@@ -267,9 +266,11 @@ def reloadprofile():
             totacc=0
             level=1
             totrank=0
-
+def reloadrooms():
+    global multilist
+    multilist=requests.get(settingskeystore['apiurl']+'api/getmultilist',headers={'User-Agent': 'QluteClient-'+str(gamever)},timeout=5).json()
 def ondemand():
-    global totperf,totscore,totrank,nettick,issigned,qlutaerror,menunotice,pingspeed,downloadqueue,level,multitime,multilist
+    global totperf,totscore,totrank,nettick,issigned,qlutaerror,menunotice,pingspeed,downloadqueue,level,multitime
     qlutaerror=True
     pingspeed=0
     while True:
@@ -277,7 +278,7 @@ def ondemand():
             exit()
         if int(time.time()-nettick)>9:
             if not bypass_multiplayer:
-                multilist=requests.get(settingskeystore['apiurl']+'api/getmultilist',headers={'User-Agent': 'QluteClient-'+str(gamever)},timeout=5).json()
+                reloadrooms()
             if issigned:
                 try:
                     reloadprofile()

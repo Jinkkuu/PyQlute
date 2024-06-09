@@ -1,6 +1,7 @@
 bpm=60000
 pausedur=3
 isplaying=0
+songtitle='No beatmaps avaliable!'
 def spectrum():
     global bars
     for a in range(1,len(bars)+1):
@@ -141,7 +142,6 @@ def beatmapload():
                     if betaperf>1500:
                         betaperf=1500
                     lastms=int(objects[-1].split(',')[2])
-                    print(isplaying)
 #                    else:
 #                        ranktype=
             else:
@@ -163,9 +163,11 @@ def beatmapload():
             a=1
             loop=-1
         if a and not isplaying:
-            pygame.mixer.music.play(loop)
-            print(isplaying)
-            isplaying=1
+            try:
+                pygame.mixer.music.play(loop)
+                isplaying=1
+            except pygame.error:
+                pass
 def volchg(t):
     global vol,voltime,volani
     voltime=time.time()+1
