@@ -2,7 +2,7 @@ def get_input():
     global keys,logintext,textboxid,bgs,reloaddatabase,room,debugmode,meidt,cset,activity,shopscroll,search,shopref,usecache,srank,modsv,sb,sbt,modsani,sbid,notewidth,noteheight,customid,successfulsignin,issigned,modshow,setupid,gobutton,useroverlay,replaymen,beatnowmusic,beatsel,beatsel,diffani,diffcon,beatnowmusic,change,setbutton,settingskeystore,fpsmode,firstcom,accounts
     for event in pygame.event.get():
         if event.type  ==  pygame.QUIT:
-            stopnow()
+            transitionprep(-1)
         if event.type  ==  pygame.MOUSEBUTTONDOWN:
             if event.button == 1:
                 pygame.mixer.Sound(samplepath+'click.wav').play()
@@ -32,7 +32,7 @@ def get_input():
                         meidt=not meid
                 elif menubutton  ==  4:
                     if not meid:
-                        stopnow()
+                        transitionprep(-1)
                 elif topbutton  ==  1:
                     transitionprep(2)
                     setupid=1
@@ -294,7 +294,7 @@ def get_input():
                 elif activity==7:
                     activity=3
                 elif not activity==1:
-                    stopnow()
+                    transitionprep(-1)
             else: 
                 if activity==10:
                     logintext[textboxid] += event.unicode

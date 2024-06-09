@@ -1,3 +1,5 @@
+import pygame
+from pygame import gfxdraw
 hcol=(62,60,115),(42,40,95),(22,20,75),(82,80,135)
 notewidth=100
 noteheight=30
@@ -46,10 +48,6 @@ def render(type, arg=(0, 0) ,  text='N/A', bordercolor=forepallete, borderradius
                 pygame.draw.rect(surf, bordercolor, (arg[0][0], arg[0][1], arg[0][2]-off, arg[0][3]-off), 1, border_radius=borderradius)
             ## This was for a "Wireframe" Like Square
 #            pygame.draw.rect(screen, (0, 255, 0), (arg[0][0], arg[0][1], arg[0][2], arg[0][3]), 1)
-        elif type == 'header':
-            render('rect', arg=((0, -40, w, 110), hcol[1], False), borderradius=20)
-            render('rect', arg=((0, -40, w, 105), hcol[0], False), borderradius=20)
-            render('rect',arg=((0,0,w,5),hcol[1],False))
         else:
             crash('Render unsupported Type')
     except Exception as error:
@@ -226,7 +224,7 @@ def fullscreenchk():
         modsv=0
         modsani=[Tween(begin=0, end=1,duration=350,easing=Easing.CUBIC,easing_mode=EasingMode.OUT),0]
         modsani[0].start()
-        transani=[Tween(begin=0, end=100,duration=150,easing=Easing.CUBIC,easing_mode=EasingMode.OUT,boomerang=True),0]
+        transani=[Tween(begin=0, end=1,duration=150*3,easing=Easing.CUBIC,easing_mode=EasingMode.OUT,boomerang=True),0]
         loading=Tween(begin=0, end=1,duration=1000,easing=Easing.BOUNCE,easing_mode=EasingMode.OUT,boomerang=True,loop=True)
         loading.start()
         logopos.start()

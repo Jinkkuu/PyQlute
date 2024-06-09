@@ -1,4 +1,4 @@
-import os,time,requests,hashlib,sys
+import os,time,requests,hashlib,sys,pygame
 def maxt(t,o):
     if t+o>254:
         return 255

@@ -174,12 +174,13 @@ def beatmenu():
                 menuback-=backspeed # type: ignore
         freeze=0
         tmp=0
-        render('header') # type: ignore
         hax=300//2
         if w <= 820 and h<=620: # type: ignore
             popupw=w//2-hax # type: ignore
         else:
             popupw=50
+        render('rect', arg=((0, -20, w, 90), hcol[1], False), borderradius=20)
+        render('rect', arg=((0, -20, w, 85), hcol[0], False), borderradius=20)
         if beatmaps==0: # type: ignore
             render('text', text='No Beatmap added :sad:', arg=(offset, forepallete)) # type: ignore
         else:

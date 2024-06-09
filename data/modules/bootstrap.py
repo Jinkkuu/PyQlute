@@ -7,7 +7,7 @@
 #
 import random,re,json,zipfile,os
 from random import randint
-import pygame, time, sys, threading, requests, socket,hashlib,io
+import time, sys, threading, requests, socket,hashlib,io
 from tweener import *
 nline='\n'
 axe=0
@@ -174,7 +174,7 @@ def notification(title,desc=''):
     noteani=[Tween(begin=0, end=notemaxh,duration=500,easing=Easing.CUBIC,easing_mode=EasingMode.OUT,boomerang=True),0]
     noteani[0].start()
 def main():
-    global fps, activity,oneperf,preparedmap,beatnowmusic,change,upd,noteani,voltime,delta,transi,volvisual,volvismo,notemsg,flashylights,logopos,oneperfk,mtext, ingame, screen, settingskeystore,reloaddatabase,totrank, debugmode,sa,bgcolour,tick,scale,size,cardsize,bgtime,replaymen,allowed,posmouse,drawtime,scoremult,msg
+    global fps, activity,oneperf,preparedmap,beatnowmusic,change,upd,noteani,voltime,delta,trans,volvisual,volvismo,notemsg,flashylights,logopos,oneperfk,mtext, ingame, screen, settingskeystore,reloaddatabase,totrank, debugmode,sa,bgcolour,tick,scale,size,cardsize,bgtime,replaymen,allowed,posmouse,drawtime,scoremult,msg
     if change:
         reloadsettings()
         change=0
@@ -260,7 +260,6 @@ def main():
             os.remove(downpath+a)
     if totrank<1:
         totrank=1
-    transi=((100-transani[0].value)/100)
     get_input()
     beatmapload()
     logo()
@@ -275,6 +274,8 @@ def main():
     controlsetup()
     downloads()
     multiplayer()
+    if activity==-1:
+        stopnow()
     if useroverlay:
         render('rect', arg=((0,-15,w,h//2), (60,60,60), False), borderradius=15)
         posy=10
@@ -318,15 +319,20 @@ def main():
         tmp=(posmouse[0]+15,posmouse[1]+15,25,25)
         render('text',text=msg,arg=((tmp[0],tmp[1]),forepallete,'min','tooltip'))
         msg=''
-    render('rect', arg=(((w//2)*(1-((transani[0].value)*0.01)),(h//2)*(1-((transani[0].value)*0.01)),(w)*((transani[0].value)*0.01),h*((transani[0].value)*0.01)), (0,0,0), False))
+    trans=1-transani[0].value
+    render('rect', arg=((w*trans,0,w,h//2), hcol[0], False))
+    render('rect', arg=((w*-trans,h//2,w,h//2), hcol[1], False))
+    if actto==-1:
+        render('text',text='See you next time~',arg=((0,0),forepallete,'grade','center'),relative=(w*trans,0,w,h-60))
+    elif actto and transani[1]:
+        rec=icons['logo.png'].get_rect(center=pygame.Rect(w*trans,0,w,h).center)
+        screen.blit(icons['logo.png'],(rec[0],rec[1]))
     if transani[1]:
         transani[0].update()
-        if transani[0].value>99:
+        if transani[0].value==1:
             activity=actto
         elif transani[0].value==0:
             transani[1]=0
-    #updateraw=(time.time()-update)/0.001
-    #spectrum()
     if activity==1:
         of=35
     else:
