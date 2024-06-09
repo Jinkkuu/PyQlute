@@ -29,6 +29,7 @@ samplepath=syspath+'samples/'
 downpath=datapath+'downloads/'
 replaypath=datapath+'replays/'
 skinpath=datapath+'skins/'
+fontpath=syspath+'fonts/'
 username='Guest'
 propath=datapath+'profiles/'
 profilepath=propath+username+'/'
@@ -102,7 +103,7 @@ oldstats=[0,0]
 rankmodes=('Ranked',(100,200,100)),('Unranked',(200,100,100)),('Special',(200,200,100)),('Loading...',(200,200,200)),
 
 pygame.init()
-fontname=resource_path(syspath+'font.ttf')
+fontname={'default':resource_path(fontpath+'default.ttf'),'bold':resource_path(fontpath+'defaultbold.ttf')}
 clock=pygame.time.Clock()
 activity=0
 select=False
@@ -429,4 +430,4 @@ if __name__  ==  "__main__":
                 sys.exit()
             main()
     except Exception as error:
-        crasha(str(error))
+        crash(str(error))

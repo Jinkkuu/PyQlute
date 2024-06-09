@@ -177,7 +177,7 @@ def drawRhomboid(surf, color, x, y, width, height, offset, thickness=0):
         (x-offset, y + height)]
     pygame.draw.polygon(surf, color, points, thickness)
 def fullscreenchk():
-    global w, h, w, h,background,fieldpos,modsv,loading, bani,beatani,diffani,screen,reload,transani,modsani, button_size_width, firstcom,tal,keymap,fonts,volani,noteheight,logopos,bladeani
+    global w, h, w, h,background,fieldpos,modsv,loading, bani,beatani,diffani,screen,reload,transani,modsani, button_size_width, firstcom,tal,keymap,fonts,fontsb,volani,noteheight,logopos,bladeani
     reload=False
     if not settingskeystore['fullscreen']:
         if not firstcom:
@@ -239,7 +239,7 @@ def fullscreenchk():
         else: 
             h=screen.get_height()
         f=24
-        fonts = pygame.font.Font(fontname,  int(f//1.2)),pygame.font.Font(fontname,  f//2),pygame.font.Font(fontname,  f*2),pygame.font.Font(fontname,  int(f)),pygame.font.Font(fontname,  int(f/1.1))
+        fonts = pygame.font.Font(fontname['default'],  int(f//1.2)),pygame.font.Font(fontname['default'],  f//2),pygame.font.Font(fontname['default'],  f*2),pygame.font.Font(fontname['bold'],  int(f)),pygame.font.Font(fontname['default'],  int(f/1.1))
         button_size_width=w//2
         print(time.time(),screen.get_size())
         reloadbg()

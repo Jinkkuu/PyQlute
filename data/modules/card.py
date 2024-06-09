@@ -25,4 +25,4 @@ def print_card(pp,score,name,pos,rank,isgrayed=False,home=False,hide=False):
                 render('text', text='Never played', arg=((pos[0]+10,pos[1]+40), tmpt,'min'))
         else:
             render('text', text='Not Logged in', arg=((pos[0]+10,pos[1]+40), tmpt,'min')) # type: ignore
-        render('text', text=name, arg=((pos[0]+10,pos[1]+10), tmpt,'bold'))
+        render('text', text=name, arg=((pos[0]+10,pos[1]+6), tmpt,'bold'))
