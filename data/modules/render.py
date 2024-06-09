@@ -54,7 +54,7 @@ def render(type, arg=(0, 0) ,  text='N/A', bordercolor=forepallete, borderradius
         print(error)
         exit()
         crash(str(error)+' (renderer)')
-def menu_draw(instruction, text=None,usecolour=False,showicon=False,newline=' - ',crossid=0,bradius=10,settings=False,beatmenu=0,ishomemenu=False,ignoremove=False, istextbox=False, selected_button=0,enabled_button=[],enable_border=False, hidebutton=False,bigmode=False,startlimit=1,endlimit=None,styleid=1,isblade=False,icon=0):
+def menu_draw(instruction, text=None,forcetext=False,usecolour=False,iconoffset=(0,0),textoffset=(0,0),showicon=False,newline=' - ',crossid=0,bradius=10,settings=False,beatmenu=0,ishomemenu=False,ignoremove=False, istextbox=False, selected_button=0,enabled_button=[],enable_border=False, hidebutton=False,bigmode=False,startlimit=1,endlimit=None,styleid=1,isblade=False,icon=0):
     global osam
     fmove=0
     pmove=0
@@ -140,17 +140,19 @@ def menu_draw(instruction, text=None,usecolour=False,showicon=False,newline=' - 
             if not text == None:
                 if icon and icon[a-1]!=None:
                     showicon=1
-                    end=icon[a-1].get_rect(center=pygame.Rect(instruction[a-1]).center)
+                    end=icon[a-1].get_rect(center=pygame.Rect((fmove+tmp[0]-pmove+iconoffset[0],tmp[1]+iconoffset[1],tmp[2],tmp[3])).center)
                     screen.blit(icon[a-1], (end[0],end[1]))
+                else:
+                    showicon=0
                 if bigmode:
                     if not showicon:
-                        render('text', text=text[a-1], arg=((0,0), forepallete,'center','grade'),relative=instruction[a-1])
+                        render('text', text=text[a-1], arg=((0,0), forepallete,'center','grade'),relative=tmp)
                 else:
                     if ishomemenu:
                         home=moveid
                     else:
                         home=0
-                    if not showicon:
+                    if not showicon or forcetext:
                         if not settings:
                             s=text[a-1].split(newline)
                             d=instruction[a-1][3]//len(s)
@@ -160,7 +162,7 @@ def menu_draw(instruction, text=None,usecolour=False,showicon=False,newline=' - 
                                     sd=0
                                 else:
                                     sd=(d*f)
-                                render('text', text=e.replace('[no video]','').rstrip(' '), arg=((0,0), tcol,'center'),relative=(fmove+tmp[0]-pmove,tmp[1]+sd,tmp[2],d))
+                                render('text', text=e.replace('[no video]','').rstrip(' '), arg=((0,0), tcol,'center'),relative=(fmove+tmp[0]-pmove+textoffset[0],tmp[1]+textoffset[1]+sd,tmp[2],d))
                                 f+=1
                         else:
                             render('text', text=text[a-1], arg=((0,0), forepallete,'center','min'),relative=tmp)

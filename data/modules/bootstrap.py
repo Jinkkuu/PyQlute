@@ -419,6 +419,7 @@ if __name__  ==  "__main__":
         icons={}
         for a in os.listdir(resource_path(syspath+'icons/')):
             icons[a]=(pygame.image.load(resource_path(syspath+'icons/'+a))) # Icons!
+        micon=(icons['logomini.png'],icons['edit.png'],icons['browse.png'],icons['exit.png'])
         programIcon = pygame.image.load(resource_path(syspath+'icon.png'))
         threading.Thread(target=ondemand).start()
         threading.Thread(target=check_gameversion).start()

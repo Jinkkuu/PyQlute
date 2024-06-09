@@ -48,7 +48,7 @@ def beatmenu():
         else:
             idc=1
             idcb=len(bp2)
-        scrollbar((w-10,54),(10,h-118),search=-cross[idc],length=idcb)
+        scrollbar((w-10,54),(10,h-124),search=-cross[idc],length=idcb)
         a=0
         tmp=(h//60)//2 # type: ignore
         if beatmaps>0: # type: ignore
