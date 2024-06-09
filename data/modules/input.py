@@ -73,6 +73,7 @@ def get_input():
 
             elif activity==6:
                 if sysbutton==1:
+                    
                     transitionprep(1)
                 elif sysbutton==2:
                     notification('Downloading',desc=sentry[sbid-1]['artist']+' - '+str(sentry[sbid-1]['title']))

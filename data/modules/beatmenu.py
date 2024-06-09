@@ -54,9 +54,11 @@ def beatmenu():
         if beatmaps>0: # type: ignore
             pp=int(int(getpoint(diffp[0][0],0,0,0,scoremult,combo=diffp[0][0]))),int(getpoint(diffp[-1][0],0,0,0,scoremult,combo=diffp[-1][0])) # type: ignore
             if len(diffp)<2 or activity==7: # type: ignore
-                gotext='Q'
+                gotext=''
+                goicon=icons['go.png']
             else:
-                gotext='->'
+                goicon=icons['next.png']
+                gotext=''
         if activity==7:
             sel=diffcon
             button=menu_draw(bp1,bp2,beatmenu=True,selected_button=sel+1,startlimit=int(cross[1])-tmp-1,endlimit=int(cross[1])+tmp+2,crossid=1,styleid=1) # type: ignore
@@ -142,7 +144,7 @@ def beatmenu():
 #        for systrocity in sysbuttonpos:
 #            render('rect', arg=((systrocity), (100,100,150), True),bordercolor=(80,80,100),borderradius=10)
         if beatmaps: # type: ignore
-            gobutton=menu_draw(((w-120,h-60,120,60),),(gotext,),bigmode=True,styleid=3,bradius=0) # type: ignore
+            gobutton=menu_draw(((w-120,h-60,120,60),),(gotext,),bigmode=True,showicon=True,icon=(goicon,),styleid=3,bradius=0) # type: ignore
         else:
             gobutton=0
         if scoremult==1:

@@ -141,17 +141,18 @@ def menu_draw(instruction, text=None,usecolour=False,showicon=False,newline=' - 
                                 menupos[a-1][0].start()
                 drawRhomboid(screen, buttcolour, fmove+tmp[0]-(moveid//2)-pmove, tmp[1], tmp[2]+moveid, tmp[3],25, 0)
             if not text == None:
+                if icon and icon[a-1]!=None:
+                    showicon=1
+                    end=icon[a-1].get_rect(center=pygame.Rect(instruction[a-1]).center)
+                    screen.blit(icon[a-1], (end[0],end[1]))
                 if bigmode:
-                    render('text', text=text[a-1], arg=((0,0), forepallete,'center','grade'),relative=instruction[a-1])
+                    if not showicon:
+                        render('text', text=text[a-1], arg=((0,0), forepallete,'center','grade'),relative=instruction[a-1])
                 else:
                     if ishomemenu:
                         home=moveid
                     else:
                         home=0
-                    if icon:
-                        showicon=1
-                        for b in icon:
-                            screen.blit(b, (instruction[a-1][0], instruction[a-1][1]))
                     if not showicon:
                         if not settings:
                             s=text[a-1].split(newline)
