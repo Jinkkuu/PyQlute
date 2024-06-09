@@ -94,9 +94,6 @@ def menu_draw(instruction, text=None,usecolour=False,showicon=False,newline=' - 
             buttcolour = (buttonc[0]+10,buttonc[1]+10,buttonc[2]+10)
             if pygame.mouse.get_focused():
                 button=a
-                if osam!=button:
-                    osam=button
-                    pygame.mixer.Sound(samplepath+'hover.wav').play()
             else:
                 osam=0
         else:

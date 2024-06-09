@@ -9,7 +9,7 @@ dcolour=(40,40,40) # default colour for top bar and blades~
 accounts=0
 wod=45
 def mainmenu():
-    global debugmode, meid,activity,beatnowmusic, totperf,totscore,msg,menubutton,topbutton,accounts,bladeani,background
+    global debugmode, meid,osam,activity,beatnowmusic, totperf,totscore,msg,menubutton,topbutton,accounts,bladeani,background
     if not bladeani[1] and activity==1:
         bladeani[1]=1
         bladeani[0].start()
@@ -55,7 +55,7 @@ def mainmenu():
             render('text', text='nothing...', arg=((20,(trans*41)-30), (255,255,255)))
         topbutton=menu_draw(tmenu, text=toptext,ignoremove=True,ishomemenu=True,bradius=0,usecolour=True,icon=(icons['settings.png'],icons['user.png'],icons['download.png']))
         if not qlutaerror:
-            print_card(totperf,totacc,settingskeystore['username'],(w//2-150,h//2+120),totrank,home=True,isgrayed=restricted)
+            print_card(totperf,totscore,settingskeystore['username'],(w//2-150,h//2+120),totrank,home=True,isgrayed=restricted)
         if menunotice!='':
             tmp = fonts[0].render(str(menunotice),  True,  (0,0,0))
             txtrect=tmp.get_rect()
@@ -83,6 +83,9 @@ def mainmenu():
             msg='Browse our catalog'
         elif menubutton == 4 and not meid:
             msg='See ya next time~'
+        if osam!=menubutton:
+            osam=menubutton
+            pygame.mixer.Sound(samplepath+'hover.wav').play()
 
 #        render('rect', arg=((-10,150,350,60), (maxt(40,bgcolour),maxt(40,bgcolour),maxt(100,bgcolour)), False),borderradius=10)
 #        render('text', text='WILL CHANGE', arg=((25,155), (255,255,maxt(0,bgcolour)),'grade'))
