@@ -364,7 +364,12 @@ def main():
 #        x+=1
     #print((time.time()-gametime)/0.001)
     if activity in allowed:
-        render('rect', arg=((posmouse[0]-10,posmouse[1]-10,20,20), (102, 155, 212), True),borderradius=20)
+        if 'cursor.png' in icons:
+            rec=icons['cursor.png'].get_rect()
+            cen=rec[2]//2,rec[3]//2
+            screen.blit(icons['cursor.png'],(posmouse[0]-cen[0],posmouse[1]-cen[1]))
+        else:
+            render('rect', arg=((posmouse[0]-10,posmouse[1]-10,20,20), (102, 155, 212), True),borderradius=20)
 #    if not (posmouse[0],posmouse[1]) in crox:
 #        crox.append((posmouse[0],posmouse[1]))
     pygame.display.flip()
