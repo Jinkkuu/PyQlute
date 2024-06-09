@@ -6,7 +6,6 @@ def print_card(pp,score,name,pos,rank,isgrayed=False,home=False,hide=False):
         else:
             tmp=bgdefaultcolour[0]+25,bgdefaultcolour[1]+25,bgdefaultcolour[2]+25
             tmpt=forepallete
-        #if not pos[0]+300>w:
         if not name:
             name='Guest'
             rank=0
@@ -20,11 +19,10 @@ def print_card(pp,score,name,pos,rank,isgrayed=False,home=False,hide=False):
             elif hide:
                 render('text', text="Offline", arg=((pos[0]+10,pos[1]+40), tmpt,'min'))
             elif pp>0:
-                render('text', text='Accuracy - '+str(round(score,2))+'%', arg=((pos[0]+10,pos[1]+60), tmpt,'min'))
-                render('text', text=str(format(int(pp),','))+'pp (Lv. '+str(format(level,','))+')', arg=((pos[0]+10,pos[1]+40), tmpt,'min'))
+                render('text', text=str(format(score,','))+' (Lv. '+str(format(level,','))+')', arg=((pos[0]+10,pos[1]+60), tmpt,'min'))
+                render('text', text=str(format(int(pp),','))+'pp', arg=((pos[0]+10,pos[1]+40), tmpt,'min'))
             else:
                 render('text', text='Never played', arg=((pos[0]+10,pos[1]+40), tmpt,'min'))
         else:
             render('text', text='Not Logged in', arg=((pos[0]+10,pos[1]+40), tmpt,'min')) # type: ignore
         render('text', text=name, arg=((pos[0]+10,pos[1]+10), tmpt,'bold'))
-            #+' (#'+str(format(rank,','))+')'

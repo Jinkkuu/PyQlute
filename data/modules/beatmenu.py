@@ -139,14 +139,10 @@ def beatmenu():
             msg='Double the fun (+0.5)'
         elif mod==7:
             msg='We be easy on you (/0.5)'
-        render('rect',arg=((0,h-65,w,5),hcol[1],False)) # type: ignore
+        #render('rect',arg=((0,h-65,w,5),hcol[1],False)) # type: ignore
         render('rect', arg=((0,h-60,w,60), hcol[0], False)) # type: ignore
 #        for systrocity in sysbuttonpos:
 #            render('rect', arg=((systrocity), (100,100,150), True),bordercolor=(80,80,100),borderradius=10)
-        if beatmaps: # type: ignore
-            gobutton=menu_draw(((w-120,h-60,120,60),),(gotext,),bigmode=True,showicon=True,icon=(goicon,),styleid=3,bradius=0) # type: ignore
-        else:
-            gobutton=0
         if scoremult==1:
             m='Mods'
         else:
@@ -156,15 +152,7 @@ def beatmenu():
         if not qlutaerror: # type: ignore
             coff=80
             render('rect',arg=((w//2-coff-5,(h-90),310,100),hcol[1],False),borderradius=10) # type: ignore
-            render('rect',arg=((w//2-coff,(h-75),300,75),hcol[1],False)) # type: ignore
-            print_card(totperf,totacc,settingskeystore['username'],(w//2-coff,(h-85)),totrank,isgrayed=restricted) # type: ignore
-#        if ranktype and not ranktype==3:
-#            if not modshow:
-#                of=110
-#            else:
-#                of=0
-#            render('rect', arg=((40,h-200+of,250,25), blend(opacity//2,0), False),borderradius=5)
-#            render('text', text='You will not earn Points', arg=((0,0), forepallete,"center"),relative=(40,h-200+of,250,25))
+            print_card(totperf,totscore,settingskeystore['username'],(w//2-coff,(h-85)),totrank,isgrayed=restricted) # type: ignore
         if not beatani[1] or not diffani[1]: # type: ignore
             cross[0]=beatani[0].value # type: ignore
             cross[1]=diffani[0].value # type: ignore
@@ -181,6 +169,10 @@ def beatmenu():
             popupw=w//2-hax # type: ignore
         else:
             popupw=50
+        if beatmaps: # type: ignore
+            gobutton=menu_draw(((w-135,h-70,145,80),),(gotext,),bigmode=True,showicon=True,icon=(goicon,),styleid=3) # type: ignore
+        else:
+            gobutton=0
         render('rect', arg=((0, -20, w, 90), hcol[1], False), borderradius=20)
         render('rect', arg=((0, -20, w, 85), hcol[0], False), borderradius=20)
         if beatmaps==0: # type: ignore
