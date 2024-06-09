@@ -431,4 +431,4 @@ if __name__  ==  "__main__":
                 sys.exit()
             main()
     except Exception as error:
-        crash(str(error))
+        crasha(str(error))

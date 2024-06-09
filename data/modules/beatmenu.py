@@ -52,7 +52,11 @@ def beatmenu():
         a=0
         tmp=(h//60)//2 # type: ignore
         if beatmaps>0: # type: ignore
-            pp=int(int(getpoint(diffp[0][0],0,0,0,scoremult,combo=diffp[0][0]))),int(getpoint(diffp[-1][0],0,0,0,scoremult,combo=diffp[-1][0])) # type: ignore
+            try:
+                pp=int(int(getpoint(diffp[0][0],0,0,0,scoremult,combo=diffp[0][0]))),int(getpoint(diffp[-1][0],0,0,0,scoremult,combo=diffp[-1][0])) # type: ignore
+            except Exception:
+                pp=0,0
+                song_change(1)
             if len(diffp)<2 or activity==7: # type: ignore
                 gotext=''
                 goicon=icons['go.png']

@@ -151,7 +151,8 @@ def beatmapload():
 #            for a in beatmap[:3]:
 #                print(a)
 #            sys.exit()
-    except Exception:
+    except Exception as err:
+        print('SONG SUBSYSTEM: ',err)
         song_change(1)
     a=0
     if beatmaps>0 and ismusic:
