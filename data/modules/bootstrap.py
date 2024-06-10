@@ -138,7 +138,7 @@ hits=[0,0,0,0]
 last=0
 ismulti=False # Enabling this would tell the game your in a multiplayer session
 keys=[0,0,0,0]
-keyslight=[0,0,0,0]
+keyslight=[Tween(begin=0),Tween(begin=0),Tween(begin=0),Tween(begin=0)]
 pos=(64,192,320,448)
 tip=0
 sre=0

@@ -1,4 +1,5 @@
 notecolour=(48, 183, 255)
+kdur=200
 def getpoint(perfect,good,meh,bad,multiplier,combo=1,type=int):
     multiplier=multiplier
     tmp=(((perfect*perfbom)+(good*(perfbom/2))+(meh*(perfbom/3))-(bad*(perfbom*2)))*multiplier)
@@ -54,23 +55,23 @@ def iscatched(block,isauto,ob,fir,id):
     tim=block
     return (lastcall,tick,tim)
 def showplayfield(pos,bypass=False):
+    render('rect', arg=((keymap[0][0]+pos[0],keymap[0][1]-10+pos[1],keymap[0][2]*4,10), (100,140,220), False),borderradius=0) # Judgement Line
     for a in range(1,5):
         b=a-1
-        mopa=(0.1-(time.time()-keyslight[b]))/0.1
-        if mopa<0:
-            mopa=0
-        co=(100,int(100+(20*mopa)),int(100+(120*mopa)))
-        render('rect', arg=(((keymap[b][0]+pos[0],keymap[b][1]+pos[1],keymap[b][2],keymap[b][3])), co, False),borderradius=0) # Judgement Block
+        co=(100,int(100+(20*keyslight[b].value)),int(100+(120*keyslight[b].value)))
+        render('rect', arg=(((keymap[b][0]+pos[0],keymap[b][1]+pos[1],keymap[b][2],keymap[b][3])), (50,50,50), False),borderradius=0) # Judgement Block
+        render('rect', arg=(((keymap[b][0]+pos[0],keymap[b][1]+pos[1]+(10*keyslight[b].value),keymap[b][2],keymap[b][3])), co, False),borderradius=0) # Judgement Block
         if a==4:
             render('line',arg=((keymap[-1][0]+pos[0]+100,0+pos[1]),(255,255,255),(keymap[-1][0]+pos[0]+100,keymap[-1][1]+pos[1]+noteheight)))    
         render('line',arg=((keymap[b][0]+pos[0],0+pos[1]),(255,255,255),(keymap[b][0]+pos[0],keymap[b][1]+pos[1]+noteheight)))
-    render('rect', arg=((keymap[0][0]+pos[0],keymap[0][1]-10+pos[1],keymap[0][2]*4,10), (100,140,220), False),borderradius=0) # Judgement Line
 
 def game():
-    global activity,timestep,debugmode,ncombo,replaystore,accuracy,beatnowmusic,kiai,unstablerate,fpsmode,score,scorew,keyspeed,bgcolour,totperf,totscore,objecon,healthtime,health,ranking,oldupdatetime,t,tip,gametime,combo,sre,combotime,sre,hits,last,stripetime,tmp,pptime,pptmp,ppcounter,perf
+    global activity,timestep,debugmode,ncombo,replaystore,keyslight,accuracy,beatnowmusic,kiai,unstablerate,fpsmode,score,scorew,keyspeed,bgcolour,totperf,totscore,objecon,healthtime,health,ranking,oldupdatetime,t,tip,gametime,combo,sre,combotime,sre,hits,last,stripetime,tmp,pptime,pptmp,ppcounter,perf
     if activity==4:
         if bgcolour>=1:
             bgcolour-=1
+        for a in keyslight:
+            a.update()
         playfield=(maxt(20,bgcolour),maxt(20,bgcolour),maxt(20,bgcolour))
         screen.fill(playfield)
         tmp=0.1
@@ -87,7 +88,7 @@ def game():
             perf=maxperf
         maxc=hits[0]+hits[1]+hits[2]+hits[3]
         if not maxc<1:
-            accuracy=round(((hits[0]-(hits[1]/2)-(hits[2]/3)-(hits[3]/4))/(maxc))*100,2)
+            accuracy=round((hits[0]/(maxc))*100,2)
         else:
             accuracy=100
         #accuracy=100
@@ -118,16 +119,6 @@ def game():
         tip=1
         hidden=0
         b=0
-        for a in unstablerate[::-1]:
-            break
-            if time.time()-a[0]>0.5:
-                unstablerate.remove(a)
-            if b>16:
-                break
-            else:
-                render('rect', arg=((keymap[3][0]+110,keymap[0][1]-50-(25*b),20*(1+b),20), hitcolour[a[1]], False))
-                render('rect', arg=(((fieldpos[0]//2)-30-(20*(b)),keymap[0][1]-50-(25*b),20*(b+1),20), hitcolour[a[1]], False))
-                b+=1
         for a in objects[objecon:maxobjec+objecon]:
             tok=a.split(',')
             #if tok[2]==firstobject:
@@ -176,14 +167,9 @@ def game():
                         keys[kik-1]=1
                         if settingskeystore['sreplay']:
                             replaystore.append(str(gametime)+';'+str(keys[0])+';'+str(keys[1])+';'+str(keys[2])+';'+str(keys[3]))
-                        keyslight[kik-1]=time.time()
-                    else:
-                        keys[kik-1]=0
                 if (judge[0] and keys[kik-1]) or judge[1]==3: 
                     hit=judge[1]
                     clicked=1
-                    if keys[kik-1]:
-                        keys[kik-1]=0
                     stripetime.append((keypos,int(tok[2])))
                     #print((keypos,int(tok[2])))
                 if pygame.Rect.colliderect(pygame.Rect(0,h+45,w,20),pygame.Rect(keypos,block,100,30)):
@@ -229,7 +215,6 @@ def game():
             current={'username': user,'score': score,'points': perf,'current': True}
             tmpl = leaderboard + [current]
             ranking=51
-            #playboard[len(playboard)-1]=(username,(255,255,0),int(end*1000000))
             for tmp in sorted(tmpl, key=lambda x: x['points'],reverse=True):
                 if tmp['username'] in (settingskeystore['username'],user) and "current" in tmp:
                     pcolor=blend(opacity,50)
@@ -307,6 +292,11 @@ def game():
 #        render('rect', arg=((w//2-200,5,tmp,10), (0,150,0), False),borderradius=10)
 #        for a in range(1,len(keys)+1):
 #            if keys[a-1]:
+        for a in range(0,4):
+            if keys[a]:
+                keyslight[a]=Tween(begin=1, end=0,duration=kdur,easing=Easing.CUBIC,easing_mode=EasingMode.OUT)
+                keyslight[a].start()
+                keys[a]=0
                 
         song_progress()
         if "tornney" in settingskeystore:
