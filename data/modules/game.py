@@ -55,12 +55,12 @@ def iscatched(block,isauto,ob,fir,id):
     tim=block
     return (lastcall,tick,tim)
 def showplayfield(pos,bypass=False):
-    render('rect', arg=((keymap[0][0]+pos[0],keymap[0][1]-10+pos[1],keymap[0][2]*4,10), (100,140,220), False),borderradius=0) # Judgement Line
+    render('rect', arg=((keymap[0][0]+pos[0],keymap[0][1]-10+pos[1],keymap[0][2]*4,10), (50,50,50), False),borderradius=0) # Judgement Line
     for a in range(1,5):
         b=a-1
         co=(100,int(100+(20*keyslight[b].value)),int(100+(120*keyslight[b].value)))
         render('rect', arg=(((keymap[b][0]+pos[0],keymap[b][1]+pos[1],keymap[b][2],keymap[b][3])), (50,50,50), False),borderradius=0) # Judgement Block
-        render('rect', arg=(((keymap[b][0]+pos[0],keymap[b][1]+pos[1]+(10*keyslight[b].value),keymap[b][2],keymap[b][3])), co, False),borderradius=0) # Judgement Block
+        render('rect', arg=(((keymap[b][0]+pos[0],keymap[b][1]+pos[1]+(10*-keyslight[b].value),keymap[b][2],keymap[b][3])), co, False),borderradius=0) # Judgement Block
         if a==4:
             render('line',arg=((keymap[-1][0]+pos[0]+100,0+pos[1]),(255,255,255),(keymap[-1][0]+pos[0]+100,keymap[-1][1]+pos[1]+noteheight)))    
         render('line',arg=((keymap[b][0]+pos[0],0+pos[1]),(255,255,255),(keymap[b][0]+pos[0],keymap[b][1]+pos[1]+noteheight)))
