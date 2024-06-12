@@ -117,7 +117,18 @@ def get_input():
                     transitionprep(1)
             elif activity==11:
                 if sysbutton:
-                    transitionprep(1)
+                    transitionprep(2)
+                elif event.button==1 and skinbutton:
+                    sbid=skinbutton
+                    settingskeystore['skin']=skins[sbid-1]
+                    reloadsettings()
+                    reloadicons()
+                elif event.button==4:
+                    if not shopscroll+20>0:
+                        shopscroll+=40
+                elif event.button==5:
+                    if not shopscroll-20<-(80*(len(skins)-1)):
+                        shopscroll-=40
             elif activity==10:
                 if pygame.Rect(w//2-300,h//2-50,600,30).collidepoint(pygame.mouse.get_pos()):
                     textboxid=0
@@ -160,8 +171,12 @@ def get_input():
                     else:
                         transitionprep(3)
             elif activity==2:
-                if catbutton:
+                if catbutton and not catbutton==2:
                     setupid=catbutton
+                elif catbutton==2:
+                    transitionprep(11)
+                    sbid=skinid
+                    shopscroll=0
                 if setbutton:
                     change=True
                 if setbutton  ==  1 and setupid==4:
@@ -177,12 +192,6 @@ def get_input():
                 elif setbutton == 6 and setupid==1:
                     change=True
                     settingskeystore['fpsmetre']=not settingskeystore['fpsmetre']
-                elif setbutton == 2 and setupid==2:
-                    transitionprep(11)
-                    customid=1
-                elif setbutton == 3 and setupid==2:
-                    transitionprep(11)
-                    customid=2
                 elif setbutton == 2 and setupid==4:
                   settingskeystore['fullscreen'] = not settingskeystore['fullscreen']
                   firstcom=False
@@ -334,17 +343,6 @@ def get_input():
                     search[1] += event.unicode
                     if len(search[1])!=len(tmp):
                         reload_database()
-            if activity==11:
-                if customid==1:
-                    if event.key  ==  pygame.K_LEFT:
-                        notewidth-=1
-                    elif event.key  ==  pygame.K_RIGHT:
-                        notewidth+=1
-                elif customid==2:
-                    if event.key  ==  pygame.K_UP:
-                        noteheight+=1
-                    elif event.key  ==  pygame.K_DOWN:
-                        noteheight-=1
             if activity==7 or activity==3:
                 if event.key  ==  pygame.K_RETURN:
                     if len(p2):

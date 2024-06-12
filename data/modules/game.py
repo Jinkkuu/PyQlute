@@ -151,6 +151,7 @@ def game():
                     keyoffset=30
                     if not modsen[1] or modsen[1] and block<=h//2:
                         if "note.png" in icons:
+                            keyoffset=icons['note.png'].get_rect()[3]
                             screen.blit(icons['note.png'],(keypos+fieldpos[0],block-(keyoffset)+fieldpos[1]))
                         else:
                             render('rect', arg=((keypos+fieldpos[0],block-(keyoffset)+fieldpos[1],notewidth,noteheight), (notecolour), False),borderradius=0)

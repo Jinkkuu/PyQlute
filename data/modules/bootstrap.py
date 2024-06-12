@@ -58,6 +58,10 @@ for a in paths:
     if not os.path.isdir(a):
         os.mkdir(a)
         print('Created', a.replace('./', ''))
+if not os.path.isfile(skinpath+'README.txt'):
+    s=open(skinpath+'README.txt','w')
+    s.write('Please add your skins here!\nIf you want to reload the skin just press F3 <3')
+    s.close()
 keyspeed=6
 keyspeedb=13360/keyspeed
 getpoints=0
@@ -394,10 +398,37 @@ def check_gameversion():
     if gamever!=ver and gamever!='0.0.0':
         notification('Notice',desc='Qlute '+str(ver)+' is out!, check on itch.io to update!')
 def reloadicons():
-    global icons
+    global skins,icons,skinid,hcol
     icons={}
-    for a in os.listdir(resource_path(syspath+'icons/')):
-        icons[a]=(pygame.image.load(resource_path(syspath+'icons/'+a))) # Icons!
+    skins=[]
+    skinid=0
+    custom=0
+    for a in os.listdir(skinpath):
+        if os.path.isdir(skinpath+a):
+            skins.append(a)
+    if settingskeystore['skin'] and settingskeystore['skin'] in skins:
+        currentskin=skinpath+settingskeystore['skin']+'/'
+        skinid=skins.index(settingskeystore['skin'])
+        if os.path.isfile(currentskin+'skin.cfg'):
+            custom=1
+            for a in open(currentskin+'skin.cfg').read().split('\n'):
+                entry=a.split(':')
+                if entry[0]=='colour':
+                    hcol=eval(entry[1])
+                    print(hcol)
+    else:
+        currentskin=None
+    if not custom:
+        hcol=(62,60,115),(42,40,95),(22,20,75),(82,80,135)
+    for pa in (resource_path(syspath+'icons/'),currentskin):
+        if pa:
+            for a in os.listdir(pa):
+                try:
+                    if os.path.isfile(pa+a):
+                        icons[a]=(pygame.image.load(resource_path(pa+a))) # Icons!
+                except Exception:
+                    pass
+    
 def gamesession():
     while True:
         main()
@@ -436,4 +467,4 @@ if __name__  ==  "__main__":
                 sys.exit()
             main()
     except Exception as error:
-        crash(str(error))
+        crasha(str(error))

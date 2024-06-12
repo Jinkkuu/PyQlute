@@ -1,6 +1,5 @@
 import pygame
 from pygame import gfxdraw
-hcol=(62,60,115),(42,40,95),(22,20,75),(82,80,135)
 notewidth=100
 noteheight=30
 osam=0

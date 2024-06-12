@@ -16,6 +16,7 @@ settingstemplate={
         'Key2' : 'f',
         'Key3' : 'j',
         'Key4' : 'k',
+        'skin' : None,
         'fpsmetre' : False
     }
 def reloadsettings():
@@ -49,26 +50,32 @@ if settingskeystore['username'] and settingskeystore['password']:
 else:
     issigned=0
 def customization():
-    global sysbutton
+    global sysbutton,skinbutton
     if activity==11:
-        if customid==1:
-            uid='Note Width'
-        elif  customid==2:
-            uid='Note Height'
-        else:
-            uid='N/A'
+        sb=[]
         render('rect', arg=((0,0,w,h), (42,40,95), False))
+        for a in range(1,len(skins)+1):
+            sb.append((400*((w/800)-1),shopscroll+100+(80*(a-1)),400,80))
+        skinbutton=menu_draw((sb),(skins),bradius=0,styleid=3,selected_button=sbid)
+        if sbid:
+            render('rect', arg=((w-400,100,400,h-100), (20,20,20), False))
+            showplayfield((w-200,-30))
+            render('rect', arg=((w-380,110,200,10), (0,180,0), False),borderradius=10)
+            if "note.png" in icons:
+                keyoffset=icons['note.png'].get_rect()[3]
+                screen.blit(icons['note.png'],(w-400,320-keyoffset))
+            else:
+                render('rect', arg=((w-400,290,100,30), (notecolour), False),borderradius=0)
+            if "note.png" in icons:
+                keyoffset=icons['note.png'].get_rect()[3]
+                screen.blit(icons['note.png'],(w-400+200,250-keyoffset))
+            else:
+                render('rect', arg=((w-400+200,250,100,30), (notecolour), False),borderradius=0)
         render('rect', arg=((0,h-60,w,60), hcol[0], False))
         render('rect', arg=((0,0,w,100), (62,60,115), False))
-        render('text', text='(Experimental) Customization - '+str(uid), arg=(offset, forepallete,'grade'))
-        render('rect', arg=(((w//2)-(notewidth//2),(h//2)-(noteheight//2),notewidth,noteheight), notecolour, False))
-        if customid==1:
-            render('text', text='WIDTH ('+str(notewidth)+')', arg=((0,0), forepallete,'center'),relative=((w//2)-(notewidth//2),(h//2)-(noteheight//2)-20,notewidth,0))
-            render('text', text='Adjust by using arrow keys LEFT / RIGHT', arg=((0,0), forepallete,'center'),relative=((w//2)-(notewidth//2),(h//2)-(noteheight//2)+noteheight+20,notewidth,0))
-        elif customid==2:
-            render('text', text='HEIGHT ('+str(noteheight)+')', arg=((0,0), forepallete,'center'),relative=((w//2)-(notewidth//2),(h//2)-(noteheight//2)-20,notewidth,0))
-            render('text', text='Adjust by using arrow keys UP / DOWN', arg=((0,0), forepallete,'center'),relative=((w//2)-(notewidth//2),(h//2)-(noteheight//2)+noteheight+20,notewidth,0))
-
+        render('text', text='Skinning', arg=(offset, forepallete,'grade'))
+        if len(sb):
+            scrollbar((0,100),(10,h-160),search=shopscroll//80,length=len(sb),colour=hcol[0])
         sysbutton=menu_draw(((-10,h-60,100,60),),('Back',),bradius=0,styleid=3)
 cset=0
 def controlsetup():
@@ -95,13 +102,6 @@ def settingspage():
         setuplistpos=[]
         b=0
         render('rect', arg=((0,0,w,h), (42,40,95), False))
-        if setupid==2:
-            setupid=1
-            render('rect', arg=((w-400,100,400,h-100), (20,20,20), False))
-            showplayfield((w-200,-30))
-            render('rect', arg=((w-380,110,200,10), (0,180,0), False),borderradius=10)
-            render('rect', arg=((w-400,320,100,30), (notecolour), False),borderradius=0)
-            render('rect', arg=((w-400+200,250,100,30), (notecolour), False),borderradius=0)
         if setupid==5:
             render('text',text='Game Name - '+str(gamename),arg=((20,120+(23*0)),forepallete))
             render('text',text='Game Version - '+str(gamever),arg=((20,120+(23*1)),forepallete))
