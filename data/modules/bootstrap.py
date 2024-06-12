@@ -227,6 +227,7 @@ def main():
         ingame=True
     else:
         ingame=False
+    debugmode=settingskeystore['fpsmetre']
 
     if "bpm" in globals() and "beatmaps" in globals():
         if activity in allowed or kiai:
@@ -391,6 +392,11 @@ def check_gameversion():
     ver=requests.get('https://github.com/Jinkkuu/PyQlute/releases/latest/download/RELEASE',timeout=10).text.rstrip('\n') # type: ignore
     if gamever!=ver and gamever!='0.0.0':
         notification('Notice',desc='Qlute '+str(ver)+' is out!, check on itch.io to update!')
+def reloadicons():
+    global icons
+    icons={}
+    for a in os.listdir(resource_path(syspath+'icons/')):
+        icons[a]=(pygame.image.load(resource_path(syspath+'icons/'+a))) # Icons!
 def gamesession():
     while True:
         main()
@@ -416,9 +422,7 @@ if __name__  ==  "__main__":
         greph=[]
         for a in modsen:
             greph.append(randint(1,2)-1)
-        icons={}
-        for a in os.listdir(resource_path(syspath+'icons/')):
-            icons[a]=(pygame.image.load(resource_path(syspath+'icons/'+a))) # Icons!
+        reloadicons()
         micon=(icons['logomini.png'],icons['edit.png'],icons['browse.png'],icons['exit.png']),(icons['user.png'],icons['online.png'],icons['exit.png'],)
         programIcon = pygame.image.load(resource_path(syspath+'icon.png'))
         threading.Thread(target=ondemand).start()
@@ -426,9 +430,9 @@ if __name__  ==  "__main__":
         #threading.Thread(target=loginwindow).start()
         #for a in range(1,3):
             #threading.Thread(target=gamesession).start(
-        while True:
+        while 1:
             if stop:
                 sys.exit()
             main()
     except Exception as error:
-        crasha(str(error))
+        crash(str(error))

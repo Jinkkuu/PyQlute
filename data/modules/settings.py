@@ -15,7 +15,8 @@ settingstemplate={
         'Key1' : 'd',
         'Key2' : 'f',
         'Key3' : 'j',
-        'Key4' : 'k'
+        'Key4' : 'k',
+        'fpsmetre' : False
     }
 def reloadsettings():
     tmp=open(datapath+'settings', 'w')
@@ -90,7 +91,7 @@ def settingspage():
             user='Guest'
         else:
             user=settingskeystore['username']
-        setuplist={'general': {'Leaderboards':settingskeystore['leaderboard'],'Effects':settingskeystore['effects'],'Save Replays':settingskeystore['sreplay'],'Enable BG':settingskeystore['bgmm'],'Controls':'->'},'skinning':{'Change Skins':'->','Note Width':'->','Note Height':'->','Note Colour':'->','Background Colour':'->','HealthBar Colour':'->','Insanity Level':'->',},'audio':{'Hitsounds':settingskeystore['hitsound']},'graphics':{'FPS':tmp,'Fullscreen':settingskeystore['fullscreen']},'debug':{},'account':{'Username':user}}
+        setuplist={'general': {'Leaderboards':settingskeystore['leaderboard'],'Effects':settingskeystore['effects'],'Save Replays':settingskeystore['sreplay'],'Enable BG':settingskeystore['bgmm'],'Controls':'->','Show FPS':settingskeystore['fpsmetre']},'skinning':{'Change Skins':'->','Note Width':'->','Note Height':'->','Note Colour':'->','Background Colour':'->','HealthBar Colour':'->','Insanity Level':'->',},'audio':{'Hitsounds':settingskeystore['hitsound']},'graphics':{'FPS':tmp,'Fullscreen':settingskeystore['fullscreen']},'debug':{},'account':{'Username':user}}
         setuplistpos=[]
         b=0
         render('rect', arg=((0,0,w,h), (42,40,95), False))
@@ -142,6 +143,8 @@ def settingspage():
                 msg='Auto Save Replays'
             elif setbutton == 4 and setupid==1:
                 msg="Show song's Background at the main menu"
+            elif setbutton == 6 and setupid==1:
+                msg="Shows in-game FPS"
             elif setbutton == 5 and setupid==1:
                 msg='Change your controls for your gameplay'
         render('rect', arg=((0,h-60,w,60), hcol[0], False))

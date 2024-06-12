@@ -172,7 +172,11 @@ def get_input():
                         fpsmode-=1
                     settingskeystore['fps']=fpsmodes[fpsmode]
                 elif setbutton == 3 and setupid==1:
+                    change=True
                     settingskeystore['sreplay']=not settingskeystore['sreplay']
+                elif setbutton == 6 and setupid==1:
+                    change=True
+                    settingskeystore['fpsmetre']=not settingskeystore['fpsmetre']
                 elif setbutton == 2 and setupid==2:
                     transitionprep(11)
                     customid=1
@@ -272,6 +276,9 @@ def get_input():
         if event.type  ==  pygame.KEYDOWN:
             if event.key  ==  pygame.K_F5:
                 debugmode=not debugmode
+            if event.key  ==  pygame.K_F3:
+                notification('Reloaded!',desc='Reloaded icons for you!')
+                reloadicons()
             if event.key  ==  pygame.K_MINUS and not activity==10:
                 volchg(0)
             elif event.key  ==  pygame.K_EQUALS and not activity==10:
