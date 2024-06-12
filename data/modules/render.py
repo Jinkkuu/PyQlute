@@ -42,7 +42,6 @@ def render(type, arg=(0, 0) ,  text='N/A', bordercolor=forepallete, borderradius
         elif type == 'line':
             pygame.draw.line(surf,colour,arg[0],arg[2])
         elif type == 'rect':
-#			print(arg[0][0], arg[0][1], arg[0][2], arg[0][3])
             pygame.draw.rect(surf, colour, (arg[0][0], arg[0][1], arg[0][2]-off, arg[0][3]-off), border_radius=borderradius)
             if arg[2]:
                 pygame.draw.rect(surf, bordercolor, (arg[0][0], arg[0][1], arg[0][2]-off, arg[0][3]-off), 1, border_radius=borderradius)
@@ -241,7 +240,6 @@ def fullscreenchk():
         f=24
         fonts = pygame.font.Font(fontname['default'],  int(f//1.2)),pygame.font.Font(fontname['default'],  f//2),pygame.font.Font(fontname['default'],  f*2),pygame.font.Font(fontname['bold'],  int(f)),pygame.font.Font(fontname['default'],  int(f/1.1))
         button_size_width=w//2
-        print(time.time(),screen.get_size())
         reloadbg()
     tal=25*(w/25)//len(bars)
     scroll=h-30-noteheight
