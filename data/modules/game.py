@@ -1,5 +1,6 @@
+import pygame
 notecolour=(48, 183, 255)
-kdur=200
+kdur=250
 def getpoint(perfect,good,meh,bad,multiplier,combo=1,type=int):
     multiplier=multiplier
     tmp=(((perfect*perfbom)+(good*(perfbom/2))+(meh*(perfbom/3))-(bad*(perfbom*2)))*multiplier)
@@ -31,13 +32,13 @@ def song_progress():
         render('rect', arg=((10,h-20,w-20,10), (50,50,50), False),borderradius=10)
         render('rect', arg=((10,h-20,slop*(w-20),10), (255,255,255), False),borderradius=10)
 def iscatched(block,isauto,ob,fir,id):
-    lean=(perfect,great,ok,miss,20) # Last one is for Auto
+    lean=(perfect,great,ok,miss,0) # Last one is for Auto
     tick=0
     agree=1
-#    if ob==fir:
-#        agree=True
-#    else:
-#        agree=False
+    if ob==fir or isauto:
+        agree=True
+    else:
+        agree=False
     if block>=h-lean[3]:
         lastcall=True
         tick=3
@@ -146,20 +147,13 @@ def game():
                         if int(tok[0])>=512-(128*(a-1)):
                             keypos=keymap[ax][0]
                             break
-#                if modsen[1]:
-#                    notecolour=(mint(int(playfield[0]),int((500/block)*48)), mint(int(playfield[1]),int((500/block)*183)), mint(int(playfield[2]),int((500/block)*255)))
-#                else:
                 if not (keypos,int(tok[2])) in barclicked:
-#                    if not modsen[1]:
-#                        if tip:
-#                            render('rect', arg=((keypos,block-30,100,30), (255,0,0), False),borderradius=0)
-#                        else:
                     keyoffset=30
                     if not modsen[1] or modsen[1] and block<=h//2:
-                        if kiai:
-                            render('rect', arg=((keypos+fieldpos[0],block-(keyoffset)-(60*flashylights)+fieldpos[1],notewidth,noteheight), (255,0,0), False),borderradius=0)
-                        render('rect', arg=((keypos+fieldpos[0],block-(keyoffset)+fieldpos[1],notewidth,noteheight), (notecolour), False),borderradius=0)
-                    #render('text',text=block,arg=((keypos,block-30),(255,255,255)))
+                        if "note.png" in icons:
+                            screen.blit(icons['note.png'],(keypos+fieldpos[0],block-(keyoffset)+fieldpos[1]))
+                        else:
+                            render('rect', arg=((keypos+fieldpos[0],block-(keyoffset)+fieldpos[1],notewidth,noteheight), (notecolour), False),borderradius=0)
                     tip=0
                 judge=iscatched(block,modsen[0],block,firstobject,ob)
                 if modsen[0]:
@@ -294,7 +288,7 @@ def game():
 #            if keys[a-1]:
         for a in range(0,4):
             if keys[a]:
-                keyslight[a]=Tween(begin=1, end=0,duration=kdur,easing=Easing.CUBIC,easing_mode=EasingMode.OUT)
+                keyslight[a]=Tween(begin=1, end=0,duration=kdur,easing=Easing.BOUNCE,easing_mode=EasingMode.OUT)
                 keyslight[a].start()
                 keys[a]=0
                 
