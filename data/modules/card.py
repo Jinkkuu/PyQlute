@@ -10,7 +10,10 @@ def print_card(pp,score,name,pos,rank,isgrayed=False,home=False,hide=False):
             name='Guest'
             rank=0
         dim=35
-        render('rect',arg=((pos[0],pos[1],300,80),(tmp),False),borderradius=10)
+        if not "card.png" in icons:
+            render('rect',arg=((pos[0],pos[1],300,80),(tmp),False),borderradius=10)
+        else:
+            screen.blit(icons['card.png'],pos)
         if rank or hide:
             if pp>0 and not hide:
                 render('text', text='#'+str(format(rank,',')), arg=((pos[0]+290,pos[1]+30), (tmp[0]+dim,tmp[1]+dim,tmp[2]+dim),'grade','rtl'))
