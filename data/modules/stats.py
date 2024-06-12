@@ -72,7 +72,6 @@ def reloadstats(reloadleaderboard=False):
     inc=0.5
     inf=0.1
     if modsen[5]:
-        print('STRICT NOTE')
         perfect=0
     else:
         perfect=80

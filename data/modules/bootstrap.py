@@ -415,7 +415,6 @@ def reloadicons():
                 entry=a.split(':')
                 if entry[0]=='colour':
                     hcol=eval(entry[1])
-                    print(hcol)
     else:
         currentskin=None
     if not custom:
@@ -467,4 +466,4 @@ if __name__  ==  "__main__":
                 sys.exit()
             main()
     except Exception as error:
-        crasha(str(error))
+        crash(str(error))
