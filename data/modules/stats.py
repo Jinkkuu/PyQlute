@@ -22,7 +22,6 @@ def reloadstats(reloadleaderboard=False):
     lvrating=0
     background=pygame.surface.Surface((0,0))
     if modsen[4]:
-        print('RND MODE')
         lol=0
         tmp=''
         for a in objects:
@@ -72,13 +71,19 @@ def reloadstats(reloadleaderboard=False):
     scoremult=1
     inc=0.5
     inf=0.1
-    perfect=80
+    if modsen[5]:
+        print('STRICT NOTE')
+        perfect=0
+    else:
+        perfect=80
     #perfect=60
     great=perfect*2
     ok=perfect*3
     for a in range(2,len(modsen)+1):
         if modsen[a-1] and a==2:
             scoremult+=inc*3
+        elif modsen[a-1] and a == 6:
+            scoremult+=0.8
         elif modsen[a-1] and not a in (4,5,7,8):
             scoremult+=inc
         elif modsen[a-1] and (a in (4,7)):

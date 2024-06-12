@@ -45,10 +45,10 @@ def iscatched(block,isauto,ob,fir,id):
     elif (block>=keymap[0][1]-lean[0] and block<=keymap[0][1]+keymap[0][3]+lean[0] and agree and not isauto) or (block>=keymap[0][1]-lean[4] and block<=keymap[0][1]+keymap[0][3]+lean[0] and agree and isauto):
         lastcall=True
         tick=0
-    elif block>=keymap[0][1]-lean[1] and block<=keymap[0][1]+keymap[0][3]+lean[1] and not isauto and agree:
+    elif block>=keymap[0][1]-lean[1] and block<=keymap[0][1]+keymap[0][3]+lean[1] and not isauto and agree and not modsen[5]:
         lastcall=True
         tick=1
-    elif block>=keymap[0][1]-lean[2] and block<=keymap[0][1]+keymap[0][3]+lean[2] and not isauto :
+    elif block>=keymap[0][1]-lean[2] and block<=keymap[0][1]+keymap[0][3]+lean[2] and not isauto and not modsen[5]:
         lastcall=True
         tick=2
     else:

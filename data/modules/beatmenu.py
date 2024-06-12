@@ -1,6 +1,6 @@
 import pygame
-modsalias="Auto",'Blind','Slice','EZ','Random'#,'DT','HT'
-modsaliasab='AT','BD','SL','EZ','RND'#,'DT','HT'
+modsalias="Auto",'Blind','Slice','EZ','Random','Strict'#,'DT','HT'
+modsaliasab='AT','BD','SL','EZ','RND','SN'#,'DT','HT'
 mods=''
 def reload_database():
     global reloaddatabase,cross,beatsel
@@ -124,7 +124,7 @@ def beatmenu():
                            ,(tm[2],h-(160*pop),90,40) # type: ignore
                            ,(tm[3],h-(110*pop),90,40) # type: ignore
                            ,(tm[4],h-(160*pop),90,40) # type: ignore
-#                           ,(tm[5],h-160,90,40)
+                           ,(tm[5],h-(160*pop),90,40)
 #                           ,(tm[6],h-160,90,40)
 #                           ,(tm[7],h-160,90,40)
                        )
@@ -140,7 +140,7 @@ def beatmenu():
         elif mod==5:
             msg='Adds new fun! (0)'
         elif mod==6:
-            msg='Double the fun (+0.5)'
+            msg='You have to aim your hits right! (+0.8)'
         elif mod==7:
             msg='We be easy on you (/0.5)'
         #render('rect',arg=((0,h-65,w,5),hcol[1],False)) # type: ignore
