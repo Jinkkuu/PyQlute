@@ -157,6 +157,7 @@ noteani=[Tween(begin=0, end=100,duration=150,easing=Easing.CUBIC,easing_mode=Eas
 notemaxh=1
 useroverlay=0
 upd=0
+issubmiting=0
 menupos=[]
 mdur=250
 measetype=Easing.BOUNCE

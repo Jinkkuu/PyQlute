@@ -1,4 +1,4 @@
-import pygame
+import pygame,threading
 notecolour=(48, 183, 255)
 kdur=250
 def getpoint(perfect,good,meh,bad,multiplier,combo=1,type=int):
@@ -67,7 +67,7 @@ def showplayfield(pos,bypass=False):
         render('line',arg=((keymap[b][0]+pos[0],0+pos[1]),(255,255,255),(keymap[b][0]+pos[0],keymap[b][1]+pos[1]+noteheight)))
 
 def game():
-    global activity,timestep,debugmode,ncombo,replaystore,keyslight,accuracy,beatnowmusic,kiai,unstablerate,fpsmode,score,scorew,keyspeed,bgcolour,totperf,totscore,objecon,healthtime,health,ranking,oldupdatetime,t,tip,gametime,combo,sre,combotime,sre,hits,last,stripetime,tmp,pptime,pptmp,ppcounter,perf
+    global activity,timestep,issubmiting,debugmode,ncombo,replaystore,keyslight,accuracy,beatnowmusic,kiai,unstablerate,fpsmode,score,scorew,keyspeed,bgcolour,totperf,totscore,objecon,healthtime,health,ranking,oldupdatetime,t,tip,gametime,combo,sre,combotime,sre,hits,last,stripetime,tmp,pptime,pptmp,ppcounter,perf
     if activity==4:
         if bgcolour>=1:
             bgcolour-=1
@@ -295,24 +295,14 @@ def game():
         song_progress()
         if "tornney" in settingskeystore:
             render('text',text=settingskeystore['username'],arg=((w-20, h-120),forepallete,'grade','rtl'))
-        if  gametime>=lastms+1000:# or combo>49:
-            render('rect', arg=((0,h//2-50,w,100), (255,255,255), False))
-            render('text',text='Loading...',arg=((20, 20),(0,0,0),'grade','center'),relative=(w//2-100,h//2-50,200,100))
-            pygame.display.update()
+        if  gametime>=lastms+1000:
             if settingskeystore['sreplay']:
                 with open(replaypath+'replay-'+str(str(time.time())+'-'+str(settingskeystore['username']))+'-'+str(beatmapsetid)+'-'+str(beatmapid),'w') as x:
                     x.write('#'+str(gamename)+'-'+str(gamever)+'\n'+str(settingskeystore['username'])+';'+str(hits[0])+';'+str(hits[1])+';'+str(hits[2])+';'+str(hits[3])+';'+str(mods)+'\n')
                     for a in replaystore:
                         x.write(a+'\n')
-            submit_score(perf,combo,other=str(beatmapid)
-                             +';'+str(beatmapsetid) # BeatmapSet ID
-                             +';'+str(hits[0])+';' # PERFECT / OUTRAGOUS
-                             +str(hits[1])+';' #GREAT
-                             +str(hits[2])+';' # OK
-                             +str(hits[3])+';' # BAD
-                             +str(diffmode)+';' # Difficulty
-                             +str(mods)+';' # Mods
-                             +str(maxperf)+';' # Max Points
-                             +str(int(time.time()-timetaken)))
-            activity=5
+            if not issubmiting:
+                issubmiting=1
+                threading.Thread(target=submit_score,args=(perf,combo,beatmapid,beatmapsetid,hits[0],hits[1],hits[2],hits[3],diffmode,mods,maxperf,int(time.time()-timetaken),)).start()
+                transitionprep(5)
 

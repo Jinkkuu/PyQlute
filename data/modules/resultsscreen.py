@@ -44,7 +44,9 @@ def beatres():
         render('text', text='GREAT - '+str(pup[1]), arg=((0,0), forepallete,'center'),relative=(w//2+160,h//2,0,0))
         render('text', text='MEH - '+str(pup[2]), arg=((0,0), forepallete,'center'),relative=(w//2-150,h//2+30,0,0))
         render('text', text='BAD - '+str(pup[3]), arg=((0,0), forepallete,'center'),relative=(w//2+160,h//2+30,0,0))
-        if settingskeystore['username']:
+        if issubmiting and settingskeystore['username']:
+            render('text', text='Submitting Score...', arg=((0,0), forepallete,'center'),relative=(scrop[0],scrop[1]+270,scrop[2],scrop[3]))
+        elif settingskeystore['username']:
             render('rect',arg=((w//2-110,h//2+43,220,35),hcol[1],False),borderradius=10)
             render('text', text='You are Level '+str(format(level,','))+'!', arg=((0,0), forepallete,'center'),relative=(w//2,h//2+60,0,0))
             render('text', text='Overall Rank - #'+str(format(totrank,',')), arg=((0,0), forepallete,'center'),relative=(w//2+160,h//2+95,0,0))
