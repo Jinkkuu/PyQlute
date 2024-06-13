@@ -48,7 +48,6 @@ def beatmenu():
         else:
             idc=1
             idcb=len(bp2)
-        scrollbar((w-10,54),(10,h-124),search=-cross[idc],length=idcb)
         a=0
         tmp=(h//60)//2 # type: ignore
         if beatmaps>0: # type: ignore
@@ -65,10 +64,10 @@ def beatmenu():
                 gotext=''
         if activity==7:
             sel=diffcon
-            button=menu_draw(bp1,bp2,beatmenu=True,selected_button=sel+1,startlimit=int(cross[1])-tmp-1,endlimit=int(cross[1])+tmp+2,crossid=1,styleid=1) # type: ignore
+            button=menu_draw(bp1,bp2,align=0,textoffset=(17,17),beatmenu=True,selected_button=sel+1,startlimit=int(cross[1])-tmp-1,endlimit=int(cross[1])+tmp+2,crossid=1,styleid=1) # type: ignore
         else:
             sel=beatsel
-            button=menu_draw(p1,p2,beatmenu=True,selected_button=sel+1,startlimit=int(cross[0])-tmp-1,endlimit=int(cross[0])+tmp+2,crossid=0,styleid=1) # type: ignore
+            button=menu_draw(p1,p2,align=0,textoffset=(17,5),beatmenu=True,selected_button=sel+1,startlimit=int(cross[0])-tmp-1,endlimit=int(cross[0])+tmp+2,crossid=0,styleid=1) # type: ignore
         if beatmaps==0: # type: ignore
             crok=999
         else:
@@ -77,29 +76,21 @@ def beatmenu():
             crub=999
         else:
             crub=0
-        if pygame.Rect(0,(h//4),45,h//2).collidepoint(pygame.mouse.get_pos()): # type: ignore
-            t=0
-        else:
-            t=225
-        if 1==1: # Leaderboard idk why this is here lol
-            s=310
-            c=0
-            if issigned: # type: ignore
-                render('rect', arg=((220-t,(h//2)-(s//2),45,s), blend(opacity,25), False),borderradius=10) # type: ignore
-                render('rect', arg=((-10-t,(h//2)-(s//2),250,s), blend(opacity,0), False),borderradius=10) # type: ignore
-                for a in leaderboard[:5]: # type: ignore
-                    if a['username']==settingskeystore['username']: # type: ignore
-                        col=166, 207, 255
-                    else:
-                        col=forepallete # type: ignore
-                    leadpos=(10-t,(10+((h//2)-(s//2)))+(60*c),220,50) # type: ignore
-                    render('rect', arg=(leadpos, blend(opacity,50), False),borderradius=10) # type: ignore
-                    render('text', text=str('#'+str(c+1)+' '+a["username"][:10]), arg=((17-t,leadpos[1]+5), col)) # type: ignore
-                    render('text', text=a['mods'], arg=((218-t,leadpos[1]+9), col,'min','rtl')) # type: ignore
-                    render('text', text=format(int(a['score']),',')+' - '+str(int(a["points"]))+'pp ('+str(int(a['combo']))+'x) '+timeform(int(time.time()-a['time'])), arg=((17-t,leadpos[1]+30), col,'min')) # type: ignore
-    #                   render('text', text=, arg=((17,leadpos[1]+28), col,'min'))
-                     #(((hits[0]*perfbom)+(hits[1]*(perfbom/2))+(hits[2]*(perfbom/3)))*scoremult)-(hits[3]*(perfbom*2))
-                    c+=1
+        s=310 # Leaderboard 
+        c=0
+        render('rect', arg=((0,0,260,h), hcol[2], False)) # type: ignore
+        if issigned: # type: ignore
+            for a in leaderboard[:5]: # type: ignore
+                if a['username']==settingskeystore['username']: # type: ignore
+                    col=166, 207, 255
+                else:
+                    col=forepallete # type: ignore
+                leadpos=(20,220+(60*c),220,50) # type: ignore
+                render('rect', arg=(leadpos, hcol[0], False),borderradius=10) # type: ignore
+                render('text', text=str('#'+str(c+1)+' '+a["username"][:10]), arg=((leadpos[0]+10,leadpos[1]+5), col)) # type: ignore
+                render('text', text=a['mods'], arg=((leadpos[0]+210,leadpos[1]+9), col,'min','rtl')) # type: ignore
+                render('text', text=format(int(a['score']),',')+' - '+str(int(a["points"]))+'pp ('+str(int(a['combo']))+'x) '+timeform(int(time.time()-a['time'])), arg=((leadpos[0]+10,leadpos[1]+30), col,'min')) # type: ignore
+                c+=1
         sysbuttonpos=(0,h-60,100,60),(100,h-60+crok,100,60),(200,h-60+crok+crub,100,60), # type: ignore
         if modsani[1]: # Animation for Mod Select :3
             pop=modsani[0].value
@@ -108,8 +99,8 @@ def beatmenu():
         if not modsani[1]:
             mod=0
         get_mods((100,h-(110*(1-pop)))) # type: ignore
-        render('rect', arg=((0,h-(180*pop),w,120), (hcol[1]), False),borderradius=10) # type: ignore
-        render('rect', arg=((0,h-(170*pop),w,120), (hcol[0]), False),borderradius=10) # type: ignore
+        render('rect', arg=((0,h-(180*pop),430,120), (hcol[1]), False),borderradius=10) # type: ignore
+        render('rect', arg=((0,h-(170*pop),430,120), (hcol[0]), False),borderradius=10) # type: ignore
         #(340,h-160,90,40) ~ Placeholder
         # This will be here for now, it WILL get better and more optimized over time
         t=(20,20,120,120,220,320,420,480)
@@ -168,32 +159,27 @@ def beatmenu():
                 menuback-=backspeed # type: ignore
         freeze=0
         tmp=0
-        hax=300//2
-        if w <= 820 and h<=620: # type: ignore
-            popupw=w//2-hax # type: ignore
-        else:
-            popupw=50
+        hax=300//2.5
+        popupw=10
         if beatmaps: # type: ignore
             gobutton=menu_draw(((w-135,h-70,145,80),),(gotext,),bigmode=True,showicon=True,icon=(goicon,),styleid=3) # type: ignore
         else:
             gobutton=0
+        scrollbar((w-10,54),(10,h-124),search=-cross[idc],length=idcb)
         render('rect', arg=((0, -20, w, 90), hcol[1], False), borderradius=20)
         render('rect', arg=((0, -20, w, 85), hcol[0], False), borderradius=20)
         if beatmaps==0: # type: ignore
             render('text', text='No Beatmap added :sad:', arg=(offset, forepallete)) # type: ignore
         else:
-            diffpos=(popupw+20+hax,150)
+            diffpos=(140,150)
             #pass#int(len(objects)*perfbom*scoremult)
             render('text', text=songtitle, arg=((20,15), forepallete)) # type: ignore
-            render('rect',arg=((popupw-4,76,hax*2,110),blend(opacity,20),False),borderradius=20) # type: ignore
-            render('rect',arg=((popupw,80,hax*2,110),blend(opacity,0),False),borderradius=20) # type: ignore
-            render('text', text=rankmodes[ranktype][0], arg=((popupw+20+hax,90), rankmodes[ranktype][1])) # type: ignore # Rank Type
+            render('text', text=rankmodes[ranktype][0], arg=((240,90), rankmodes[ranktype][1],'rtl')) # type: ignore # Rank Type
             if pp[0]!=pp[1]:
-                render('text', text=str(pp[0])+'-'+str(pp[1])+'pp', arg=((popupw+20+hax,120), forepallete)) # type: ignore
-            render('text', text='BPM: '+str(int(60000/bpm)+1), arg=((popupw+20,90), forepallete)) # type: ignore # type: ignore
+                render('text', text=str(pp[0])+'-'+str(pp[1])+'pp', arg=((240,120), forepallete,'rtl')) # type: ignore
+            render('text', text='BPM: '+str(bpmstr), arg=((popupw+20,90), forepallete)) # type: ignore # type: ignore
             render('text', text=clockify(int(lastms//1000)/speed), arg=((popupw+20,155), forepallete)) # type: ignore
             render('text', text='+'+format(maxperf,',')+'pp', arg=((popupw+20,120), forepallete)) # type: ignore
-            render('rect', arg=((diffpos[0]-(bgcolour//2),diffpos[1],100+bgcolour,30), (levelcol[0]-20,levelcol[1]-20,levelcol[2]-20), False),borderradius=10) # type: ignore
             render('rect', arg=((diffpos[0],diffpos[1],100,30), levelcol, False),borderradius=10) # type: ignore
             render('text', text='Lv. '+str(round(lvrating,2)), arg=((0,0), forepallete,"center"),relative=(diffpos[0],diffpos[1],100,30)) # type: ignore
             textbox((20,44,300),20,text=search[1],center=True,min=True,bg_colour=hcol[0])

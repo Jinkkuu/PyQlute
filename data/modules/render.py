@@ -86,7 +86,7 @@ def menu_draw(instruction, text=None,forcetext=False,usecolour=False,align=1,ico
             tmp=pygame.Rect(tmp[0],tmp[1],tmp[2],tmp[3])
         else:
             size=65
-            tmp=pygame.Rect(w//2-tmp[0],(h//2)-tmp[1]-((size+5)*cross[crossid])+((size+5)*(a-1)),tmp[2],tmp[3])
+            tmp=pygame.Rect(w-tmp[2]+80,(h//2)-tmp[1]-((size+5)*cross[crossid])+((size+5)*(a-1)),tmp[2],tmp[3])
         if tmp.collidepoint(pygame.mouse.get_pos()) and not select:
             select=True
             buttcolour = (buttonc[0]+10,buttonc[1]+10,buttonc[2]+10)

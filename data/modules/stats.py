@@ -14,7 +14,7 @@ def reloadbg():
     except Exception:
         pass
 def reloadstats(reloadleaderboard=False):
-    global objects,difficulty,background,backgroundev,songtitle,metadata,timings,lvrating,levelrating,levelcol,bpm,songoffset,maxperf,scoremult,ismulti,beattitle,perfect,great,ok,diffmode,beatmapid,beatmapsetid
+    global objects,difficulty,bpmstr,background,backgroundev,songtitle,metadata,timings,lvrating,levelrating,levelcol,bpm,songoffset,maxperf,scoremult,ismulti,beattitle,perfect,great,ok,diffmode,beatmapid,beatmapsetid
     diffmode=diff[diffcon][1]
     beatmap=open(gamepath+fullbeatmapname[beatsel]+'/'+pref+'['+diffmode+']'+'.osu').read().rstrip('\n').split('\n')
     objects=beatmap[beatmap.index('[HitObjects]')+1:]
@@ -67,6 +67,9 @@ def reloadstats(reloadleaderboard=False):
         else:
             break
     bpm=float(bpmparse(timings[0]))
+    bpmstr=str(int(60000/bpm)+1)
+    if bpm<1 or bpm>60000:
+        bpmstr='N/A'
     songoffset=float(beatmap[beatmap.index('[TimingPoints]')+1:][0].split(',')[0])
     scoremult=1
     inc=0.5
