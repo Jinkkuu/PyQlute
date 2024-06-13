@@ -58,7 +58,7 @@ def beatmapload():
 #            gametime=0
         #pygame.mixer.music.play(-1,(time.time()-gametime))
     try:
-        if beatnowmusic:
+        if beatnowmusic and len(p2):
             pausetime=time.time()+pausedur
             fbt=fullbeatmapname[beatsel]
             beatani=[Tween(begin=cross[0], end=beatsel,duration=350,easing=Easing.CUBIC,easing_mode=EasingMode.OUT),0]
