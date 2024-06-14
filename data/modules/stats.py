@@ -96,7 +96,7 @@ def reloadstats(reloadleaderboard=False):
     lvy=0
     for a in  objects:
         tmp=a.split(',')
-        bartime=int(tmp[2])//100
+        bartime=int(tmp[2])//bpm
         if bartime!=lvt:
             lvt=bartime
             lvy=0
@@ -164,9 +164,10 @@ def getstat():
 #        print(ranktypetmp)
     ranktype=getrank(ranktypetmp)
 def resetscore():
-    global score,issubmiting,ncombo,barclicked,prevrank,timestep,replaystore,unstablerate,timetaken,perf,scorew,kiai,bgcolour,objecon,combo,sre,health,healthtime,combotime,hits,last,stripetime,ppcounter,pptime,pptmp,modshow,ranking
+    global maxcombo,score,issubmiting,ncombo,barclicked,prevrank,timestep,replaystore,unstablerate,timetaken,perf,scorew,kiai,bgcolour,objecon,combo,sre,health,healthtime,combotime,hits,last,stripetime,ppcounter,pptime,pptmp,modshow,ranking
     last=0
     issubmiting=0
+    maxcombo=0
     ncombo=0
     prevrank=totrank
     unstablerate=[]
