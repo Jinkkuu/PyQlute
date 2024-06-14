@@ -254,7 +254,12 @@ def game():
                 render('text',text=comboo,arg=((0,0),(255,0,0),'grade','center'),relative=(kek[0]-sre,kek[1],kek[2],kek[3]))
                 render('text',text=comboo,arg=((0,0),(0,0,255),'grade','center'),relative=(kek[0]+sre,kek[1],kek[2],kek[3]))
                 render('text',text=comboo,arg=((0,0),(0,255,0),'grade','center'),relative=(kek[0],kek[1]+sre,kek[2],kek[3]))
-                render('text',text=hittext[judgewindow],arg=((0,0, h-80-sre),hitcolour[judgewindow],'grade','center'),relative=(kek[0],kek[1]+60,kek[2],kek[3]))
+                if "hit"+str(judgewindow)+".png" in icons:
+                    judgepos=icons["hit"+str(judgewindow)+".png"].get_rect()[2:4]
+                    judgepos=judgepos[0]//2,judgepos[1]//2
+                    screen.blit(icons["hit"+str(judgewindow)+".png"],(w//2-judgepos[0],kek[1]+70+judgepos[1]))
+                else:
+                    render('text',text=hittext[judgewindow],arg=((0,0, h-80-sre),hitcolour[judgewindow],'grade','center'),relative=(kek[0],kek[1]+60,kek[2],kek[3]))
             render('text',text=comboo,arg=((0,0, h-80-sre),forepallete,'grade','center'),relative=kek)
         #render('text',text=h//2+gametime-(int(objects[0].split(',')[2])),arg=((20, 80),forepallete))
         render('line',arg=((0,h-miss),(255,255,255),(w,h-miss)))
