@@ -67,7 +67,7 @@ def showplayfield(pos,bypass=False):
         render('line',arg=((keymap[b][0]+pos[0],0+pos[1]),(255,255,255),(keymap[b][0]+pos[0],keymap[b][1]+pos[1]+noteheight)))
 
 def game():
-    global activity,timestep,issubmiting,debugmode,ncombo,replaystore,keyslight,accuracy,beatnowmusic,kiai,unstablerate,fpsmode,score,scorew,keyspeed,bgcolour,totperf,totscore,objecon,healthtime,health,ranking,oldupdatetime,t,tip,gametime,combo,sre,combotime,sre,hits,last,stripetime,tmp,pptime,pptmp,ppcounter,perf
+    global activity,timestep,issubmiting,maxcombo,judgewindow,debugmode,ncombo,replaystore,keyslight,accuracy,beatnowmusic,kiai,unstablerate,fpsmode,score,scorew,keyspeed,bgcolour,totperf,totscore,objecon,healthtime,health,ranking,oldupdatetime,t,tip,gametime,combo,sre,combotime,sre,hits,last,stripetime,tmp,pptime,pptmp,ppcounter,perf
     if activity==4:
         if bgcolour>=1:
             bgcolour-=1
@@ -89,10 +89,9 @@ def game():
             perf=maxperf
         maxc=hits[0]+hits[1]+hits[2]+hits[3]
         if not maxc<1:
-            accuracy=round((hits[0]/(maxc))*100,2)
+            accuracy=round(((hits[0]+(hits[1]/2)+(hits[2]/3))/(maxc))*100,2)
         else:
             accuracy=100
-        #accuracy=100
         if int(maxperf)!=0:
             end=(perf/maxperf)*(scoremult*1000000)
         else:
@@ -139,13 +138,14 @@ def game():
                         notfound=False
                         break
                 if notfound:
-                    for a in range(1,6):
+                    for a in range(1,5):
                         if a-1>=4:
                             ax=3
                         else:
                             ax=a-1
-                        if int(tok[0])>=512-(128*(a-1)):
-                            keypos=keymap[ax][0]
+                        if int(tok[0])>=512-(128*(a)):
+                            keypos=keymap[ax-1][0]
+                            kik=ax
                             break
                 if not (keypos,int(tok[2])) in barclicked:
                     keyoffset=30
@@ -177,6 +177,10 @@ def game():
                         health-=t1
                     else:
                         health+=10
+                    try:
+                        judgewindow=hit
+                    except Exception:
+                        judgewindow=hit
                     hits[hit]+=1
                     bgcolour+=1
                     barclicked.append((notes[0],int(notes[1])))
@@ -186,11 +190,16 @@ def game():
                         combo+=1
                         if ncombo>0:
                             ncombo-=1
+                        if combo>maxcombo:
+                            maxcombo=combo
                         combotime=time.time()
-                        t=a.split(':')[-1]
-                        if not t=='' and settingskeystore['hitsound']:
-                            pygame.mixer.Sound(gamepath+realid+'/'+str(t)).play()
-                            print('Played',t)
+                        try:
+                            t=a.split(':')[-1]
+                            if not t=='' and settingskeystore['hitsound']:
+                                pygame.mixer.Sound(gamepath+realid+'/'+str(t)).play()
+                                print('Played',t)
+                        except Exception:
+                            pass
                     else:
                         ncombo+=1
                         combotime=time.time()
@@ -207,7 +216,7 @@ def game():
                 user='Guest'
             else:
                 user='Qlutina'
-            current={'username': user,'score': score,'points': perf,'current': True}
+            current={'username': user,'score': score,'points': perf,'combo':maxcombo,'current': True}
             tmpl = leaderboard + [current]
             ranking=51
             for tmp in sorted(tmpl, key=lambda x: x['points'],reverse=True):
@@ -226,7 +235,7 @@ def game():
                     render('rect', arg=((-30,65+(50*(t)),225,50), pcolor, False),borderradius=10)
                     #render('text',text='#'+str(players),arg=((20, 80+(50*(t))),(pcolor[0]-20,pcolor[1]-20,pcolor[2]-20)))
                     render('text',text=tmp['username'],arg=((20, 70+(50*(t))),pcol)) #'#'+str(players)+' '+
-                    render('text',text='#'+str(players)+' '+format(tmp['score'],','),arg=((20, 95+(50*(t))),pcol,'min'))
+                    render('text',text='#'+str(players)+' '+format(tmp['score'],',')+' ('+str(int(tmp['combo']))+'x)',arg=((20, 95+(50*(t))),pcol,'min'))
                     t+=1
                 players+=1
         if score<0:
@@ -236,16 +245,12 @@ def game():
         render('rect', arg=((0,-20,w,55), hcol[1], False),borderradius=20)
         render('rect', arg=((w//2-200,19,401,61), hcol[0], False),borderradius=20)
         render('text',text=format(score,','),arg=((20, 20),t,'grade','center'),relative=(w//2-200,22,400,60))
-        render('text',text=str(accuracy)+'% '+format(int(perf*(accuracy*0.01)),',')+'pp',arg=((20, 170),forepallete,'center'),relative=(w//2-200,82,400,20))
+        render('text',text=str(accuracy)+'% '+format(int(perf),',')+'pp',arg=((20, 170),forepallete,'center'),relative=(w//2-200,82,400,20))
         get_mods((20,20))
         if combo!=0:
             kek=(w//2-(notewidth*2),100,400,100)
             comboo=str(format(int(combo),','))
             if sre:
-                try:
-                    judgewindow=judge[1]
-                except Exception:
-                    judgewindow=0
                 render('text',text=comboo,arg=((0,0),(255,0,0),'grade','center'),relative=(kek[0]-sre,kek[1],kek[2],kek[3]))
                 render('text',text=comboo,arg=((0,0),(0,0,255),'grade','center'),relative=(kek[0]+sre,kek[1],kek[2],kek[3]))
                 render('text',text=comboo,arg=((0,0),(0,255,0),'grade','center'),relative=(kek[0],kek[1]+sre,kek[2],kek[3]))
@@ -304,6 +309,6 @@ def game():
                         x.write(a+'\n')
             if not issubmiting:
                 issubmiting=1
-                threading.Thread(target=submit_score,args=(perf,combo,beatmapid,beatmapsetid,hits[0],hits[1],hits[2],hits[3],diffmode,mods,maxperf,int(time.time()-timetaken),)).start()
+                threading.Thread(target=submit_score,args=(perf,maxcombo,beatmapid,beatmapsetid,hits[0],hits[1],hits[2],hits[3],diffmode,mods,maxperf,int(time.time()-timetaken),)).start()
                 transitionprep(5)
 
