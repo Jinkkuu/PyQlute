@@ -327,10 +327,15 @@ def get_input():
                     else:
                         transitionprep(-1)           
                 elif not activity==7:
-                    if ismulti:
-                        transitionprep(16)
-                    else:
-                        transitionprep(1)
+                    if len(search[1]):
+                        search[1]=''
+                        reload_database()
+                    else:                        
+                        if ismulti:
+                            transitionprep(16)
+                        else:
+                            transitionprep(1)
+                    
                 elif activity==7:
                     activity=3
             else: 
