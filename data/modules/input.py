@@ -116,8 +116,13 @@ def get_input():
                 if sysbutton:
                     transitionprep(1)
             elif activity==11:
-                if sysbutton:
+                if sysbutton==1:
                     transitionprep(2)
+                elif sysbutton==2:
+                    sbid=0
+                    settingskeystore['skin']=None
+                    reloadsettings()
+                    reloadicons()
                 elif event.button==1 and skinbutton:
                     sbid=skinbutton
                     settingskeystore['skin']=skins[sbid-1]

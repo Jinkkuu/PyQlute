@@ -58,26 +58,25 @@ def customization():
         for a in range(1,len(skins)+1):
             sb.append((400*((w/800)-1),shopscroll+100+(80*(a-1)),400,80))
         skinbutton=menu_draw((sb),(skins),bradius=0,styleid=3,selected_button=sbid)
-        if sbid:
-            render('rect', arg=((w-400,100,400,h-100), (20,20,20), False))
-            showplayfield((w-200,-30))
-            render('rect', arg=((w-380,110,200,10), (0,180,0), False),borderradius=10)
-            if "note.png" in icons:
-                keyoffset=icons['note.png'].get_rect()[3]
-                screen.blit(icons['note.png'],(w-400,320-keyoffset))
-            else:
-                render('rect', arg=((w-400,290,100,30), (notecolour), False),borderradius=0)
-            if "note.png" in icons:
-                keyoffset=icons['note.png'].get_rect()[3]
-                screen.blit(icons['note.png'],(w-400+200,250-keyoffset))
-            else:
-                render('rect', arg=((w-400+200,250,100,30), (notecolour), False),borderradius=0)
+        render('rect', arg=((w-400,100,400,h-100), (20,20,20), False))
+        showplayfield((w-200,-30))
+        render('rect', arg=((w-380,110,200,10), (0,180,0), False),borderradius=10)
+        if "note.png" in icons:
+            keyoffset=icons['note.png'].get_rect()[3]
+            screen.blit(icons['note.png'],(w-400,320-keyoffset))
+        else:
+            render('rect', arg=((w-400,290,100,30), (notecolour), False),borderradius=0)
+        if "note.png" in icons:
+            keyoffset=icons['note.png'].get_rect()[3]
+            screen.blit(icons['note.png'],(w-400+200,250-keyoffset))
+        else:
+            render('rect', arg=((w-400+200,250,100,30), (notecolour), False),borderradius=0)
         render('rect', arg=((0,h-60,w,60), hcol[0], False))
         render('rect', arg=((0,0,w,100), (62,60,115), False))
         render('text', text='Skinning', arg=(offset, forepallete,'grade'))
         if len(sb):
             scrollbar((0,100),(10,h-160),search=shopscroll//80,length=len(sb),colour=hcol[0])
-        sysbutton=menu_draw(((-10,h-60,100,60),),('Back',),bradius=0,styleid=3)
+        sysbutton=menu_draw(((0,h-60,100,60),(100,h-60,100,60),),('Back','Defaults'),bradius=0,styleid=3)
 cset=0
 def controlsetup():
     global sysbutton,cset
