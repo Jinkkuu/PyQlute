@@ -50,6 +50,21 @@ if settingskeystore['username'] and settingskeystore['password']:
     issigned=1
 else:
     issigned=0
+def medalscreen():
+    global sysbutton
+    if activity==17:
+        sb=[]
+        render('rect', arg=((0,0,w,h), (42,40,95), False))
+        for a in range(1,len(medals)+1):
+            sb.append((w//2-200,shopscroll+100+(80*(a-1)),400,80))
+        if len(sb):
+            scrollbar((0,100),(10,h-160),search=shopscroll//80,length=len(sb),colour=hcol[0])
+        skinbutton=menu_draw((sb),(medals_name),bradius=0,styleid=3,selected_button=sbid,newline='\n')
+        render('rect', arg=((0,h-60,w,60), hcol[0], False))
+        render('rect', arg=((0,0,w,100), (62,60,115), False))
+        render('text', text='Medals', arg=(offset, forepallete,'grade'))
+        sysbutton=menu_draw(((0,h-60,100,60),),('Back',),bradius=0,styleid=3)
+
 def customization():
     global sysbutton,skinbutton
     if activity==11:
@@ -98,7 +113,7 @@ def settingspage():
             user='Guest'
         else:
             user=settingskeystore['username']
-        setuplist={'general': {'Leaderboards':settingskeystore['leaderboard'],'Effects':settingskeystore['effects'],'Save Replays':settingskeystore['sreplay'],'Enable BG':settingskeystore['bgmm'],'Controls':'->','Show FPS':settingskeystore['fpsmetre'],'Discord RPC':settingskeystore['discordrpc'],},'skinning':{'Change Skins':'->','Note Width':'->','Note Height':'->','Note Colour':'->','Background Colour':'->','HealthBar Colour':'->','Insanity Level':'->',},'audio':{'Hitsounds':settingskeystore['hitsound']},'graphics':{'FPS':tmp,'Fullscreen':settingskeystore['fullscreen']},'debug':{},'account':{'Username':user}}
+        setuplist={'general': {'Leaderboards':settingskeystore['leaderboard'],'Effects':settingskeystore['effects'],'Save Replays':settingskeystore['sreplay'],'Enable BG':settingskeystore['bgmm'],'Controls':'->','Show FPS':settingskeystore['fpsmetre'],'Discord RPC':settingskeystore['discordrpc'],},'skinning':{'Change Skins':'->','Note Width':'->','Note Height':'->','Note Colour':'->','Background Colour':'->','HealthBar Colour':'->','Insanity Level':'->',},'audio':{'Hitsounds':settingskeystore['hitsound']},'graphics':{'FPS':tmp,'Fullscreen':settingskeystore['fullscreen']},'debug':{},'account':{'Username':user,'Medals':'->'}}
         setuplistpos=[]
         b=0
         render('rect', arg=((0,0,w,h), (42,40,95), False))

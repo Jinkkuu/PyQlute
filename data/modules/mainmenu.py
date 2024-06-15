@@ -65,10 +65,8 @@ def mainmenu():
             t=2
         else:
             t=1
-        #print_card(oneperf,oneperf*10*10*300,'Monstras',(340,60),t)
         rank=2
         b=1
-        #print_card(totperf//2,totscore//2,'MiXer',(340,60),2,isgrayed=1)
         if gamever!='0.0.0':
             render('text', text=gamename+'/'+gameedition+' ('+str(gamever)+')', arg=((0,0), forepallete,'center'),relative=(w//2,h-35,0,0))
         else:

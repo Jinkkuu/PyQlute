@@ -235,24 +235,39 @@ def diff_change(switch):
     reloadstats()
     diffani=[Tween(begin=cross[1], end=diffcon,duration=350,easing=Easing.CUBIC,easing_mode=EasingMode.OUT),0]
     diffani[0].start()
-def get_rank(num):
-    #crok=256*oneperf
-    crok=oneperf/2
-    totrank=(crok+1)-int((num/oneperf)*crok)
-    return int(totrank)
+def reloadmedals(): # Medals be baddy
+    global medals,medals_name
+    return 0
+    f=requests.get(settingskeystore['apiurl']+'api/listmedal?'+str(settingskeystore['username']),headers={'User-Agent': 'QluteClient-'+str(gamever)},timeout=5)
+    medals=json.loads(f.text)
+    medals_name=[]
+    medals=[]
+    id=0
+    for a in medals:
+        if a['achieved']:
+            if successfulsignin:
+                notification(a['title'],desc=a['desc'])
+            ac='Achieved >v<'
+        else:
+            ac='Not Achieved QnQ'
+        id+=1
+        medals_name.append(ac+'\n'+a['desc']+'\n'+a['title'])
+        medals.append(a)
+
 def reloadprofile():
     global totperf,totscore,totrank,totacc,issigned,successfulsignin,restricted,level,qlutaerror
-#    for a in pend:
     if settingskeystore['username']!='':
         try:
             if not successfulsignin:
                 f=requests.get(settingskeystore['apiurl']+'api/chkprofile?'+str(settingskeystore['username'])+'?'+str(settingskeystore['password']),headers={'User-Agent': 'QluteClient-'+str(gamever)},timeout=5)
                 cache=json.loads(f.text)
                 if int(cache['success'])==1:
-                    successfulsignin=1
                     if len(cache['notification']):
                        notification('QlutaBot',cache['notification'])
                     bypass=0
+                    reloadmedals()
+                    successfulsignin=1
+
                 else:
                     notification('QlutaBot','Incorrect Credentials')
                     bypass=1

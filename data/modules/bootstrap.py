@@ -151,6 +151,8 @@ delta=0
 mainurl='https://dev.catboy.best'
 beatmapapi=mainurl+'/api/v2/'
 beattitle=None
+medals=[]
+medals_name=[]
 countersp=0
 #def print(txt):
 #    logbox.append((txt,time.time()))
@@ -180,7 +182,7 @@ def notification(title,desc=''):
     noteani=[Tween(begin=0, end=notemaxh,duration=500,easing=Easing.CUBIC,easing_mode=EasingMode.OUT,boomerang=True),0]
     noteani[0].start()
 def main():
-    global fps, activity,oneperf,preparedmap,beatnowmusic,change,upd,noteani,voltime,delta,trans,volvisual,volvismo,notemsg,flashylights,logopos,oneperfk,mtext, ingame, screen, settingskeystore,reloaddatabase,totrank, debugmode,sa,bgcolour,tick,scale,size,cardsize,bgtime,replaymen,allowed,posmouse,drawtime,scoremult,msg
+    global fps, activity,preparedmap,beatnowmusic,change,upd,noteani,voltime,delta,trans,volvisual,volvismo,notemsg,flashylights,mtext, ingame, screen, settingskeystore,reloaddatabase,totrank, debugmode,sa,bgcolour,tick,scale,size,cardsize,bgtime,replaymen,allowed,posmouse,drawtime,scoremult,msg
     if change:
         reloadsettings()
         change=0
@@ -220,7 +222,7 @@ def main():
     if time.time()-sa>0.1:
         sa=time.time()
         fps=int(clock.get_fps())
-    allowed=[0,1,2,3,5,6,7,8,11,12,13,14,15,16]
+    allowed=[0,1,2,3,5,6,7,8,11,12,13,14,15,16,17]
     upd=time.time()
     fullscreenchk()
     size=60
@@ -275,6 +277,7 @@ def main():
     settingspage()
     beatmenu()
     customization()
+    medalscreen()
     shopdirect()
     gameedit()
     loginscreen()

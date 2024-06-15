@@ -7,6 +7,7 @@ def submit_score(perf,combo,beatmapid,beatmapsetid,max,great,meh,bad,difficulty,
     f=requests.get(settingskeystore['apiurl']+'api/submitscore?'+str(settingskeystore['username'])+';'+str(settingskeystore['password'])+';'+str(template),headers={'User-Agent': 'QluteClient-'+str(gamever)},timeout=10) # type: ignore
     f=f.text
     reloadprofile() # type: ignore
+    reloadmedals()
     issubmiting=0
     if f!='':
         print(f.rstrip('\n'))

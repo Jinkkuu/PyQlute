@@ -1,10 +1,12 @@
 import pygame,threading
 notecolour=(48, 183, 255)
 kdur=250
-def getpoint(perfect,good,meh,bad,multiplier,combo=1,type=int):
+def getpoint(perfect,good,meh,bad,multiplier,combo=1,type=int): # Points System 2024/06/15
     multiplier=multiplier
-    tmp=(((perfect*perfbom)+(good*(perfbom/2))+(meh*(perfbom/3))-(bad*(perfbom*2)))*multiplier)
-    tmp+=perfbom*combo
+    if bad==0:
+        bad+=1
+    tmp=((perfect)+(good/2)+(meh/3))/bad
+    tmp*=perfbom*multiplier
     return type(tmp)
 def clockify(clo):
     minraw=int(clo/60)
@@ -164,7 +166,7 @@ def game():
                         if settingskeystore['sreplay']:
                             replaystore.append(str(gametime)+';'+str(keys[0])+';'+str(keys[1])+';'+str(keys[2])+';'+str(keys[3]))
                 if (judge[0] and keys[kik-1]) or judge[1]==3: 
-                    hit=judge[1]              
+                    hit=judge[1]                  
                     clicked=1
                     stripetime.append((keypos,int(tok[2])))
                     #print((keypos,int(tok[2])))

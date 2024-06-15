@@ -115,6 +115,15 @@ def get_input():
             elif activity==9:
                 if sysbutton:
                     transitionprep(1)
+            elif activity==17:
+                if sysbutton:
+                    transitionprep(2)
+                elif event.button==4:
+                    if not shopscroll+20>0:
+                        shopscroll+=40
+                elif event.button==5:
+                    if not shopscroll-20<-(80*(len(medals)-1)):
+                        shopscroll-=40
             elif activity==11:
                 if sysbutton==1:
                     transitionprep(2)
@@ -211,6 +220,10 @@ def get_input():
                   settingskeystore['effects'] = not settingskeystore['effects']
                 elif setbutton == 4 and setupid==1:
                   settingskeystore['bgmm'] = not settingskeystore['bgmm']
+                elif setbutton == 2 and setupid==6:
+                    transitionprep(17)
+                    sbid=0
+                    shopscroll=0
                 elif setbutton == 5 and setupid==1:
                     transitionprep(13)
                     cset=-1
