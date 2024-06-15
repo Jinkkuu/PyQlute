@@ -60,7 +60,8 @@ def showplayfield(pos,bypass=False):
     for a in range(1,5):
         b=a-1
         co=(100,int(100+(20*keyslight[b].value)),int(100+(120*keyslight[b].value)))
-        render('rect', arg=(((keymap[b][0]+pos[0],keymap[b][1]+pos[1],keymap[b][2],keymap[b][3])), (50,50,50), False),borderradius=0) # Judgement Block
+        cb=(80,int(80+(20*keyslight[b].value)),int(80+(120*keyslight[b].value)))
+        render('rect', arg=(((keymap[b][0]+pos[0],keymap[b][1]+pos[1],keymap[b][2],keymap[b][3])), cb, False),borderradius=0) # Judgement Block
         render('rect', arg=(((keymap[b][0]+pos[0],keymap[b][1]+pos[1]+(10*-keyslight[b].value),keymap[b][2],keymap[b][3])), co, False),borderradius=0) # Judgement Block
         if a==4:
             render('line',arg=((keymap[-1][0]+pos[0]+100,0+pos[1]),(255,255,255),(keymap[-1][0]+pos[0]+100,keymap[-1][1]+pos[1]+noteheight)))    
@@ -163,7 +164,7 @@ def game():
                         if settingskeystore['sreplay']:
                             replaystore.append(str(gametime)+';'+str(keys[0])+';'+str(keys[1])+';'+str(keys[2])+';'+str(keys[3]))
                 if (judge[0] and keys[kik-1]) or judge[1]==3: 
-                    hit=judge[1]
+                    hit=judge[1]              
                     clicked=1
                     stripetime.append((keypos,int(tok[2])))
                     #print((keypos,int(tok[2])))

@@ -1,5 +1,10 @@
-import requests,threading,re
+import requests,threading,re,pypresence
 from urllib.parse import unquote
+from pypresence import Presence
+import time
+
+client_id = '1251396255381327966'  # Client ID
+RPC = Presence(client_id)  # Initialize the client class
 lvrating=0
 def bpmparse(bpm):
     return bpm.split(',')[1]
@@ -282,21 +287,23 @@ def ondemand():
     global totperf,totscore,totrank,nettick,issigned,qlutaerror,menunotice,pingspeed,downloadqueue,level,multitime
     qlutaerror=True
     pingspeed=0
+    discordactive=0
     while True:
         if stop:
             exit()
         if int(time.time()-nettick)>9:
+            if activity==4:
+                pre='Playing '
+            else:
+                pre='Listening to '
+            status=pre+str(beattitle)
             if not bypass_multiplayer:
                 reloadrooms()
             if issigned:
                 try:
                     reloadprofile()
-                    if activity==4:
-                        pre='Playing '
-                    else:
-                        pre='Listening to '
                     ps=time.time()
-                    f=requests.get(settingskeystore['apiurl']+'api/setstatus?'+str(settingskeystore['username'])+'?playing?'+str(pre+str(beattitle)),headers={'User-Agent': 'QluteClient-'+str(gamever)},timeout=5)
+                    f=requests.get(settingskeystore['apiurl']+'api/setstatus?'+str(settingskeystore['username'])+'?playing?'+str(status),headers={'User-Agent': 'QluteClient-'+str(gamever)},timeout=5)
                     f=f.text
                     menunotice=requests.get(settingskeystore['apiurl']+'api/menunotice',headers={'User-Agent': 'QluteClient-'+str(gamever)},timeout=5).text
                     qlutaerror=False
@@ -333,6 +340,23 @@ def ondemand():
                 except Exception as err:
                     print(err)
                 downloadqueue.remove(a)
+            try:
+                if settingskeystore['discordrpc']:
+                    if not discordactive:
+                        RPC.connect()
+                        discordactive=1
+                    if issigned:
+                        user=settingskeystore['username']
+                        rank=totrank
+                        userstat=user+' (#'+format(rank,',')+')'
+                    else:
+                        rank=0
+                        user='Guest'
+                        userstat=user
+                    RPC.update(state=status,large_image='main-image',large_text=userstat)
+            except Exception as err:
+                discordactive=0
+                print(err)
 
 
         time.sleep(1/10)

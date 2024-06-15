@@ -294,9 +294,8 @@ def main():
     try:
         game()
     except Exception as error:
-        raise TypeError
-        crash(error)
-        activity=1
+        notification('Error!!',desc=error)
+        transitionprep(3)
     if not notemsg[0]=='':
         sh=0
         sw=0

@@ -192,6 +192,9 @@ def get_input():
                 elif setbutton == 6 and setupid==1:
                     change=True
                     settingskeystore['fpsmetre']=not settingskeystore['fpsmetre']
+                elif setbutton == 7 and setupid==1:
+                    change=True
+                    settingskeystore['discordrpc']=not settingskeystore['discordrpc']
                 elif setbutton == 2 and setupid==4:
                   settingskeystore['fullscreen'] = not settingskeystore['fullscreen']
                   firstcom=False

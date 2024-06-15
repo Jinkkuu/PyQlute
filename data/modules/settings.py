@@ -17,6 +17,7 @@ settingstemplate={
         'Key3' : 'j',
         'Key4' : 'k',
         'skin' : None,
+        'discordrpc' : True,
         'fpsmetre' : False
     }
 def reloadsettings():
@@ -98,7 +99,7 @@ def settingspage():
             user='Guest'
         else:
             user=settingskeystore['username']
-        setuplist={'general': {'Leaderboards':settingskeystore['leaderboard'],'Effects':settingskeystore['effects'],'Save Replays':settingskeystore['sreplay'],'Enable BG':settingskeystore['bgmm'],'Controls':'->','Show FPS':settingskeystore['fpsmetre']},'skinning':{'Change Skins':'->','Note Width':'->','Note Height':'->','Note Colour':'->','Background Colour':'->','HealthBar Colour':'->','Insanity Level':'->',},'audio':{'Hitsounds':settingskeystore['hitsound']},'graphics':{'FPS':tmp,'Fullscreen':settingskeystore['fullscreen']},'debug':{},'account':{'Username':user}}
+        setuplist={'general': {'Leaderboards':settingskeystore['leaderboard'],'Effects':settingskeystore['effects'],'Save Replays':settingskeystore['sreplay'],'Enable BG':settingskeystore['bgmm'],'Controls':'->','Show FPS':settingskeystore['fpsmetre'],'Discord RPC':settingskeystore['discordrpc'],},'skinning':{'Change Skins':'->','Note Width':'->','Note Height':'->','Note Colour':'->','Background Colour':'->','HealthBar Colour':'->','Insanity Level':'->',},'audio':{'Hitsounds':settingskeystore['hitsound']},'graphics':{'FPS':tmp,'Fullscreen':settingskeystore['fullscreen']},'debug':{},'account':{'Username':user}}
         setuplistpos=[]
         b=0
         render('rect', arg=((0,0,w,h), (42,40,95), False))
