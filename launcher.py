@@ -56,29 +56,16 @@ if os.path.isfile(syspath+'.version'):
     gamever=open(syspath+'.version').read().rstrip("\n")
 if os.path.isfile(syspath+'.edition'):
     gameedition=open(syspath+'.edition').read().rstrip("\n")
-if not "-devmode" in sys.argv:
-    devmode=True # Bypasses the sha256sum Checks and open as Normal. Which would make players able to run the game with modified code that I didn't Verify yet.
-else:
-    devmode=False # This is the Default
 for a in os.listdir(resource_path(modulepath)):
     try:
         if not os.path.isdir(resource_path(modulepath+a)):
-            tmpr=open(resource_path(modulepath+a),'rb').read()
             tmp=open(resource_path(modulepath+a)).read()
-            if not devmode:
-                url = "https://api.github.com/repos/pxkidoescoding/Qlute/contents/data/modules/"+str(a)
-                response = requests.get(url)
-                print(url)
-                sha = response.json()["sha"]
-                shalocal=hashlib.sha256(tmpr).hexdigest()
-                print(shalocal)
             if not 'bootstrap.py' in a:
                 exec(tmp)
     except Exception as error:
         print(str(a),error)
-        #print('File:'+str(a)+' is Not Verified, Skipping')
         exit()
-        os.remove(resource_path(modulepath+a))
+
 moduletime=time.time()-moduletime
 if os.path.isfile(resource_path(modulepath+'bootstrap.py')):
         exec(open(resource_path(modulepath+'bootstrap.py')).read())
