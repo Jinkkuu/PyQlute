@@ -386,10 +386,11 @@ def main():
             render('rect', arg=((posmouse[0]-10,posmouse[1]-10,20,20), (102, 155, 212), True),borderradius=20)
 #    if not (posmouse[0],posmouse[1]) in crox:
 #        crox.append((posmouse[0],posmouse[1]))
+#    if "-testmode" in sys.argv:
+#        stopnow()
     pygame.display.flip()
     drawtime=clock.tick(fpsmodes[fpsmode])/1000
     delta=drawtime
-    #print(drawtime)
 nettick=0
 timetaken=0
 welcometext='Welcome to '+str(gamename)

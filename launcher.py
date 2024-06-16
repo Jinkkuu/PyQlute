@@ -57,17 +57,17 @@ if os.path.isfile(syspath+'.version'):
 if os.path.isfile(syspath+'.edition'):
     gameedition=open(syspath+'.edition').read().rstrip("\n")
 for a in os.listdir(resource_path(modulepath)):
-    try:
-        if not os.path.isdir(resource_path(modulepath+a)):
-            tmp=open(resource_path(modulepath+a)).read()
-            if not 'bootstrap.py' in a:
-                exec(tmp)
-    except Exception as error:
-        print(str(a),error)
-        exit()
-
+    if os.path.isfile(resource_path(modulepath+a)):
+        tmp=open(resource_path(modulepath+a)).read()
+        if not 'bootstrap.py' in a:
+            exec(tmp)
 moduletime=time.time()-moduletime
 if os.path.isfile(resource_path(modulepath+'bootstrap.py')):
-        exec(open(resource_path(modulepath+'bootstrap.py')).read())
+        program=open(resource_path(modulepath+'bootstrap.py')).read()
+        if "-testmode" in sys.argv:
+            import cProfile
+            cProfile.run(program)
+        else:
+            exec(program)
 else:
     print('Bootstrap not Found')
