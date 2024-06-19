@@ -6,6 +6,20 @@ import time
 client_id = '1251396255381327966'  # Client ID
 RPC = Presence(client_id)  # Initialize the client class
 lvrating=0
+def getrating(notes,mult,bpm): # Get Level rating of the beatmap
+    lvy=0
+    lvt=0
+    lvrating=0
+    lastms=int(notes[-1].split(',')[2])
+    for a in notes:
+        tmp=a.split(',')
+        bartime=float(tmp[2])
+        lvy=(bartime-lvy)/bpm
+        lvy*=scoremult
+        #lvrating+=(0.01*bpm)*
+        lvrating+=0.00005*lvy
+        print(0.00005*lvy)
+    return round(lvrating,2)
 def bpmparse(bpm):
     return bpm.split(',')[1]
 def reloadbg():
@@ -99,17 +113,7 @@ def reloadstats(reloadleaderboard=False):
             scoremult*=8
     lvt=0
     lvy=0
-    for a in  objects:
-        tmp=a.split(',')
-        bartime=int(tmp[2])//bpm
-        if bartime!=lvt:
-            lvt=bartime
-            lvy=0
-        else:
-            lvy+=1
-
-        lvrating+=0.01*lvy
-    lvrating=round(lvrating,2)*scoremult
+    lvrating=getrating(objects,scoremult,bpm)
     if lvrating>=120:
         levelcol=rankdiffc[-1]
     elif lvrating>=15:
@@ -169,8 +173,10 @@ def getstat():
 #        print(ranktypetmp)
     ranktype=getrank(ranktypetmp)
 def resetscore():
-    global maxcombo,score,issubmiting,ncombo,barclicked,prevrank,timestep,replaystore,unstablerate,timetaken,perf,scorew,kiai,bgcolour,objecon,combo,sre,health,healthtime,combotime,hits,last,stripetime,ppcounter,pptime,pptmp,modshow,ranking
+    global maxcombo,score,fever,issubmiting,ncombo,barclicked,prevrank,timestep,replaystore,unstablerate,timetaken,perf,scorew,kiai,bgcolour,objecon,combo,sre,health,healthtime,combotime,hits,last,stripetime,ppcounter,pptime,pptmp,modshow,ranking
     last=0
+    fever=0
+    fevertime=0
     issubmiting=0
     maxcombo=0
     ncombo=0
