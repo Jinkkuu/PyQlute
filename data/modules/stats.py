@@ -16,9 +16,9 @@ def getrating(notes,mult,bpm): # Get Level rating of the beatmap
         bartime=float(tmp[2])
         lvy=(bartime-lvy)/bpm
         lvy*=scoremult
-        #lvrating+=(0.01*bpm)*
         lvrating+=0.00005*lvy
-        print(0.00005*lvy)
+    if lvrating>128:
+        lvrating=128.99
     return round(lvrating,2)
 def bpmparse(bpm):
     return bpm.split(',')[1]
