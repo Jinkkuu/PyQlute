@@ -1,5 +1,4 @@
 import pygame
-from pygame import gfxdraw
 notewidth=100
 noteheight=30
 osam=0
