@@ -53,9 +53,8 @@ def beatmenu():
         if beatmaps>0: # type: ignore
             try:
                 pp=int(int(getpoint(diffp[0][0],0,0,0,scoremult,combo=diffp[0][0]))),int(getpoint(diffp[-1][0],0,0,0,scoremult,combo=diffp[-1][0])) # type: ignore
-            except Exception:
-                pp=0,0
-                song_change(1)
+            except Exception as err:
+                pp=1,1
             if len(diffp)<2 or activity==7: # type: ignore
                 gotext=''
                 goicon=icons['go.png']
@@ -78,7 +77,7 @@ def beatmenu():
             crub=0
         s=310 # Leaderboard 
         c=0
-        render('rect', arg=((0,0,260,h), hcol[2], False)) # type: ignore
+        render('rect', arg=((0,0,260,h-60), hcol[2], False)) # type: ignore
         if issigned: # type: ignore
             for a in leaderboard[:5]: # type: ignore
                 if a['username']==settingskeystore['username']: # type: ignore

@@ -263,7 +263,7 @@ def get_input():
                                 for a in range(1,len(modsen)+1):
                                     if mod==a:
                                         modsen[a-1]=not modsen[a-1]
-                                        reloadstats()
+                                        reloadstats(reloadleaderboard=False)
                             else:
                                 if button:
                                     if activity!=7:

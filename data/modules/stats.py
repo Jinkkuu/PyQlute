@@ -13,12 +13,13 @@ def getrating(notes,mult,bpm): # Get Level rating of the beatmap
     lastms=int(notes[-1].split(',')[2])
     for a in notes:
         tmp=a.split(',')
-        bartime=float(tmp[2])
-        lvy=(bartime-lvy)/bpm
-        lvy*=scoremult
-        lvrating+=0.00005*lvy
+        if len(tmp)>4:
+            bartime=float(tmp[2])
+            lvy=(bartime-lvy)/bpm
+            lvy*=scoremult
+            lvrating+=0.00005*lvy
     if lvrating>128:
-        lvrating=128.99
+        lvrating=128
     return round(lvrating,2)
 def bpmparse(bpm):
     return bpm.split(',')[1]
@@ -32,11 +33,20 @@ def reloadbg():
         background.fill((255*b, 255*b, 255*b,128), special_flags=pygame.BLEND_RGBA_MULT)
     except Exception:
         pass
-def reloadstats(reloadleaderboard=False):
-    global objects,difficulty,bpmstr,background,backgroundev,songtitle,metadata,timings,lvrating,levelrating,levelcol,bpm,songoffset,maxperf,scoremult,ismulti,beattitle,perfect,great,ok,diffmode,beatmapid,beatmapsetid
+def loadmap(url):
+    beatmap=open(url,encoding='utf-8', errors='replace').read().rstrip('\n').split('\n')
+    return beatmap
+def getobjects(url,ints=False):
+    if ints:
+        return len(loadmap(url)[beatmap.index('[HitObjects]')+1:])
+    else:
+        return loadmap(url)[beatmap.index('[HitObjects]')+1:]
+def reloadstats(reloadleaderboard=True):
+    global objects,difficulty,lastms,bpmstr,background,backgroundev,songtitle,metadata,timings,lvrating,levelrating,levelcol,bpm,songoffset,maxperf,scoremult,ismulti,beattitle,perfect,great,ok,diffmode,beatmapid,beatmapsetid
     diffmode=diff[diffcon][1]
-    beatmap=open(gamepath+fullbeatmapname[beatsel]+'/'+pref+'['+diffmode+']'+'.osu').read().rstrip('\n').split('\n')
-    objects=beatmap[beatmap.index('[HitObjects]')+1:]
+    beatmap=loadmap(gamepath+fbt+'/'+pref+'['+diffmode+']'+'.osu')
+    objects=getobjects(gamepath+fbt+'/'+pref+'['+diffmode+']'+'.osu')
+    lastms=int(objects[-1].split(',')[2])
     b=0
     lvrating=0
     background=pygame.surface.Surface((0,0))
@@ -58,13 +68,6 @@ def reloadstats(reloadleaderboard=False):
         backgroundev=backgroundev.split(',')[2].rstrip('"')[1:]
     reloadbg()
     difficulty=beatmap[beatmap.index('[Difficulty]')+1:]
-    keycheck=int(float(difficulty[1].replace('CircleSize:','')))
-#    if keycheck!=4:
-#        print('This Game only supports ONLY 4 Keys')
-#        if len(bp2)>1:
-#            diff_change(1)
-#        else:
-#            song_change(1)
     difficulty=difficulty[:difficulty.index('')]
     metadata=beatmap[beatmap.index('[Metadata]')+1:beatmap.index('[Difficulty]')-1]
     beatmapid=None
@@ -77,7 +80,8 @@ def reloadstats(reloadleaderboard=False):
     beattitle=p2[beatsel].replace('\n','-')+' ['+str(diffmode)+']'
     songtitle=metadata[2].split(':')[1]+' - '+metadata[0].split(':')[1]
     threading.Thread(target=getstat).start()
-    threading.Thread(target=rleaderboard).start()
+    if reloadleaderboard:
+        threading.Thread(target=rleaderboard).start()
     timingst=beatmap[beatmap.index('[TimingPoints]')+1:]
     timings=[]
     for a in timingst:
@@ -169,10 +173,8 @@ def getstat():
 #        print(ranktypetmp)
     ranktype=getrank(ranktypetmp)
 def resetscore():
-    global maxcombo,score,fever,issubmiting,ncombo,barclicked,prevrank,timestep,replaystore,unstablerate,timetaken,perf,scorew,kiai,bgcolour,objecon,combo,sre,health,healthtime,combotime,hits,last,stripetime,ppcounter,pptime,pptmp,modshow,ranking
+    global maxcombo,score,issubmiting,ncombo,barclicked,prevrank,timestep,replaystore,unstablerate,timetaken,perf,scorew,kiai,bgcolour,objecon,combo,sre,health,healthtime,combotime,hits,last,stripetime,ppcounter,pptime,pptmp,modshow,ranking
     last=0
-    fever=0
-    fevertime=0
     issubmiting=0
     maxcombo=0
     ncombo=0

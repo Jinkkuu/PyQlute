@@ -12,7 +12,7 @@ def get_creation_time(item):
     item_path = os.path.join(gamepath, item)
     return os.path.getctime(item_path)
 def beatmapload():
-    global p2,p1,beatnowmusic,gc,speed,fbt,pausetime,isplaying,gametime,bp1,bp2,beatani,beatmaps,diffani,beattitle,fullbeatmapname,objects,diffp,betaperf,reloaddatabase,maxperf,background,ranktype,diff,diffmode,pref,level,ismusic,bpm,realid,prestart,beatsel,tick,lastms,combotime,songoffset,metadata
+    global p2,p1,beatnowmusic,gc,speed,fbt,pausetime,isplaying,gametime,bp1,bp2,beatani,beatmaps,diffani,fullbeatmapname,diffp,reloaddatabase,background,ranktype,diff,pref,ismusic,bpm,realid,prestart,beatsel,tick,lastms,metadata,beatmap
     if reloaddatabase:
         p1=[]
         p2=[]
@@ -32,7 +32,7 @@ def beatmapload():
         if not len(p2) and beatmaps>0:
             background=pygame.Surface((0,0))
             pygame.mixer.music.stop()
-            songtitle='No beatmaps avaliable!'
+            songtitle='Error in subsystem!'
     if prestart:
         if len(fullbeatmapname)!=0:
             beatsel=random.randint(1,len(fullbeatmapname))-1
@@ -51,12 +51,6 @@ def beatmapload():
         pygame.mixer.music.set_volume((volvisual*0.01))
     else:
         background=pygame.Surface((0,0))
-#        pygame.mixer.music.set_volume(0)
-        #pygame.mixer.music.set_pos(time.time()-gametime)
-        #pass
-#        if gametime<0:
-#            gametime=0
-        #pygame.mixer.music.play(-1,(time.time()-gametime))
     try:
         if beatnowmusic and len(p2):
             pausetime=time.time()+pausedur
@@ -102,17 +96,17 @@ def beatmapload():
                             pref=pref[:pref.index('[')]
                     diffp=[]
                     for difftmp in diff:
-                        beatmap=open(gamepath+fbt+'/'+pref+'['+difftmp+']'+'.osu',encoding='utf-8', errors='replace').read().rstrip('\n').split('\n')
+                        beatmap=loadmap(gamepath+fbt+'/'+pref+'['+difftmp+']'+'.osu')
+                        amo=getobjects(gamepath+fbt+'/'+pref+'['+difftmp+']'+'.osu',ints=True)
                         general=beatmap[beatmap.index('[General]')+1:]
                         general=general[:general.index("")]
                         for a in general:
                             if "AudioFilename" in a:
                                 music=a.split(': ')[1]
-                        objects=len(beatmap[beatmap.index('[HitObjects]')+1:])
                         difficulty=beatmap[beatmap.index('[Difficulty]')+1:]
                         difficulty=difficulty[:difficulty.index('')]
                         metadata=beatmap[beatmap.index('[Metadata]')+1:beatmap.index('[Difficulty]')-1]
-                        diffp.append((objects,difftmp))
+                        diffp.append((amo,difftmp))
                     diffp=sorted(diffp, key=lambda x: x[0])
                     diff=diffp
                     bp1=[]
@@ -122,36 +116,12 @@ def beatmapload():
                         bp1.append((((cardsize//2),size,cardsize,size))) # type: ignore
                         bp2.append(str(b[1]))
                         a+=1
-#                    print(diffp)
-                    #print(ids)
                     pygame.mixer.music.load(gamepath+fbt+'/'+music)
                     reloadstats()
-                    betaperf=0
-                    ptick=0
-                    gener=0
-                    perfnerf=0.00975
-                    perfntot=0
-                    for a in objects:
-                        if int(a.split(',')[2])//100>ptick:
-                            ptick=int(a.split(',')[2])//100
-                            perfntot=0
-                        else:
-                            perfntot+=perfnerf
-                        betaperf+=perfntot
-                    betaperf=betaperf
-                    if betaperf>1500:
-                        betaperf=1500
-                    lastms=int(objects[-1].split(',')[2])
-#                    else:
-#                        ranktype=
             else:
                 lastms=1
-                #objects=['','']
-                #metadata=beatmap[beatmap.index('[Metadata]')+1:]
-#            for a in beatmap[:3]:
-#                print(a)
-#            sys.exit()
     except Exception as err:
+        raise ''
         print('SONG SUBSYSTEM: ',err)
         song_change(1)
     a=0
