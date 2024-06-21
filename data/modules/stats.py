@@ -117,7 +117,6 @@ def reloadstats(reloadleaderboard=False):
     maxlev=len(rankdiffc)
     splitlv=64//maxlev
     for a in range(maxlev-1,-1,-1):
-        print(splitlv*a,lvrating)
         if lvrating>=splitlv*a:
             levelcol=rankdiffc[a]
             break
