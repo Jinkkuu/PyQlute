@@ -190,7 +190,7 @@ def timeform(t):
         x=int(t//31536000)
         fix='yr'
     elif t>=2630000:
-        fix='m'
+        fix='mn'
         x=int(t//2630000)
     elif t>=86400:
         x=int(t//86400)
