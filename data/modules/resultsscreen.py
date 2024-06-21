@@ -36,7 +36,7 @@ def beatres():
         #render('rect',arg=((0,(h//2-((500//2)*scale[1])),w,500*scale[1]),(50,50,50),True),bordercolor=(30,30,30),borderradius=20)
         render('rect',arg=(scrop,gc,False),borderradius=20)
         render('text', text=gradet, arg=((0,0), forepallete,'grade','center'),relative=scrop)
-        render('text', text=str(format(int(perf/maxperf*1000000),',')), arg=((0,0), forepallete,'grade','center'),relative=(scrop[0],scrop[1]+80,scrop[2],scrop[3]))
+        render('text', text=str(format(int(perf/maxperf*(1000000*mult)),',')), arg=((0,0), forepallete,'grade','center'),relative=(scrop[0],scrop[1]+80,scrop[2],scrop[3]))
         #render('text', text=+' Acc - '+str(accuracy)+'%', arg=((0,0), forepallete,'center'),relative=(w//2,h//2-30,0,0))
         render('text', text='pp - '+str(str(format(int(perf),',')))+'/'+str(str(str(format(maxperf,',')))), arg=((0,0), forepallete,'center'),relative=(w//2-150,h//2-30,0,0))
         render('text', text=str(accuracy)+'%', arg=((0,0), forepallete,'center'),relative=(w//2+160,h//2-30,0,0))
