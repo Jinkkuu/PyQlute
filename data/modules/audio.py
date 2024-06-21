@@ -121,7 +121,6 @@ def beatmapload():
             else:
                 lastms=1
     except Exception as err:
-        raise ''
         print('SONG SUBSYSTEM: ',err)
         song_change(1)
     a=0
