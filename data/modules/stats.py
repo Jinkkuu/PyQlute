@@ -115,10 +115,12 @@ def reloadstats(reloadleaderboard=False):
     lvy=0
     lvrating=getrating(objects,scoremult,bpm)
     maxlev=len(rankdiffc)
-    splitlv=100//maxlev
-    for a in range(0,maxlev):
+    splitlv=64//maxlev
+    for a in range(maxlev-1,-1,-1):
+        print(splitlv*a,lvrating)
         if lvrating>=splitlv*a:
             levelcol=rankdiffc[a]
+            break
     levelrating=rankdiff[rankdiffc.index(levelcol)]
     maxperf=getpoint(len(objects),0,0,0,scoremult,combo=len(objects))
 def rleaderboard():
