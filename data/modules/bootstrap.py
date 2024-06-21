@@ -37,8 +37,8 @@ level=0
 print('Starting Game...')
 button_size_height=33
 stop=0
-rankdiff='Easy','Normal','Hard','Extra','Expert','>n<','Devil'
-rankdiffc=(0,100,200),(0,200,50),(150,200,0),(200,50,0),(0,0,0),(150,0,150)
+rankdiffc=(0,100,200),(0, 200, 30),(164, 219, 44),(219, 149, 44),(137, 31, 166),(166, 31, 31),(0,0,0)
+rankdiff='Easy','Normal','Hard','Extra','Expert','Master','X-X'
 sa=time.time()
 gametime=0
 ismusic=0
