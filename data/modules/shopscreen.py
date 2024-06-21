@@ -33,13 +33,12 @@ def shop_refresh(usecached):
                 alt=''
             sentrynf=[]
             tick=0
-            for progress in range(0,maxsentry+1): 
+            retry=1
+            while retry:
                 try:
-                    f = requests.get(beatmapapi+'search'+alt+'?limit=50&offset='+str(progress*50),headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'},timeout=3)
-                    f=f.json()['found']
-                    for a in f:
-                        if a['beatmaps'][0]['mode']=='mania':
-                           sentrynf.append(a)
+                    f = requests.get(beatmapapi+'search'+alt+'?limit=50',headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'},timeout=10)
+                    sentrynf=f.json()['found']
+                    retry=0
                 except Exception as err:
                     print(err)
         sentry=[]
@@ -96,10 +95,7 @@ def shopdirect():
             loading.update()
             render('rect', arg=((25+(loading.value*(w-485)),h//2-25,40,40), forepallete, False),borderradius=int(40-(loading.value*25)))
             render('rect', arg=((27+(loading.value*(w-485)),h//2-22,35,35), (0,0,0), False),borderradius=int(35-(loading.value*25)))
-            if progress:
-                te=str(int((progress/maxsentry)*100))+'%'
-            else:
-                te='Loading...'
+            te='Loading...'
             render('text', text=te, arg=((20,20), forepallete,'grade','center'),relative=(400*((w/800)-1),100,400,h-100))
         if len(sb):
             scrollbar((0,120),(10,h-180),search=shopscroll//80,length=len(sb),colour=hcol[0])
@@ -112,14 +108,15 @@ def shopdirect():
             render('text', text=entry['title'], arg=((w-400+25,335), forepallete))
             render('text', text=entry['artist'], arg=((w-400+25,360), forepallete))
             #render('text', text=entry['creator'], arg=((w-400+25,360), forepallete))
-            render('text', text='BPM:'+str(entry['bpm'])+' - '+str(getpoint(entry['beatmaps'][0]['max_combo'],0,0,0,1,combo=entry['beatmaps'][0]['max_combo']))+'pp - '+clockify(entry['beatmaps'][0]['total_length']), arg=((w-400+25,310), forepallete))
+            if entry['beatmaps'][0]['max_combo']:
+                com=entry['beatmaps'][0]['max_combo']
+            else:
+                com=0
+            render('text', text='BPM:'+str(entry['bpm'])+' - '+str(getpoint(com,0,0,0,1,combo=com))+'pp - '+clockify(entry['beatmaps'][0]['total_length']), arg=((w-400+25,310), forepallete))
             render('rect', arg=((w-400+30,250,100,40), rankmodes[rank][1], False),borderradius=10) # type: ignore
             render('text', text=rankmodes[rank][0], arg=((0,0), forepallete,'center'),relative=(w-400+30,250,100,40))
             print_card(0,0,entry['creator'],(w-400+25,390),0,hide=True) # type: ignore
         else:
             crok=999
-        if sbid and entry['beatmaps'][0]['mode']!='mania':
-            crok=999
-            render('text', text='Beatmap not supported on '+gamename, arg=((w-400+25,480), forepallete))
 
         sysbutton=menu_draw(((-10,h-60,100,60),(w-140,crok+h-60,140,60)),('Back','Download'),bradius=0,styleid=3)
