@@ -58,6 +58,7 @@ def iscatched(block,isauto,ob,fir,id):
     tim=block
     return (lastcall,tick,tim)
 def showplayfield(pos,bypass=False):
+    linecol=(80,80,100)
     render('rect', arg=((keymap[0][0]+pos[0],keymap[0][1]-10+pos[1],keymap[0][2]*4,10), (50,50,50), False),borderradius=0) # Judgement Line
     for a in range(1,5):
         b=a-1
@@ -66,26 +67,21 @@ def showplayfield(pos,bypass=False):
         render('rect', arg=(((keymap[b][0]+pos[0],keymap[b][1]+pos[1],keymap[b][2],keymap[b][3])), cb, False),borderradius=0) # Judgement Block
         render('rect', arg=(((keymap[b][0]+pos[0],keymap[b][1]+pos[1]+(10*-keyslight[b].value),keymap[b][2],keymap[b][3])), co, False),borderradius=0) # Judgement Block
         if a==4:
-            render('line',arg=((keymap[-1][0]+pos[0]+100,0+pos[1]),(255,255,255),(keymap[-1][0]+pos[0]+100,keymap[-1][1]+pos[1]+noteheight)))    
-        render('line',arg=((keymap[b][0]+pos[0],0+pos[1]),(255,255,255),(keymap[b][0]+pos[0],keymap[b][1]+pos[1]+noteheight)))
+            render('line',arg=((keymap[-1][0]+pos[0]+100,0+pos[1]),linecol,(keymap[-1][0]+pos[0]+100,keymap[-1][1]+pos[1]+noteheight-1)))    
+        render('line',arg=((keymap[b][0]+pos[0],0+pos[1]),linecol,(keymap[b][0]+pos[0],keymap[b][1]+pos[1]+noteheight-1)))
 
 def game():
     global activity,timestep,issubmiting,maxcombo,judgewindow,debugmode,ncombo,replaystore,keyslight,accuracy,beatnowmusic,kiai,unstablerate,fpsmode,score,scorew,keyspeed,bgcolour,totperf,totscore,objecon,healthtime,health,ranking,oldupdatetime,t,tip,gametime,combo,sre,combotime,sre,hits,last,stripetime,tmp,pptime,pptmp,ppcounter,perf
     if activity==4:
-        if bgcolour>=1:
-            bgcolour-=1
         for a in keyslight:
             a.update()
-        playfield=(maxt(20,bgcolour),maxt(20,bgcolour),maxt(20,bgcolour))
+        playfield=(20,20,20)
         screen.fill(playfield)
         tmp=0.1
         sretemplate=(tmp-(time.time()-combotime))/tmp
         sre=(sretemplate)*20
         if sre<=0:
             sre=0
-        #if gametime<0:
-        #    pygame.mixer.music.play(-1,0)
-
         b=0
         perf=getpoint(hits[0],hits[1],hits[2],hits[3],scoremult,combo,type=float)
         if perf>maxperf:
@@ -132,7 +128,6 @@ def game():
                         health-=t1
                 ob+=1
                 if ob==1:
-                    #if not keys:
                     firstobject=int(block)
                 notfound=True
                 for kik in range(1,len(pos)+1):
@@ -166,7 +161,7 @@ def game():
                         if settingskeystore['sreplay']:
                             replaystore.append(str(gametime)+';'+str(keys[0])+';'+str(keys[1])+';'+str(keys[2])+';'+str(keys[3]))
                 if (judge[0] and keys[kik-1]) or judge[1]==3: 
-                    hit=judge[1]                  
+                    hit=judge[1]               
                     clicked=1
                     stripetime.append((keypos,int(tok[2])))
                     #print((keypos,int(tok[2])))
@@ -185,7 +180,6 @@ def game():
                     except Exception:
                         judgewindow=hit
                     hits[hit]+=1
-                    bgcolour+=1
                     barclicked.append((notes[0],int(notes[1])))
                     ton=(time.time(),hit)
                     unstablerate.append(ton)
@@ -248,7 +242,8 @@ def game():
         render('rect', arg=((0,-20,w,55), hcol[1], False),borderradius=20)
         render('rect', arg=((w//2-200,19,401,61), hcol[0], False),borderradius=20)
         render('text',text=format(score,','),arg=((20, 20),t,'grade','center'),relative=(w//2-200,22,400,60))
-        render('text',text=str(accuracy)+'% '+format(int(perf),',')+'pp',arg=((20, 170),forepallete,'center'),relative=(w//2-200,82,400,20))
+        render('text',text=str(accuracy)+'% ',arg=((20, 170),forepallete,'center'),relative=(w//2-200,82,200,20))
+        render('text',text=format(int(perf),',')+'pp',arg=((20, 170),forepallete,'center'),relative=(w//2,82,200,20))
         get_mods((20,20))
         if combo!=0:
             kek=(w//2-(notewidth*2),100,400,100)
