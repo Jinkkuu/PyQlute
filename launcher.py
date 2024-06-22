@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import os,time,requests,hashlib,sys,pygame
 def maxt(t,o):
     if t+o>254:
