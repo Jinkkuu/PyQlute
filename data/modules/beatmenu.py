@@ -2,6 +2,7 @@ import pygame
 modsalias="Auto",'Blind','Slice','EZ','Random','Strict'#,'DT','HT'
 modsaliasab='AT','BD','SL','EZ','RND','SN'#,'DT','HT'
 mods=''
+leadh=50
 def reload_database():
     global reloaddatabase,cross,beatsel
     reloaddatabase=1
@@ -84,11 +85,11 @@ def beatmenu():
                     col=166, 207, 255
                 else:
                     col=forepallete # type: ignore
-                leadpos=(20,220+(60*c),220,50) # type: ignore
+                leadpos=(-10,220+(leadh*c)+10,250,leadh) # type: ignore
                 render('rect', arg=(leadpos, hcol[0], False),borderradius=10) # type: ignore
-                render('text', text=str('#'+str(c+1)+' '+a["username"][:10]), arg=((leadpos[0]+10,leadpos[1]+5), col)) # type: ignore
-                render('text', text=a['mods'], arg=((leadpos[0]+210,leadpos[1]+9), col,'min','rtl')) # type: ignore
-                render('text', text=format(int(a['score']),',')+' - '+str(int(a["points"]))+'pp ('+str(int(a['combo']))+'x) '+timeform(int(time.time()-a['time'])), arg=((leadpos[0]+10,leadpos[1]+30), col,'min')) # type: ignore
+                render('text', text=str('#'+str(c+1)+' '+a["username"][:10]), arg=((leadpos[0]+20,leadpos[1]+5), col)) # type: ignore
+                render('text', text=a['mods'], arg=((leadpos[0]+240,leadpos[1]+9), col,'min','rtl')) # type: ignore
+                render('text', text=format(int(a['score']),',')+' - '+str(int(a["points"]))+'pp ('+str(int(a['combo']))+'x) '+timeform(int(time.time()-a['time'])), arg=((leadpos[0]+20,leadpos[1]+30), col,'min')) # type: ignore
                 c+=1
         sysbuttonpos=(0,h-60,100,60),(100,h-60+crok,100,60),(200,h-60+crok+crub,100,60), # type: ignore
         if modsani[1]: # Animation for Mod Select :3
