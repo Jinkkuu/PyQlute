@@ -32,7 +32,8 @@ fontpath=syspath+'fonts/'
 username='Guest'
 propath=datapath+'profiles/'
 profilepath=propath+username+'/'
-gameauthor='Pxki Games'
+gameauthor='Jinkku'
+copyrightdate=2023,2024
 level=0
 print('Starting Game...')
 button_size_height=33
@@ -258,14 +259,17 @@ def main():
         if gametime//bpm>tick:
             tick+=1
     for a in os.listdir(downpath):
-        if a.endswith('.osz'):
-            if not os.path.isdir(gamepath+a.replace('.osz','')):
-                os.mkdir(gamepath+a.replace('.osz',''))
-                with zipfile.ZipFile(downpath+a, 'r') as zip_ref:
-                    zip_ref.extractall(gamepath+a.replace('.osz','/'))
-                    reloaddatabase=1
-                notification('Beatmap Imported',desc=a)
-            os.remove(downpath+a)
+        try:
+            if a.endswith('.osz'):
+                if not os.path.isdir(gamepath+a.replace('.osz','')):
+                    os.mkdir(gamepath+a.replace('.osz',''))
+                    with zipfile.ZipFile(downpath+a, 'r') as zip_ref:
+                        zip_ref.extractall(gamepath+a.replace('.osz','/'))
+                        reloaddatabase=1
+                    notification('Beatmap Imported',desc=a)
+        except Exception:
+            pass
+        os.remove(downpath+a)
     if totrank<1:
         totrank=1
     get_input()
