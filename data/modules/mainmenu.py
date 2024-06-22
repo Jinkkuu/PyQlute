@@ -53,6 +53,7 @@ def mainmenu():
             render('text', text=songtitle, arg=((20,(trans*41)-30), forepallete))
         else:
             render('text', text='nothing...', arg=((20,(trans*41)-30), (255,255,255)))
+        render('text',text=gameauthor+' ('+str(copyrightdate[0])+'-'+str(copyrightdate[1])+')',arg=((20, 60),(255,255,255),'min'))
         topbutton=menu_draw(tmenu, text=toptext,ignoremove=True,ishomemenu=True,bradius=0,usecolour=True,icon=(icons['settings.png'],icons['user.png'],icons['download.png']))
         if not qlutaerror:
             print_card(totperf,totscore,settingskeystore['username'],(w//2-150,h//2+120),totrank,home=True,isgrayed=restricted)
