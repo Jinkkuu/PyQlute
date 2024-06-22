@@ -357,7 +357,7 @@ def ondemand():
                                 f.write(chunk)
                         os.rename(downpath+filename+'.tmp',downpath+filename)
                 except Exception as err:
-                    print(err)
+                    print(err,'DOWNLOAD SEQUENCE')
                 downloadqueue.remove(a)
             try:
                 if settingskeystore['discordrpc']:
