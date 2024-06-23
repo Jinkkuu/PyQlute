@@ -36,10 +36,15 @@ def loadmap(url):
     beatmap=open(url,encoding='utf-8', errors='replace').read().rstrip('\n').split('\n')
     return beatmap
 def getobjects(url,ints=False):
+    obs=loadmap(url)[beatmap.index('[HitObjects]')+1:]
+    ob=[]
+    for a in obs:
+        if len(a.split(','))>5:
+            ob.append(a)
     if ints:
-        return len(loadmap(url)[beatmap.index('[HitObjects]')+1:])
+        return len(ob)
     else:
-        return loadmap(url)[beatmap.index('[HitObjects]')+1:]
+        return ob
 def reloadstats(reloadleaderboard=True):
     global objects,difficulty,lastms,bpmstr,background,backgroundev,songtitle,metadata,timings,lvrating,levelrating,levelcol,bpm,songoffset,maxperf,scoremult,ismulti,beattitle,perfect,great,ok,diffmode,beatmapid,beatmapsetid
     diffmode=diff[diffcon][1]
