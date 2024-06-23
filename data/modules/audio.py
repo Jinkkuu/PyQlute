@@ -39,7 +39,6 @@ def beatmapload():
         prestart=0
     if ismusic:
         #gametime=pygame.mixer.music.get_pos()
-        speed=1
         gametime=(((time.time()-gc)/0.001))*speed
         if 0==1: #DISABLEEEEE
             if modsen[5]:
