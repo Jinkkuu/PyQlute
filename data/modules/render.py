@@ -13,7 +13,6 @@ def render(type, arg=(0, 0) ,  text='N/A', bordercolor=forepallete, borderradius
             colour=mint(arg[1][0],darkness),mint(arg[1][1],darkness),mint(arg[1][2],darkness)
         except Exception:
             colour=mint(arg[1],darkness)
-        relative=pygame.Rect(relative)
         if type == 'text':
             if "bold" in arg:
                 ftype=3
@@ -26,6 +25,7 @@ def render(type, arg=(0, 0) ,  text='N/A', bordercolor=forepallete, borderradius
             tmp = fonts[ftype].render(str(text),  True,  colour)
             txtrect=tmp.get_rect()
             if "center" in arg:
+                relative=pygame.Rect(relative)
                 out = tmp.get_rect(center=relative.center)
             else:
                 out=arg[0]
