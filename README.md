@@ -5,7 +5,7 @@
 # Qlute
 ~ Your Keys/Your Rhythm ~
 # Downloads
-| [Windows 7+ (x64)](https://github.com/Jinkkuu/PyQlute/releases/latest/download/qlute.exe) | [Linux (x64)](https://github.com/Jinkkuu/PyQlute/releases/latest/download/qlute)   |
+| [Windows 10+ (x64)](https://github.com/Jinkkuu/PyQlute/releases/latest/download/qlute.exe) | [Linux (x64)](https://github.com/Jinkkuu/PyQlute/releases/latest/download/qlute)   |
 |--------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 
 MacOS users will need to use wine to play this game, How to install wine please refer to [Here](https://wiki.winehq.org/MacOS)
