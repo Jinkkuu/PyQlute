@@ -66,7 +66,6 @@ def mainmenu():
             t=2
         else:
             t=1
-        rank=2
         b=1
         if gamever!='0.0.0':
             render('text', text=gamename+'/'+gameedition+' ('+str(gamever)+')', arg=((0,0), forepallete,'center'),relative=(w//2,h-35,0,0))
@@ -85,9 +84,6 @@ def mainmenu():
         if osam!=menubutton:
             osam=menubutton
             pygame.mixer.Sound(samplepath+'hover.wav').play()
-
-#        render('rect', arg=((-10,150,350,60), (maxt(40,bgcolour),maxt(40,bgcolour),maxt(100,bgcolour)), False),borderradius=10)
-#        render('text', text='WILL CHANGE', arg=((25,155), (255,255,maxt(0,bgcolour)),'grade'))
         song_progress()
 
 
