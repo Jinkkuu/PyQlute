@@ -88,7 +88,7 @@ def get_input():
                     transitionprep(1)
                 elif sysbutton==2:
                     notification('Downloading',desc=sentry[sbid-1]['artist']+' - '+str(sentry[sbid-1]['title']))
-                    downloadqueue.append([sentry[sbid-1]['artist']+' - '+str(sentry[sbid-1]['title']),'https://akatsuki.gg/d/'+str(sentry[sbid-1]['beatmaps'][0]['beatmapset_id']),'Queued'])
+                    downloadqueue.append([sentry[sbid-1]['artist']+' - '+str(sentry[sbid-1]['title']),'https://catboy.best/d/'+str(sentry[sbid-1]['beatmaps'][0]['beatmapset_id']),'Queued'])
                 elif event.button==1:
                     if shopbutton2 in (1,2):
                         if not sref:

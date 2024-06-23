@@ -10,7 +10,6 @@ def getrating(notes,mult,bpm): # Get Level rating of the beatmap
     lvy=0
     lvt=0
     lvrating=0
-    lastms=int(notes[-1].split(',')[2])
     for a in notes:
         tmp=a.split(',')
         if len(tmp)>4:
@@ -46,7 +45,10 @@ def reloadstats(reloadleaderboard=True):
     diffmode=diff[diffcon][1]
     beatmap=loadmap(gamepath+fbt+'/'+pref+'['+diffmode+']'+'.osu')
     objects=getobjects(gamepath+fbt+'/'+pref+'['+diffmode+']'+'.osu')
-    lastms=int(objects[-1].split(',')[2])
+    if len(objects):
+        lastms=int(objects[-1].split(',')[2])
+    else:
+        lastms=1000
     b=0
     lvrating=0
     background=pygame.surface.Surface((0,0))
