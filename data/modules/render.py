@@ -2,7 +2,7 @@ import pygame
 notewidth=100
 noteheight=30
 osam=0
-def render(type, arg=(0, 0) ,  text='N/A', bordercolor=forepallete, borderradius=0,relative=(0,0,0,0),surf=''):
+def render(type, arg=(0, 0) ,  text='N/A', bordercolor=(255,255,255), borderradius=0,relative=(0,0,0,0),surf=''):
     off=0
     grad2=False
     if surf=='':
@@ -27,6 +27,7 @@ def render(type, arg=(0, 0) ,  text='N/A', bordercolor=forepallete, borderradius
             if "center" in arg:
                 relative=pygame.Rect(relative)
                 out = tmp.get_rect(center=relative.center)
+                out[1]+=2
             else:
                 out=arg[0]
                 if "rtl" in arg:
