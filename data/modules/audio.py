@@ -11,7 +11,7 @@ def spectrum():
 def get_creation_time(item):
     item_path = os.path.join(gamepath, item)
     return os.path.getctime(item_path)
-def beatmapload():
+def audiomixer():
     global p2,p1,beatnowmusic,gc,speed,fbt,pausetime,isplaying,gametime,bp1,bp2,beatani,beatmaps,diffani,fullbeatmapname,diffp,reloaddatabase,background,ranktype,diff,pref,ismusic,bpm,realid,prestart,beatsel,tick,lastms,metadata,beatmap
     if reloaddatabase:
         p1=[]

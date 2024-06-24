@@ -273,7 +273,7 @@ def main():
     if totrank<1:
         totrank=1
     get_input()
-    beatmapload()
+    audiomixer()
     logo()
     mainmenu()
     beatres()
