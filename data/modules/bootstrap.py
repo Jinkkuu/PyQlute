@@ -382,12 +382,9 @@ def main():
 #        x+=1
     #print((time.time()-gametime)/0.001)
     if activity in allowed:
-        if 'cursor.png' in icons:
-            rec=icons['cursor.png'].get_rect()
-            cen=rec[2]//2,rec[3]//2
-            screen.blit(icons['cursor.png'],(posmouse[0]-cen[0],posmouse[1]-cen[1]))
-        else:
-            render('rect', arg=((posmouse[0]-10,posmouse[1]-10,20,20), (102, 155, 212), True),borderradius=20)
+        rec=icons['cursor.png'].get_rect()
+        cen=rec[2]//2,rec[3]//2
+        screen.blit(icons['cursor.png'],(posmouse[0]-cen[0],posmouse[1]-cen[1]))
 #    if not (posmouse[0],posmouse[1]) in crox:
 #        crox.append((posmouse[0],posmouse[1]))
 #    if "-testmode" in sys.argv:
@@ -430,8 +427,9 @@ def reloadicons():
             for a in os.listdir(pa):
                 try:
                     if os.path.isfile(pa+a):
-                        icons[a]=(pygame.image.load(resource_path(pa+a))) # Icons!
-                except Exception:
+                        icons[a]=(pygame.image.load(resource_path(pa+a)).convert_alpha()) # Icons!
+                except Exception as err:
+                    print(a,err)
                     pass
     
 def gamesession():
@@ -459,8 +457,6 @@ if __name__  ==  "__main__":
         greph=[]
         for a in modsen:
             greph.append(randint(1,2)-1)
-        reloadicons()
-        micon=(icons['logomini.png'],icons['edit.png'],icons['browse.png'],icons['exit.png']),(icons['user.png'],icons['online.png'],icons['exit.png'],)
         programIcon = pygame.image.load(resource_path(syspath+'icon.png'))
         threading.Thread(target=ondemand).start()
         threading.Thread(target=check_gameversion).start()
@@ -472,4 +468,4 @@ if __name__  ==  "__main__":
                 sys.exit()
             main()
     except Exception as error:
-        crash(str(error))
+        crasha(str(error))
