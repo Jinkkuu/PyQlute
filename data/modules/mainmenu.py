@@ -9,12 +9,12 @@ dcolour=(40,40,40) # default colour for top bar and blades~
 accounts=0
 wod=45
 def mainmenu():
-    global debugmode, meid,osam,activity,micon,beatnowmusic, totperf,totscore,msg,menubutton,topbutton,accounts,bladeani,background
+    global debugmode, meid,osam,micon,activity,beatnowmusic, totperf,totscore,msg,menubutton,topbutton,accounts,bladeani,background
     if not bladeani[1] and activity==1:
         bladeani[1]=1
         bladeani[0].start()
-    elif activity!=1:
         micon=(icons['logomini.png'],icons['edit.png'],icons['browse.png'],icons['exit.png']),(icons['user.png'],icons['online.png'],icons['exit.png'],)
+    elif activity!=1:
         bladeani[1]=0
     if activity==1:
         bladeani[0].update()
