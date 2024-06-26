@@ -49,7 +49,10 @@ def mainmenu():
         menubutton=menu_draw(mmenu, text=mtext[meid],isblade=True,textoffset=(-10,25),iconoffset=(-7,-5),icon=micon[meid],ishomemenu=True,forcetext=True,usecolour=True)
         if gametime>=lastms+1000 or gametime<=-1:
             song_change(1)
-        render('rect',arg=((0,0,w,45),dcolour,False))#,surf=surface[0])
+        topbar=pygame.surface.Surface((w,45))
+        pygame.draw.rect(topbar,(0,0,0),pygame.Rect(0,0,w,40))
+        topbar.set_alpha(trans*60)
+        screen.blit(topbar,(0,(trans*45)-45))
         if beatmaps!=0:
             render('text', text=songtitle, arg=((20,(trans*41)-30), forepallete))
         else:

@@ -78,7 +78,10 @@ def beatmenu():
             crub=0
         s=310 # Leaderboard 
         c=0
-        render('rect', arg=((0,0,260,h-60), hcol[2], False)) # type: ignore
+        podium=pygame.surface.Surface((260,h-60))
+        pygame.draw.rect(podium,hcol[2],pygame.Rect(0,0,w,h-60))
+        podium.set_alpha(255*0.80)
+        screen.blit(podium,(0,0))
         if issigned: # type: ignore
             for a in leaderboard[:5]: # type: ignore
                 if a['username']==settingskeystore['username']: # type: ignore

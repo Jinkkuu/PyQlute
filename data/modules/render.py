@@ -2,7 +2,7 @@ import pygame
 notewidth=100
 noteheight=30
 osam=0
-def render(type, arg=(0, 0) ,  text='N/A', bordercolor=(255,255,255), borderradius=0,relative=(0,0,0,0),surf=''):
+def render(type, arg=(0, 0) ,  text='N/A', bordercolor=(255,255,255), borderradius=0,relative=(0,0,0,0),surf=''): # DELETING THIS 
     off=0
     grad2=False
     if surf=='':
