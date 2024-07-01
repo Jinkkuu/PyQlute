@@ -2,7 +2,7 @@ import requests,threading,re,pypresence
 from urllib.parse import unquote
 from pypresence import Presence
 import time
-
+block=0
 client_id = '1251396255381327966'  # Client ID
 RPC = Presence(client_id)  # Initialize the client class
 lvrating=0
@@ -151,18 +151,26 @@ def getrank(id):
 #        print(rankmodes[1][0])
         return 1
 def getstat():
-    global ranktype,getpoints,leaderboard
+    global ranktype,getpoints,leaderboard,block
     x=1
     success=0
-    while x<4 and not success:
+    while x<4 and not success and time.time()-block>0:
         try:
             tmp=''
             with requests.get(beatmapapi+'s/'+str(beatmapsetid),headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'},timeout=3, stream=True) as f:
-                tmp+=f.text
-            f=json.loads(tmp)['found']
-            f=f['ranked']
-#            print(f)
-            ranktypetmp=int(f)
+                if f.status_code != 429:
+                    tmp+=f.text
+                    error=0
+                else:
+                    error=1
+            if not error:
+                f=json.loads(tmp)
+                f=f['RankedStatus']
+                ranktypetmp=int(f)
+            else:
+                ranktypetmp=-99
+                block=time.time()+120
+                print('You have been rate limited!! Slow down after 2 minutes~ >n<')
             success=1
         except Exception:
             #print(error,'(Returning as Unranked)')
