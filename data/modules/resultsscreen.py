@@ -1,9 +1,18 @@
+import pygame
+from data.modules.bootstrap import getactivity,transitionprep
+from data.modules.renderapi import draw_button,center_text,getfonts
+from data.modules.songselect import getmaxpoints,getmult
+from data.modules.colours import maincolour
+from data.modules.settings import getsetting
+
 gradecolour=(114, 180, 181),(114, 142, 179),(105, 173, 99),(113, 85, 173),(173, 136, 61),(168, 70, 50),(20,20,20)
 testing=0
-def beatres():
-    global activity,replaymen,butt
-    if activity==5:
-        render('rect', arg=((0,0,w,h), (60,60,120), False))
+replaymen=0
+def beatres(screen,w,h):
+    if getactivity()==9:
+        from data.modules.gameplay import points,accuracy,hits
+        from data.modules.onlineapi import oldstats,issubmiting,level,totacc,totrank,totperf,totscore,prevrank
+        screen.fill(maincolour[0])
         if replaymen:
             title='Replay Screen'
         else:
@@ -32,27 +41,24 @@ def beatres():
         scale=(w//800,h//600)
         scrop=(w//2-((100//2)*scale[0]),(h//2+50-((460//2)*scale[1])),100*scale[0],50*scale[1])
         pup=[hits[0],hits[1],hits[2],hits[3]]
-        #render('rect',arg=((w//2-310,h//2-110,620,260),(100,100,150),False),borderradius=20)
-        #render('rect',arg=((0,(h//2-((500//2)*scale[1])),w,500*scale[1]),(50,50,50),True),bordercolor=(30,30,30),borderradius=20)
-        render('rect',arg=(scrop,gc,False),borderradius=20)
-        render('text', text=gradet, arg=((0,0), forepallete,'grade','center'),relative=scrop)
-        render('text', text=str(format(int(perf/maxperf*(1000000*scoremult)),',')), arg=((0,0), forepallete,'grade','center'),relative=(scrop[0],scrop[1]+80,scrop[2],scrop[3]))
-        #render('text', text=+' Acc - '+str(accuracy)+'%', arg=((0,0), forepallete,'center'),relative=(w//2,h//2-30,0,0))
-        render('text', text='pp - '+str(str(format(int(perf),',')))+'/'+str(str(str(format(maxperf,',')))), arg=((0,0), forepallete,'center'),relative=(w//2-150,h//2-30,0,0))
-        render('text', text=str(accuracy)+'%', arg=((0,0), forepallete,'center'),relative=(w//2+160,h//2-30,0,0))
-        render('text', text='MAX - '+str(pup[0]), arg=((0,0), forepallete,'center'),relative=(w//2-150,h//2,0,0))
-        render('text', text='GREAT - '+str(pup[1]), arg=((0,0), forepallete,'center'),relative=(w//2+160,h//2,0,0))
-        render('text', text='MEH - '+str(pup[2]), arg=((0,0), forepallete,'center'),relative=(w//2-150,h//2+30,0,0))
-        render('text', text='BAD - '+str(pup[3]), arg=((0,0), forepallete,'center'),relative=(w//2+160,h//2+30,0,0))
-        if issubmiting and settingskeystore['username']:
-            render('text', text='Submitting Score...', arg=((0,0), forepallete,'center'),relative=(scrop[0],scrop[1]+270,scrop[2],scrop[3]))
-        elif settingskeystore['username']:
-            render('rect',arg=((w//2-110,h//2+43,220,35),hcol[1],False),borderradius=10)
-            render('text', text='You are Level '+str(format(level,','))+'!', arg=((0,0), forepallete,'center'),relative=(w//2,h//2+60,0,0))
-            render('text', text='Overall Rank - #'+str(format(totrank,',')), arg=((0,0), forepallete,'center'),relative=(w//2+160,h//2+95,0,0))
-            render('text', text='Overall Points - '+str(format(totperf,',')), arg=((0,0), forepallete,'center'),relative=(w//2-150,h//2+95,0,0))
-            render('text', text='Overall Accuracy - '+str(round(totacc,2))+'%', arg=((0,0), forepallete,'center'),relative=(w//2-150,h//2+135,0,0))
-            render('text', text='Ranked Score - '+str(format(totscore,',')), arg=((0,0), forepallete,'center'),relative=(w//2+160,h//2+135,0,0))
+        pygame.draw.rect(screen,gc,pygame.Rect(scrop),border_radius=20)
+        center_text(screen,gradet,(scrop[0],scrop[1]+5,scrop[2],scrop[3]),colour=(255,255,255),type='grade')
+        center_text(screen,str(format(int(points/getmaxpoints()*(1000000*getmult())),',')),(scrop[0],scrop[1]+80,scrop[2],scrop[3]),colour=(255,255,255),type='grade')
+        center_text(screen,'pp - '+str(str(format(int(points),',')))+'/'+str(str(str(format(getmaxpoints(),',')))),(w//2-150,h//2-30,0,0),colour=(255,255,255))
+        center_text(screen,str(accuracy)+'%',(w//2+160,h//2-30,0,0),colour=(255,255,255))
+        center_text(screen,'MAX - '+str(pup[0]),(w//2-150,h//2,0,0),colour=(255,255,255))
+        center_text(screen,'GREAT - '+str(pup[1]),(w//2+160,h//2,0,0),colour=(255,255,255))
+        center_text(screen,'MEH - '+str(pup[2]),(w//2-150,h//2+30,0,0),colour=(255,255,255))
+        center_text(screen,'BAD - '+str(pup[3]),(w//2+160,h//2+30,0,0),colour=(255,255,255))
+        if issubmiting and getsetting('username'):
+            center_text(screen,'Submitting Score...',(scrop[0],scrop[1]+270,scrop[2],scrop[3]),colour=(255,255,255))
+        elif getsetting('username'):
+            pygame.draw.rect(screen,maincolour[1],pygame.Rect(w//2-110,h//2+43,220,35),border_radius=10)
+            center_text(screen,'You are Level '+str(format(level,','))+'!',(w//2,h//2+60,0,0),colour=(255,255,255))
+            center_text(screen,'Overall Rank - #'+str(format(totrank,',')),(w//2+160,h//2+95,0,0),colour=(255,255,255))
+            center_text(screen,'Overall Points - '+str(format(totperf,',')),(w//2-150,h//2+95,0,0),colour=(255,255,255))
+            center_text(screen,'Overall Accuracy - '+str(round(totacc,2))+'%',(w//2-150,h//2+135,0,0),colour=(255,255,255))
+            center_text(screen,'Ranked Score - '+str(format(totscore,',')),(w//2+160,h//2+135,0,0),colour=(255,255,255))
             changed=[totrank-prevrank,totperf-oldstats[0],round(totacc-oldstats[2],2),totscore-oldstats[1],level-oldstats[3]]
             final=[totrank,totperf,totacc,totscore,level]
             klap=(w//2+200,h//2+105),(w//2-121,h//2+105),(w//2-109,h//2+145),(w//2+160,h//2+145),(w//2+45,h//2+68,0,0)
@@ -80,10 +86,12 @@ def beatres():
                     if a == 1:
                         if chac==cha[1]:
                             fip=fip.replace('-','+')
-                    render('text', text=chap+str(fip)+suf, arg=((klap[a-1]), chac))
+                    screen.blit(getfonts(0).render(chap+str(fip)+suf,True,chac),klap[a-1])
         else:
-            render('text', text='Hey, Your not Logged in yet!', arg=((0,0), forepallete,'center'),relative=(scrop[0],scrop[1]+270,scrop[2],scrop[3]))
-            render('text', text='You can compete if you Log in :3', arg=((0,0), forepallete,'center'),relative=(scrop[0],scrop[1]+290,scrop[2],scrop[3]))
+            center_text(screen,'Hey, Your not Logged in yet!',(scrop[0],scrop[1]+270,scrop[2],scrop[3]))
+            center_text(screen,'You can compete if you Log in~',(scrop[0],scrop[1]+290,scrop[2],scrop[3]))
 
-        render('text', text=title, arg=((20,20), forepallete))
-        butt=menu_draw(((scrop[0]-90,scrop[1]+360,scrop[2]*3-20,scrop[3]),),('Continue',),styleid=2)
+        screen.blit(getfonts(0).render(title,True,(255,255,255)),(20,20))
+        butt=draw_button(screen,((scrop[0]-90,scrop[1]+360,scrop[2]*3-20,scrop[3]),),('Continue',))
+        if butt:
+            transitionprep(2)
