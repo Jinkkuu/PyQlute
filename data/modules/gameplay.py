@@ -3,11 +3,12 @@ from data.modules.input import get_input
 from data.modules.colours import maincolour
 from data.modules.settings import getsetting,setsetting
 from data.modules.audio import load_music,get_pos,music_control
-from data.modules.beatmap_processor import get_info,getobjects,getpoint
+from data.modules.beatmap_processor import get_info,getobjects,getpoint,getkeycount,getkeypos
 from data.modules.onlineapi import getleaderboard,submit_score,issubmiting,setsubmit,getsubmitstatus
 from data.modules.bootstrap import getimg,getactivity,transitionprep,clockify,gamepath
 import data.modules.renderapi as renderapi
 import pygame,time,threading
+from random import randint
 from tweener import *
 perfect=80
 great=perfect*2
@@ -18,12 +19,11 @@ accuracy=100
 notecolour=(48, 183, 255)
 maxhealth=110
 health=maxhealth
-keyslight=[Tween(begin=0),Tween(begin=0),Tween(begin=0),Tween(begin=0)]
-hittext='PERFECT!','GREAT','MEH','MISS'
+hittext='PERFECT','GREAT','MEH','MISS'
 hitcolour=(100, 120, 200),(100, 200, 100),(200, 200, 100),(200, 100, 100)
 def iscatched(keymap,block,isauto,ob,fir,h):
     from data.modules.songselect import modsen
-    lean=(perfect,great,ok,miss,0) # Last one is for Auto
+    lean=(perfect,great,ok,miss,100) # Last one is for Auto
     tick=0
     agree=1
     if ob==fir or isauto:
@@ -49,7 +49,13 @@ def iscatched(keymap,block,isauto,ob,fir,h):
     return (lastcall,tick,tim)
 
 def reset_score():
-    global points,combo,ncombo,maxcombo,hits,clickedkeys, ncombo,keys, combotime, accuracy, timetaken,health
+    global points,combo,ncombo,maxcombo,hits,clickedkeys, ncombo,keys, combotime, accuracy, timetaken,health,keyslight,pos
+    e=getkeypos()
+    if e:
+        pos=e
+    else:
+        pos=(64,192,320,448) # Keys
+    keyslight=[Tween(begin=0) for a in range(0,getkeycount())]
     points = 0
     ncombo = 0
     health=10
@@ -59,7 +65,7 @@ def reset_score():
     maxcombo = 0
     clickedkeys = []
     hits = [0,0,0,0]
-    keys = [0,0,0,0]
+    keys = [0 for a in range(0,getkeycount())]
     combotime = time.time()
     accuracy = 0
 
@@ -81,9 +87,11 @@ def song_progress(screen,start,end,w,h):
 def showplayfield(screen,pos,keymap,bypass=False):
     linecol=(80,80,100)
     h=screen.get_height()
-    pygame.draw.rect(screen,(50,50,50),(keymap[0][0]+pos[0],h-60+pos[1]-10,keymap[0][2]*4,10)) # Judgement Line
+    count=getkeycount()
+    space=(keymap[0][2]*count//2)
+    pygame.draw.rect(screen,(50,50,50),(pos[0]-space,h-60+pos[1]-10,keymap[0][2]*count,10)) # Judgement Line
     col=(10,30),(20,40)
-    for a in range(1,5):
+    for a in range(1,count+1):
         b=a-1
         if a>1 and a<4:
             bcol=col[1]
@@ -92,9 +100,9 @@ def showplayfield(screen,pos,keymap,bypass=False):
         co=(100,int(100+(20*keyslight[b].value)),int(100+(120*keyslight[b].value)))
         cb=(80,int(80+(20*keyslight[b].value)),int(80+(120*keyslight[b].value)))
         cc=(40,int(40+(bcol[0]*keyslight[b].value)),int(40+(bcol[1]*keyslight[b].value)))
-        pygame.draw.rect(screen,(cc),(keymap[b][0]+pos[0],0,keymap[b][2],keymap[b][3]+(h-100)))
-        pygame.draw.rect(screen,(cb),(keymap[b][0]+pos[0],h-60+pos[1],keymap[b][2],keymap[b][3]))
-        pygame.draw.rect(screen,(co),(keymap[b][0]+pos[0],h-60+pos[1]+(10*-keyslight[b].value),keymap[b][2],keymap[b][3]))
+        pygame.draw.rect(screen,(cc),(keymap[b][0]-((keymap[0][2]*getkeycount()//2))+pos[0],0,keymap[b][2],keymap[b][3]+(h-100)))
+        pygame.draw.rect(screen,(cb),(keymap[b][0]-((keymap[0][2]*getkeycount()//2))+pos[0],h-60+pos[1],keymap[b][2],keymap[b][3]))
+        pygame.draw.rect(screen,(co),(keymap[b][0]-((keymap[0][2]*getkeycount()//2))+pos[0],h-60+pos[1]+(10*-keyslight[b].value),keymap[b][2],keymap[b][3]))
 #        tmp = renderapi.getfonts(0).render(str(a),True,(255,255,255))
 #        screen.blit(tmp,(keymap[b][0]+pos[0],h-60+pos[1]))
         #render('rect', arg=(), cb, False),borderradius=0) # Judgement Block
@@ -103,7 +111,6 @@ def showplayfield(screen,pos,keymap,bypass=False):
 #            pygame.draw.line(screen,linecol,(keymap[-1][0]+pos[0]+100,0+pos[1]),(keymap[-1][0]+pos[0]+100,keymap[-1][1]+pos[1]+30-1))
 #        pygame.draw.line(screen,linecol,(keymap[-1][0]+pos[0]+100,0+pos[1]),(keymap[-1][0]+pos[0]+100,keymap[-1][1]+pos[1]+30-1))
         #render('line',arg=((keymap[b][0]+pos[0],0+pos[1]),linecol,(keymap[b][0]+pos[0],keymap[b][1]+pos[1]+noteheight-1)))
-pos=(64,192,320,448) # Keys
 objecon=0
 def resetcursor():
     global objecon
@@ -117,7 +124,7 @@ def main(screen,w,h):
         screen.fill((20,20,20))
         clicked=0
         length=get_info('lengths')[selected[1]]
-        fieldpos = (w//2-200,0) # Gameplay field
+        fieldpos = (w//2,0) # Gameplay field
         if health<0:
             health=maxhealth
             transitionprep(2)
@@ -128,16 +135,6 @@ def main(screen,w,h):
         t1=t1*(combo+ncombo+0.01)
         if t1>=maxt1:
             t1=maxt1
-        if length:
-            if not music_control(4) and get_pos()>=0:
-                music_control(0)
-            if  get_pos()>=length+1000:
-                if not getsubmitstatus():
-                    setsubmit(1)
-                    threading.Thread(target=submit_score,args=(int(points),maxcombo,get_info('beatmapids')[selected[1]-1],get_info('beatmapsetid'),hits[0],hits[1],hits[2],hits[3],get_info('maps')[selected[1]],mods,int(getmaxpoints()),int(time.time()-timetaken),)).start()
-                transitionprep(9)
-            if getsetting('hidegamehud'):
-                song_progress(screen,get_pos(),length+1000,w,h)
         tmp=0.1
         sretemplate=(tmp-(time.time()-combotime))/tmp
         sre=(sretemplate)*20    
@@ -156,7 +153,7 @@ def main(screen,w,h):
             accuracy=round(((hits[0]+(hits[1]/2)+(hits[2]/3))/(maxc))*100,2)
         else:
             accuracy=100
-        keymap=tuple((100*id,h-30,100,30) for id in range(0,4))
+        keymap=tuple((100*id,h-30,100,30) for id in range(0,getkeycount()))
         showplayfield(screen,fieldpos,keymap)
         objects=getobjects()
         ti=get_pos()
@@ -171,11 +168,12 @@ def main(screen,w,h):
                         if not end*1000000 >=999000 and (modsen[0] and health>1):
                             health-=t1
                     for kik in range(0,len(pos)):
-                        if int(ob[0])==pos[kik]:
+                        if int(ob[0])==int(pos[kik]):
                             barpos=kik
                             notfound=False
                             break
                     if notfound:
+                        print('!!')
                         for kik in range(0,4):
                             if int(ob[0])>=512-(128*(kik+1)):
                                 barpos=kik
@@ -186,9 +184,9 @@ def main(screen,w,h):
                             bar=getimg('note.png')
                             if bar:
                                 keyoffset=bar.get_rect()[3]
-                                screen.blit(bar,(fieldpos[0]+keymap[barpos][0],block-keyoffset))
+                                screen.blit(bar,(fieldpos[0]-((keymap[0][2]*getkeycount()//2))+keymap[barpos][0],block-keyoffset))
                             else:
-                                pygame.draw.rect(screen,notecolour,(fieldpos[0]+keymap[barpos][0],block-keymap[0][3],keymap[0][2],keymap[0][3]))
+                                pygame.draw.rect(screen,notecolour,(fieldpos[0]-((keymap[0][2]*getkeycount()//2))+keymap[barpos][0],block-keymap[0][3],keymap[0][2],keymap[0][3]))
                     if obid==1:
                         firstobject=int(block)
                         obid+=1
@@ -199,7 +197,7 @@ def main(screen,w,h):
                         if judge[0]:
                             keys[kik]=1
                     if (judge[0] and keys[kik]) or judge[1]==3: 
-                        hit=judge[1]               
+                        hit=judge[1]
                         clicked=1
                         keyqueue.append((barpos,int(ob[2])))
 
@@ -242,11 +240,21 @@ def main(screen,w,h):
                         #health-=t1
 
 
-        for a in range(0,4):
+        for a in range(0,getkeycount()):
             if keys[a]:
                 keyslight[a]=Tween(begin=1, end=0,duration=kdur,easing=Easing.BOUNCE,easing_mode=EasingMode.OUT)
                 keyslight[a].start()
                 keys[a]=0
+        if length:
+            if not music_control(4) and get_pos()>=0:
+                music_control(0)
+            if  get_pos()>=length+1000:
+                if not getsubmitstatus():
+                    setsubmit(1)
+                    threading.Thread(target=submit_score,args=(int(points),maxcombo,get_info('beatmapids')[selected[1]],get_info('beatmapsetid'),hits[0],hits[1],hits[2],hits[3],get_info('maps')[selected[1]],mods,int(getmaxpoints()),int(time.time()-timetaken),)).start()
+                transitionprep(9)
+            if getsetting('hidegamehud'):
+                song_progress(screen,get_pos(),length+1000,w,h)
         if getsetting('hidegamehud'):
             pygame.draw.rect(screen,maincolour[0],pygame.Rect(0,0,w,55),border_bottom_left_radius=20,border_bottom_right_radius=20)
             pygame.draw.rect(screen,maincolour[1],pygame.Rect(w//2-200,19,401,61),border_radius=20)
@@ -320,6 +328,6 @@ def main(screen,w,h):
                     reload_map()
                 elif event.key == pygame.K_F3:
                     setsetting('hidegamehud',not getsetting('hidegamehud'))
-                for a in range(0,4):
+                for a in range(0,getkeycount()):
                     if event.unicode  ==  getsetting('Key'+str(a+1)):
                         keys[a]=1

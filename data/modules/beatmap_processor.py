@@ -10,6 +10,8 @@ template='[General]','[Editor]','[Metadata]','[Difficulty]','[Events]','[TimingP
 perfbom=0.075
 background=pygame.surface.Surface((0,0))
 objects=None
+keycount=4
+pos=[]
 def getpoint(perfect,good,meh,bad,multiplier,combo=1,type=int): # Points System 2024/06/15
     multiplier=multiplier
     if bad==0:
@@ -18,6 +20,7 @@ def getpoint(perfect,good,meh,bad,multiplier,combo=1,type=int): # Points System 
     tmp*=perfbom*multiplier
     return type(tmp)
 def loadstats(file,find=0):
+    print(file)
     map=open(file,encoding='utf-8',errors='replace').read().split('\n')
     cache={}
     for a in template:
@@ -57,7 +60,6 @@ def addbeatmap(value,save=False):
     for b in os.listdir(gamepath+value):
         if b.endswith('.osu'):
             cache=loadstats(gamepath+value+'/'+b)
-            diffs.append(b)
             try:
                 lengths.append(int(cache['hitobjects'][-1][2]))
             except Exception as err:
@@ -71,11 +73,12 @@ def addbeatmap(value,save=False):
                 beatmapids.append(cache['metadata']['beatmapid'])
             else:
                 beatmapids.append(None)
-            tmp.append((version,getpoint(len(cache['hitobjects']),0,0,0,1,len(cache['hitobjects']),float)))
+            tmp.append((version,getpoint(len(cache['hitobjects']),0,0,0,1,len(cache['hitobjects']),float),b))
     tmp=sorted(tmp, key=lambda x: x[1])
     for b in tmp:
         difficulties.append(b[0])
         pointlist.append(b[1])
+        diffs.append(b[2])
     try:
         songtitle=value[value.index(' '):]
     except Exception:
@@ -161,12 +164,29 @@ def cache_beatmap(value):
     global songcache,background
     reset_tick()
     songcache=beatmaplist[value]
+def getkeycount():
+    return keycount
+def getkeypos():
+    return pos
+def setkeycount(val):
+    global keycount
+    keycount=val
+
 def grabobjects(value):
-    global objects
+    global objects,pos
     try:
         objects=loadstats(value)['hitobjects']
+        x=[]
+        for a in objects:
+            key=a[0]
+            if not key in x:
+                x.append(key)
+        setkeycount(4)
+        pos=[]
     except Exception as err:
         print(err)
+        pos=None
+        setkeycount(4)
         objects=None
 def getobjects():
     return objects

@@ -1,0 +1,4 @@
+pygame-ce
+tweener
+requests
+pypresence

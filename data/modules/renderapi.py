@@ -5,7 +5,7 @@ from tweener import *
 mainmenucolor=(67, 124, 191),(92, 90, 145),(179, 72, 62)
 def initscreen(): # Initialize the screen
     from data.modules.bootstrap import resource_path,getsysdata,getname,version
-    t=pygame.display.set_mode((800,600),pygame.RESIZABLE)
+    t=pygame.display.set_mode((800,600),pygame.RESIZABLE,vsync=0)
     name=getname()
     pygame.display.set_caption(f'{name[0]}/{name[1]} {version()[0]}')
     pygame.display.set_icon(pygame.image.load(getsysdata()+'icon.png'))

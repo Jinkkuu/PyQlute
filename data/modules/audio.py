@@ -41,4 +41,4 @@ def music_control(value):
     except pygame.error:
         print('No music is loaded')
 def get_pos():
-    return (time.time()-gametime)/0.001
+    return ((time.time()-gametime)/0.001)

@@ -50,8 +50,8 @@ def shop_refresh(usecached):
     try:
         if not usecached:
             sref=1
-            if search[0]!='':
-                alt='?query='+str(search[0])
+            if search!='':
+                alt='?query='+str(search)
             else:
                 alt=''
             sentrynf=[]
