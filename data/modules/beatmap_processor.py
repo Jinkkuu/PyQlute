@@ -12,6 +12,7 @@ background=pygame.surface.Surface((0,0))
 objects=None
 keycount=4
 pos=[]
+enable_experimental=0
 def getpoint(perfect,good,meh,bad,multiplier,combo=1,type=int): # Points System 2024/06/15
     multiplier=multiplier
     if bad==0:
@@ -181,8 +182,11 @@ def grabobjects(value):
             key=a[0]
             if not key in x:
                 x.append(key)
-        setkeycount(4)
-        pos=[]
+        keycount=len(x)
+        if keycount>7 or not enable_experimental:
+            keycount=4
+        setkeycount(keycount)
+        pos=x[:keycount]
     except Exception as err:
         print(err)
         pos=None

@@ -1,7 +1,7 @@
 import pygame.gfxdraw,time,threading,os
 import data.modules.renderapi as renderapi
 from data.modules.bootstrap import getactivity,setactivity,transitionprep,gamepath,sify,clockify,scrollbar,getact,getimg,setmsg,timeform,getuserdata
-from data.modules.beatmap_processor import get_info,cache_beatmap,grabobjects,getobjects,random_beatmap,reloadbg,getbackground,loadstats,beatmaplist,beatmapselect
+from data.modules.beatmap_processor import get_info,cache_beatmap,grabobjects,getobjects,random_beatmap,reloadbg,getbackground,loadstats,beatmaplist,beatmapselect,getkeycount
 from data.modules.colours import maincolour,emblemcolour
 from data.modules.audio import load_music,music_control,set_gametime
 from data.modules.input import get_input
@@ -137,6 +137,8 @@ def main(screen,w,h):
             sets=get_info('maps')
             pp=(int(get_info('points')[0]),int(get_info('points')[-1]))
             sifyy=sify(len(get_info('maps')),' Set')
+            keyy=str(getkeycount()),sify(getkeycount(),' Key')
+            
             tmp = renderapi.getfonts(0).render(str(len(sets))+sifyy+' - '+clockify(get_info('lengths')[selected[1]]),True,(255,255,255))
             screen.blit(tmp,(20,80))
             t=renderapi.getfonts(0).render(rankmodes[ranktype][0],True,(255,255,255))
@@ -145,6 +147,11 @@ def main(screen,w,h):
             rtl=290-rtl[2],80
             pygame.draw.rect(screen,rankmodes[ranktype][1],(rtl[0],rtl[1],fr[2]+10,35),border_bottom_left_radius=10,border_top_left_radius=10)
             screen.blit(t,(rtl[0]+5,rtl[1]+7))
+            t=renderapi.getfonts(0).render(keyy[0]+keyy[1],True,(255,255,255))
+            rtl=t.get_rect()
+            fr=rtl
+            rtl=290-rtl[2],125
+            screen.blit(t,(rtl[0],rtl[1]))
             if pp[0] != pp[1]:
                 tmp = renderapi.getfonts(0).render(format(int(pp[0]*mult),',')+'-'+format(int(pp[1]*mult),',')+'pp',True,(255,255,255))
             else:
@@ -358,7 +365,7 @@ def prepare(buttonid,reloadmusic=True,reloadleaderboard=True,getranky=False):
     mod=selectedqueue[0].replace(' [no video]','')
     reloadbg(gamepath+selectedqueue[1]+'/'+selectedqueue[3],gamepath+selectedqueue[1]+'/')
     if reloadleaderboard:
-        threading.Thread(target=rleaderboard, args=(get_info('beatmapids')[selected[1]-1],)).start()
+        threading.Thread(target=rleaderboard, args=(get_info('beatmapids')[selected[1]],)).start()
     if getranky:
         threading.Thread(target=getstat, args=(get_info('beatmapsetid'),)).start()
     if mod[0]==' ':

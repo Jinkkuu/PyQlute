@@ -23,7 +23,7 @@ hittext='PERFECT','GREAT','MEH','MISS'
 hitcolour=(100, 120, 200),(100, 200, 100),(200, 200, 100),(200, 100, 100)
 def iscatched(keymap,block,isauto,ob,fir,h):
     from data.modules.songselect import modsen
-    lean=(perfect,great,ok,miss,100) # Last one is for Auto
+    lean=(perfect,great,ok,miss,0) # Last one is for Auto
     tick=0
     agree=1
     if ob==fir or isauto:
@@ -173,7 +173,6 @@ def main(screen,w,h):
                             notfound=False
                             break
                     if notfound:
-                        print('!!')
                         for kik in range(0,4):
                             if int(ob[0])>=512-(128*(kik+1)):
                                 barpos=kik
