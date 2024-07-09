@@ -74,6 +74,7 @@ def main(screen,w,h):
         lpanel.fill((0,0,0,0))
     if getactivity() == 2:
         from data.modules.beatmap_processor import beatmaplist,beatmapselect
+        parallax=((pygame.mouse.get_pos()[0]/w)*10)-5,((pygame.mouse.get_pos()[1]/h)*10)-5
         mult=getmult()
         modsani[0].update()
         if modsani[0].value==100 or not modshow:
@@ -91,7 +92,7 @@ def main(screen,w,h):
         buttonid=0
         click=0
         if getbackground():
-            screen.blit(getbackground(),(0,0))
+            screen.blit(getbackground(),(-5-parallax[0],-5-parallax[1]))
         else:
             screen.fill((maincolour[4]))
 #        screen.blit(bpanel,(w//2,0))

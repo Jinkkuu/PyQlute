@@ -51,9 +51,10 @@ def main(screen,w,h):
             bladeani[1]=1
             bladeani[0].start()    
         bladeani[0].update()
+        parallax=((pygame.mouse.get_pos()[0]/w)*10)-5,((pygame.mouse.get_pos()[1]/h)*10)-5
         if getsetting('bgmm') and getbackground():
             bg=pygame.surface.Surface((w,h))
-            bg.blit(getbackground(),(0,0))
+            bg.blit(getbackground(),(-5-parallax[0],-5-parallax[1]))
         else:
             bg=pygame.surface.Surface((w,h))
             bg.fill((maincolour[0][0],maincolour[0][1],maincolour[0][2]))
@@ -144,8 +145,6 @@ def main(screen,w,h):
         if osam!=highlight:
             osam=highlight
             pygame.mixer.Sound(samplepath+'hover.wav').play()
-
-
 ## Input
 
         if button == 1:
