@@ -14,11 +14,13 @@ gametime=0
 def set_gametime(delay):
     global gametime
     gametime=time.time()+delay
-def load_music(value,loop=0):
+def load_music(value,loop=0,fadein=0):
     global is_running
+    if fadein:
+        fadein=1000
     pygame.mixer.music.load(value)
     is_running = 1
-    pygame.mixer.music.play(loop)
+    pygame.mixer.music.play(loops=loop,fade_ms=fadein)
     set_gametime(0)
     reset_tick()
 def music_control(value):
