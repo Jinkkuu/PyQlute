@@ -52,9 +52,10 @@ def main(screen,w,h):
             bladeani[0].start()    
         bladeani[0].update()
         parallax=((pygame.mouse.get_pos()[0]/w)*10)-5,((pygame.mouse.get_pos()[1]/h)*10)-5
+        parallax=(-5-parallax[0],-5-parallax[1])
         if getsetting('bgmm') and getbackground():
             bg=pygame.surface.Surface((w,h))
-            bg.blit(getbackground(),(-5-parallax[0],-5-parallax[1]))
+            bg.blit(getbackground(),parallax)
         else:
             bg=pygame.surface.Surface((w,h))
             bg.fill((maincolour[0][0],maincolour[0][1],maincolour[0][2]))
@@ -79,14 +80,14 @@ def main(screen,w,h):
         if getnotice()!='':
             tmp = getfonts(0).render(str(getnotice()),  True,  (0,0,0))
             txtrect=tmp.get_rect()
-            pygame.draw.rect(screen,(maincolour[1]),pygame.Rect(w//2-(txtrect[2]//2)-10,h//2-170,txtrect[2]+20,50),border_radius=10)
-            center_text(screen,getnotice(),(w//2-(txtrect[2]//2)-10,h//2-170,txtrect[2]+20,50),'',(255,255,255))
+            pygame.draw.rect(screen,(maincolour[1]),pygame.Rect(w//2-(txtrect[2]//2)-10-parallax[0],h//2-170-parallax[1],txtrect[2]+20,50),border_radius=10)
+            center_text(screen,getnotice(),(w//2-(txtrect[2]//2)-10-parallax[0],h//2-170-parallax[1],txtrect[2]+20,50),'',(255,255,255))
 
         if getsigned():
-            card(screen,(w//2-150,h//2+120),accuracy=getmystats()[0],points=getmystats()[1],rank=getmystats()[2],score=getmystats()[3],level=getmystats()[4],username=getsetting('username'))
+            card(screen,(w//2-150-parallax[0],h//2+120-parallax[1]),accuracy=getmystats()[0],points=getmystats()[1],rank=getmystats()[2],score=getmystats()[3],level=getmystats()[4],username=getsetting('username'))
         for a in range(1,len(mtext[meid])+1):
-            mmenu.append((fmove[a-1]+(bla+(w//2-((wid*scale)*(len(mtext[meid])/2))+((wid*scale)*(a-1))))-(moveid[a-1]//2)-pmove[a-1],h//2-(75*scale),(wid*scale)+moveid[a-1],hei*scale))
-        drawRhomboid(screen,dcolour,bla-25,h//2-(76*scale)+1,w+80,hei*scale,26)
+            mmenu.append((fmove[a-1]+(bla-parallax[0]+(w//2-((wid*scale)*(len(mtext[meid])/2))+((wid*scale)*(a-1))))-(moveid[a-1]//2)-pmove[a-1],h//2-(75*scale)-parallax[1],(wid*scale)+moveid[a-1],hei*scale))
+        drawRhomboid(screen,dcolour,bla-25-parallax[0],h//2-(76*scale)+1-parallax[1],w+80,hei*scale,26)
         tmenu=[(w-(40*a),0,40,40) for a in range(1,4)]
         button, highlight=draw_button(screen,mmenu,mtext[meid],isblade=1,return_hover=1,icon=micon,textoffset=(-10,25),iconoffset=(-7,-10))
         topbutton=draw_button(screen,tmenu,'',hidetext=1,icon=('settings.png','user.png','download.png'),border_radius=0)

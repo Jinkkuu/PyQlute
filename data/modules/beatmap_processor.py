@@ -207,7 +207,7 @@ def reloadbg(value,base):
             b=0.50
             background=pygame.image.load(base+backgroundev).convert()
             sc=background.get_rect()[2],background.get_rect()[3]
-            background=pygame.transform.smoothscale(background, (w+20,h+20))
+            background=pygame.transform.smoothscale_by(background, ((w/sc[0])+0.01,(h/sc[1])+0.01))
             #background.fill((255*b, 255*b, 255*b,128), special_flags=pygame.BLEND_RGBA_MULT)
         else:
             background=0

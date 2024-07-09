@@ -7,8 +7,9 @@ gamename='Qlute'
 gameeditions='stable','beta','canary','dev'
 gameauthor='Jinkku'
 from tweener import *
-import os,pygame,zipfile,time
+import os,pygame,zipfile,time,gc
 from data.modules.colours import maincolour
+gc.enable()
 def resource_path(relative_path):
     from os.path import abspath, join
     import sys
@@ -248,7 +249,7 @@ def main():
                     sub = screen.subsurface(pygame.Rect(0,0,w,h))
                     scid=settings.getsetting('screenshot_id')
                     pygame.image.save(sub, screenshotfolder+'screenshot_'+str(scid)+'.jpg')
-                    print('Screenshot as screenshot_'+str(scid)+'.jpg')
+                    notification('Screenshot Saved',desc='Saved as screenshot_'+str(scid)+'.jpg')
                     settings.setsetting('screenshot_id',scid+1)
                 elif event.key == pygame.K_F11:
                     pygame.display.toggle_fullscreen()
