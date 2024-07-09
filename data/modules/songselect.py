@@ -91,8 +91,9 @@ def main(screen,w,h):
         mouse=pygame.mouse.get_pos()
         buttonid=0
         click=0
-        if getbackground():
-            screen.blit(getbackground(),(-5-parallax[0],-5-parallax[1]))
+        bg=getbackground(w,h)
+        if bg:
+            screen.blit(bg,(-5-parallax[0],-5-parallax[1]))
         else:
             screen.fill((maincolour[4]))
 #        screen.blit(bpanel,(w//2,0))

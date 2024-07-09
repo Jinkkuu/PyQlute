@@ -53,9 +53,10 @@ def main(screen,w,h):
         bladeani[0].update()
         parallax=((pygame.mouse.get_pos()[0]/w)*10)-5,((pygame.mouse.get_pos()[1]/h)*10)-5
         parallax=(-5-parallax[0],-5-parallax[1])
-        if getsetting('bgmm') and getbackground():
+        bgs=getbackground(w,h)
+        if getsetting('bgmm') and bgs:
             bg=pygame.surface.Surface((w,h))
-            bg.blit(getbackground(),parallax)
+            bg.blit(bgs,parallax)
         else:
             bg=pygame.surface.Surface((w,h))
             bg.fill((maincolour[0][0],maincolour[0][1],maincolour[0][2]))
@@ -77,11 +78,12 @@ def main(screen,w,h):
         ani=((100-bladeani[0].value)/100)
         bla=(ani*w)
         mmenu=[]
-        if getnotice()!='':
-            tmp = getfonts(0).render(str(getnotice()),  True,  (0,0,0))
+        notice=getnotice()
+        if notice!='':
+            tmp = getfonts(0).render(notice,  True,  (0,0,0))
             txtrect=tmp.get_rect()
-            pygame.draw.rect(screen,(maincolour[1]),pygame.Rect(w//2-(txtrect[2]//2)-10-parallax[0],h//2-170-parallax[1],txtrect[2]+20,50),border_radius=10)
-            center_text(screen,getnotice(),(w//2-(txtrect[2]//2)-10-parallax[0],h//2-170-parallax[1],txtrect[2]+20,50),'',(255,255,255))
+            pygame.draw.rect(screen,maincolour[1],pygame.Rect(w//2-(txtrect[2]//2)-10-parallax[0],h//2-170-parallax[1],txtrect[2]+20,50),border_radius=10)
+            center_text(screen,notice,(w//2-(txtrect[2]//2)-10-parallax[0],h//2-170-parallax[1],txtrect[2]+20,50),'',(255,255,255))
 
         if getsigned():
             card(screen,(w//2-150-parallax[0],h//2+120-parallax[1]),accuracy=getmystats()[0],points=getmystats()[1],rank=getmystats()[2],score=getmystats()[3],level=getmystats()[4],username=getsetting('username'))

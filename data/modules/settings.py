@@ -175,12 +175,16 @@ def settingspage(screen,w,h):
                   firstcom=False
                 elif setbutton == 1 and setupid==3:
                   settingskeystore['hitsound'] = not settingskeystore['hitsound']
+                  reloadsettings()
                 elif setbutton == 1 and setupid==1:
                   settingskeystore['leaderboard'] = not settingskeystore['leaderboard']
+                  reloadsettings()
                 elif setbutton == 2 and setupid==1:
                   settingskeystore['effects'] = not settingskeystore['effects']
+                  reloadsettings()
                 elif setbutton == 4 and setupid==1:
                   settingskeystore['bgmm'] = not settingskeystore['bgmm']
+                  reloadsettings()
                 elif setbutton == 2 and setupid==6:
                     transitionprep(17)
                     sbid=0

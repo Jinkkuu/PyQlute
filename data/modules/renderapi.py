@@ -91,7 +91,6 @@ def drawRhomboid(surf, color, x, y, width, height, offset, thickness=0):
         (x + width + offset, y), 
         (x + width-offset, y + height), 
         (x-offset, y + height))
-    #pygame.draw.polygon(surf, color, points, thickness)
     pygame.gfxdraw.filled_polygon(surf,points,color)
     pygame.gfxdraw.aapolygon(surf,points,color)
 def center_text(screen,text,pos,type='',colour=(255,255,255)): # Can be used for backward compatability but not recommended!

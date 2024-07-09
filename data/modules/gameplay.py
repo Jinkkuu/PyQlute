@@ -103,14 +103,6 @@ def showplayfield(screen,pos,keymap,bypass=False):
         pygame.draw.rect(screen,(cc),(keymap[b][0]-((keymap[0][2]*getkeycount()//2))+pos[0],0,keymap[b][2],keymap[b][3]+(h-100)))
         pygame.draw.rect(screen,(cb),(keymap[b][0]-((keymap[0][2]*getkeycount()//2))+pos[0],h-60+pos[1],keymap[b][2],keymap[b][3]))
         pygame.draw.rect(screen,(co),(keymap[b][0]-((keymap[0][2]*getkeycount()//2))+pos[0],h-60+pos[1]+(10*-keyslight[b].value),keymap[b][2],keymap[b][3]))
-#        tmp = renderapi.getfonts(0).render(str(a),True,(255,255,255))
-#        screen.blit(tmp,(keymap[b][0]+pos[0],h-60+pos[1]))
-        #render('rect', arg=(), cb, False),borderradius=0) # Judgement Block
-        #render('rect', arg=((()), co, False),borderradius=0) # Judgement Block
-#        if a==4:
-#            pygame.draw.line(screen,linecol,(keymap[-1][0]+pos[0]+100,0+pos[1]),(keymap[-1][0]+pos[0]+100,keymap[-1][1]+pos[1]+30-1))
-#        pygame.draw.line(screen,linecol,(keymap[-1][0]+pos[0]+100,0+pos[1]),(keymap[-1][0]+pos[0]+100,keymap[-1][1]+pos[1]+30-1))
-        #render('line',arg=((keymap[b][0]+pos[0],0+pos[1]),linecol,(keymap[b][0]+pos[0],keymap[b][1]+pos[1]+noteheight-1)))
 objecon=0
 def resetcursor():
     global objecon
@@ -118,6 +110,7 @@ def resetcursor():
 def main(screen,w,h):
     global objecon, points,combo,maxcombo,hits,clickedkeys,judgewindow, ncombo,keyslight,keys, combotime,accuracy,health,firstobject
     if getactivity() == 5:
+        tick=time.time()
         from data.modules.songselect import modsen,reload_map,getmaxpoints,selected,mods,get_mods,getmult
         for a in keyslight:
             a.update()
@@ -164,9 +157,9 @@ def main(screen,w,h):
                 block=ti-int(ob[2])+h
                 if (block <=h+100 and block>=-40 and not modsen[2]) or (block <=h+100 and block>=h//2 and modsen[2]):
                     notfound=True
-                    if obid==1:
+                    if obid==2:
                         if not end*1000000 >=999000 and (modsen[0] and health>1):
-                            health-=t1
+                            health-=t1*(combo+ncombo)
                     for kik in range(0,len(pos)):
                         if int(ob[0])==int(pos[kik]):
                             barpos=kik
@@ -318,7 +311,7 @@ def main(screen,w,h):
                 players+=1
 
 ## Input
-
+        screen.blit(renderapi.getfonts(1).render(str(round((time.time()-tick)/0.001,2))+'ms',True,(255,255,255)),(20,h//2))
         for event in get_input():
             if event.type == pygame.KEYDOWN:
                 if event.key in (pygame.K_ESCAPE,pygame.K_q):
