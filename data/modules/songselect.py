@@ -160,7 +160,7 @@ def main(screen,w,h):
                 starticon='next.png'
             else:
                 starticon='go.png'
-            screen.blit(tmp,(20,110))
+            screen.blit(tmp,(20,125))
             scrollbar(screen,(w-10,60),(10,h-140),search=cross[diffsec]/80,length=len(i[diffsec]))
         
         if 1==1: 
@@ -378,6 +378,6 @@ def prepare(buttonid,reloadmusic=True,reloadleaderboard=True,getranky=False):
         print('No maps found')
     startani(diffsec)
     if selectedqueue[2] and reloadmusic:
-        load_music(gamepath+selectedqueue[1]+'/'+selectedqueue[2],-1)
+        load_music(gamepath+selectedqueue[1]+'/'+selectedqueue[2],-1,fadein=1)
 oh=0
 ow=0
