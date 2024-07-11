@@ -205,7 +205,7 @@ def getbackground(w,h):
         bg = pygame.transform.scale(background,(w+10,h+10))
     return bg
 def reloadbg(value,base):
-    global background,bump,sc
+    global background,bump,sc,bg
     try:
         x=loadstats(value)['events']
         x=x[1]
@@ -214,9 +214,11 @@ def reloadbg(value,base):
             w,h= getscreen()
             b=0.50
             background=pygame.image.load(base+backgroundev).convert()
+            bg=background
             #background.fill((255*b, 255*b, 255*b,128), special_flags=pygame.BLEND_RGBA_MULT)
         else:
             background=0
+        
     except Exception as err:
         print(err)
         background=0
