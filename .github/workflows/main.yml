@@ -2,7 +2,7 @@ name: Build and Package Binary
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Note: 8 PM EST is 12 AM UTC
+    - cron: '0 0 * * 0'  # Note: Weekly at 12AM UTC
   workflow_dispatch:
 jobs:
   windows-build:
@@ -45,22 +45,6 @@ jobs:
       run: echo $(date +'%Y.%m.%d') > data/.version
     - name: Set game edition
       run: echo 1 > data/.edition
-    - name: Check for commits today
-      id: check_commits
-      run: |
-          # Get the date in UTC
-          current_date=$(date -u +"%Y-%m-%d")
-          
-          # Get the list of commits made today
-          commits=$(git log --since="$current_date 00:00:00" --until="$current_date 23:59:59" --format='%H')
-          
-          # Fail the job if no commits are found
-          if [ -z "$commits" ]; then
-            echo "No commits found for today."
-            exit 1
-          else
-            echo "Commits found for today."
-          fi
     - name: Set up Python 3
       uses: actions/setup-python@v2
       with:
@@ -101,8 +85,7 @@ jobs:
     - name: Make changelog
       run: |
        current_date=$(date -u +"%Y-%m-%d")
-       echo "# What's Changed">CHANGELOG.md
-       echo $(git log --since="$current_date 00:00:00" --until="$current_date 23:59:59" --format='### %h : %s (By @%cn)') >>CHANGELOG.md
+       echo "This release is automated, please check the site for the changelog <3">CHANGELOG.md
     - name: release
       uses: actions/create-release@v1
       id: create_release
