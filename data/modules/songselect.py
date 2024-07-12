@@ -366,6 +366,7 @@ def prepare(buttonid,reloadmusic=True,reloadleaderboard=True,getranky=False):
     resetcursor()
     mod=selectedqueue[0].replace(' [no video]','')
     reloadbg(gamepath+selectedqueue[1]+'/'+selectedqueue[3],gamepath+selectedqueue[1]+'/')
+    print(get_info('beatmapids')[selected[1]],get_info('beatmapids'))
     if reloadleaderboard:
         threading.Thread(target=rleaderboard, args=(get_info('beatmapids')[selected[1]],)).start()
     if getranky:

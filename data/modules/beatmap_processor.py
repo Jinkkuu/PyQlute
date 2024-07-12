@@ -71,15 +71,17 @@ def addbeatmap(value,save=False):
             else:
                 version='Untitled'
             if "beatmapid" in cache['metadata']:
-                beatmapids.append(cache['metadata']['beatmapid'])
+                beatmapid=cache['metadata']['beatmapid']
             else:
-                beatmapids.append(None)
-            tmp.append((version,getpoint(len(cache['hitobjects']),0,0,0,1,len(cache['hitobjects']),float),b))
+                beatmapid=None
+            tmp.append((version,getpoint(len(cache['hitobjects']),0,0,0,1,len(cache['hitobjects']),float),b,beatmapid))
     tmp=sorted(tmp, key=lambda x: x[1])
+    beatmapids=[]
     for b in tmp:
         difficulties.append(b[0])
         pointlist.append(b[1])
         diffs.append(b[2])
+        beatmapids.append(b[3])
     try:
         songtitle=value[value.index(' '):]
     except Exception:

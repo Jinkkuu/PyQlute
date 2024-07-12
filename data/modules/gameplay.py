@@ -303,10 +303,6 @@ def main(screen,w,h):
                     pygame.draw.rect(screen,pcolour,pygame.Rect(-30,65+(50*(t)),225,50),border_bottom_right_radius=10,border_top_right_radius=10)
                     screen.blit(renderapi.getfonts(0).render(tmp['username'],True,pcol),(20, 70+(50*t)))
                     screen.blit(renderapi.getfonts(1).render('#'+str(players)+' '+format(tmp['score'],','),True,pcol),(20, 95+(50*t)))
-#                    render('rect', arg=((-30,65+(50*(t)),225,50), pcolor, False),borderradius=10)
-#                    render('text',text=,arg=((20, 70+(50*(t))),pcol)) #'#'+str(players)+' '+
-#                    render('text',text=,arg=((20, 95+(50*(t))),pcol,'min'))
-#                    render('text',text='('+str(int(tmp['combo']))+'x)',arg=((180, 95+(50*(t))),pcol,'min','rtl'))
                     t+=1
                 players+=1
 
