@@ -2,7 +2,7 @@ from data.modules.renderapi import getfonts,draw_button,drawRhomboid,center_text
 from data.modules.bootstrap import getactivity,transitionprep,gamepath,version,getname,getimg,getcopyrighttext,setmsg,samplepath,notification
 from data.modules.beatmap_processor import get_info,beatmap_count,beatmaplist,random_beatmap,getbackground
 from data.modules.audio import get_pos,get_tick,inc_tick
-from data.modules.settings import settingskeystore,getsetting
+from data.modules.settings import settingskeystore,getsetting,togset
 from data.modules.gameplay import song_progress
 from data.modules.songselect import prepare,resetdcursor,selected
 from data.modules.card import main as card
@@ -160,7 +160,7 @@ def main(screen,w,h):
         elif button == 4:
             transitionprep(-1)
         elif topbutton == 1:
-            transitionprep(6)
+            togset()
         elif topbutton == 2:
             transitionprep(7)
         elif topbutton == 3:

@@ -311,7 +311,6 @@ def main(screen,w,h):
                 players+=1
 
 ## Input
-        screen.blit(renderapi.getfonts(1).render(str(round((time.time()-tick)/0.001,2))+'ms',True,(255,255,255)),(20,h//2))
         for event in get_input():
             if event.type == pygame.KEYDOWN:
                 if event.key in (pygame.K_ESCAPE,pygame.K_q):

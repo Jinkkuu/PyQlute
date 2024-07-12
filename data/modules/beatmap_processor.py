@@ -199,10 +199,12 @@ oldh=0
 bg=pygame.surface.Surface((0,0))
 def getbackground(w,h):
     global oldw,oldh,bg
-    if oldw != w or oldh != h:
+    if oldw != w or oldh != h or bg:
         oldw=w
         oldh=h
         bg = pygame.transform.scale(background,(w+10,h+10))
+    else:
+        bg=0
     return bg
 def reloadbg(value,base):
     global background,bump,sc,bg
