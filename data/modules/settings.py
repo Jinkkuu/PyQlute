@@ -164,9 +164,6 @@ def settingspage(screen,w,h):
                 boobs = checkbutton(setpage,tmpp,tmp,tmpc,title=setupcatagory[setupid])
                 if boobs:
                     bootid=suck+boobs
-                    print(bootid)
-                    if bootid:
-                        reloadsettings()
                     if bootid  ==  9:
                         change=True
                         if fpsmode<1:
@@ -174,16 +171,12 @@ def settingspage(screen,w,h):
                         else:
                             fpsmode-=1
                         settingskeystore['fps']=fpsmodes[fpsmode]
-                        reloadsettings()
                     elif bootid == 3:
                         settingskeystore['sreplay']=not settingskeystore['sreplay']
-                        reloadsettings()
                     elif bootid == 6:
                         settingskeystore['fpsmetre']=not settingskeystore['fpsmetre']
-                        reloadsettings()
                     elif bootid == 7:
                         settingskeystore['discordrpc']=not settingskeystore['discordrpc']
-                        reloadsettings()
                     elif bootid == 10:
                         settingskeystore['fullscreen'] = not settingskeystore['fullscreen']
                     elif bootid == 8:
@@ -194,6 +187,8 @@ def settingspage(screen,w,h):
                         settingskeystore['effects'] = not settingskeystore['effects']
                     elif bootid == 4:
                         settingskeystore['bgmm'] = not settingskeystore['bgmm']
+                    if bootid:
+                        reloadsettings()
                 else:
                     suck+=len(tmpt)
         sysbutton=draw_button(setpage,((10,h-70,100,60),),('Back',),border_radius=10)
