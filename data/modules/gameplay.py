@@ -250,15 +250,15 @@ def main(screen,w,h):
         if getsetting('hidegamehud'):
             pygame.draw.rect(screen,maincolour[0],pygame.Rect(0,0,w,55),border_bottom_left_radius=20,border_bottom_right_radius=20)
             pygame.draw.rect(screen,maincolour[1],pygame.Rect(w//2-200,19,401,61),border_radius=20)
-            renderapi.center_text(screen,str(end),(w//2-200,30,401,60),'score',(255,255,255))
-            renderapi.center_text(screen,str(accuracy)+'% ',(w//2-200,82,200,20),'',(255,255,255))
-            renderapi.center_text(screen,format(int(points),',')+'pp',(w//2,82,200,20),'',(255,255,255))
+            renderapi.center_text(screen,format(end,','),(w//2-200,30,401,60),'score',(255,255,255))
+            renderapi.center_text(screen,str(accuracy)+'% ',(w//2-200,85,200,20),'',(255,255,255))
+            renderapi.center_text(screen,format(int(points),',')+'pp',(w//2,85,200,20),'',(255,255,255))
             tmp=(health/100)*400
             if tmp<0:
                 tmp=0
             elif tmp>400:
                 tmp=400
-            pygame.draw.rect(screen,(0,180,0),(w//2-200,5,tmp,10),border_radius=10)
+            pygame.draw.rect(screen,(255,255,255),(w//2-200,5,tmp,10),border_radius=10)
             get_mods(screen,(20,20))
         if combo!=0:
             kek=(w//2-200,100,400,100)
