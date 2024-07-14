@@ -98,9 +98,13 @@ def checkbutton(screen,buttonpos,buttontext,buttonticked,title='Test'):
         butt=butt[0],butt[1]
         tes=getfonts(1).render(text[1],True,(255,255,255))
         rect=tes.get_rect()
-        screen.blit(tes,butt)
         tmp=buttonticked[text[0]]
-        buttpos=pygame.Rect(rect[2]+20,buttonpos[text[0]][1]-2,35,rect[3])
+        if tmp in (0,1):
+            buttpos=pygame.Rect(rect[2]+20,buttonpos[text[0]][1]-2,35,rect[3])
+        else:
+            txt=getfonts(1).render(': '+tmp,True,(255,255,255))
+            buttpos=txt.get_rect()[-1]
+            buttpos=pygame.Rect(0,buttonpos[text[0]][1]-2,400,buttpos)
         mouse=pygame.mouse.get_pos()
         if pygame.Rect.collidepoint(buttpos,mouse[0],mouse[1]):
             hover=20
@@ -112,7 +116,9 @@ def checkbutton(screen,buttonpos,buttontext,buttonticked,title='Test'):
         if tmp in (0,1):
             pygame.draw.rect(screen,(clickcol[tmp][0]+hover,clickcol[tmp][1]+hover,clickcol[tmp][2]),buttpos,border_radius=10)
         else:
-            screen.blit(getfonts(1).render(': '+tmp,True,(255,255,255)),(rect[2]+10,buttonpos[text[0]][1]))
+            pygame.draw.rect(screen,(50+hover,50+hover,80+hover),buttpos)
+            screen.blit(txt,(rect[2]+10,buttonpos[text[0]][1]))
+        screen.blit(tes,butt)
         for event in get_input():
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and clickedid:
                 return clickedid
@@ -128,12 +134,12 @@ def settingspage(screen,w,h):
     global setupid,fpsmode,setbutton,catbutton,ctrl,obut,setshow,setani,settingscroll,setpage,sh,sw,blackout
     setani.update()
     if not "setpage" in globals() or sh!=h or sw!=w:
+        print('changed')
         sh=h
         sw=w
         setpage=pygame.surface.Surface((400,h),pygame.SRCALPHA).convert()
         blackout=pygame.surface.Surface((w,h)).convert()
     if setani.value <= 0.99 and setani.value > 0.01:
-        setpage.set_alpha(240*setani.value)
         blackout.set_alpha(100*setani.value)
     if setani.value>0:
         if str(fpsmodes[fpsmode])!='1000':
@@ -145,7 +151,7 @@ def settingspage(screen,w,h):
         else:
             user=settingskeystore['username']
         setpage.fill((50,50,80))
-        setuplist={'general': {'Leaderboards':settingskeystore['leaderboard'],'Effects':settingskeystore['effects'],'Save Replays':settingskeystore['sreplay'],'Enable BG':settingskeystore['bgmm'],'Controls':'->','Show FPS':settingskeystore['fpsmetre'],'Discord RPC':settingskeystore['discordrpc'],},'skinning':{},'audio':{'Hitsounds':settingskeystore['hitsound']},'graphics':{'FPS':tmp,'Fullscreen':settingskeystore['fullscreen']},'debug':{},'account':{'You are ':user}}
+        setuplist={'general': {'Leaderboards':settingskeystore['leaderboard'],'Effects':settingskeystore['effects'],'Save Replays':settingskeystore['sreplay'],'Enable BG':settingskeystore['bgmm'],'Show FPS':settingskeystore['fpsmetre'],'Discord RPC':settingskeystore['discordrpc'],},'skinning':{},'audio':{'Hitsounds':settingskeystore['hitsound']},'graphics':{'FPS':tmp,'Fullscreen':settingskeystore['fullscreen']},'debug':{},'account':{'You are ':user}}
         setpage.blit(getfonts(2).render('Settings',True,(255,255,255)),(10,10+settingscroll))
         tick=0
         suck=0
@@ -164,7 +170,7 @@ def settingspage(screen,w,h):
                 boobs = checkbutton(setpage,tmpp,tmp,tmpc,title=setupcatagory[setupid])
                 if boobs:
                     bootid=suck+boobs
-                    if bootid  ==  9:
+                    if bootid  ==  8:
                         change=True
                         if fpsmode<1:
                             fpsmode=len(fpsmodes)-1
@@ -173,13 +179,13 @@ def settingspage(screen,w,h):
                         settingskeystore['fps']=fpsmodes[fpsmode]
                     elif bootid == 3:
                         settingskeystore['sreplay']=not settingskeystore['sreplay']
-                    elif bootid == 6:
+                    elif bootid == 5:
                         settingskeystore['fpsmetre']=not settingskeystore['fpsmetre']
-                    elif bootid == 7:
+                    elif bootid == 6:
                         settingskeystore['discordrpc']=not settingskeystore['discordrpc']
-                    elif bootid == 10:
+                    elif bootid == 9:
                         settingskeystore['fullscreen'] = not settingskeystore['fullscreen']
-                    elif bootid == 8:
+                    elif bootid == 7:
                         settingskeystore['hitsound'] = not settingskeystore['hitsound']
                     elif bootid == 1:
                         settingskeystore['leaderboard'] = not settingskeystore['leaderboard']
