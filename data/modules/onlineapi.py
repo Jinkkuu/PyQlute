@@ -191,6 +191,8 @@ def getqueue():
 def getstat(beatmapsetid):
     global ranktype
     from data.modules.shopscreen import beatmapapi,getrank
+    ranktype=getrank(1)
+    return 0
     x=1
     success=0
     block=0

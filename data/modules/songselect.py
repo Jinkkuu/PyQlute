@@ -165,27 +165,30 @@ def main(screen,w,h):
             screen.blit(tmp,(20,125))
             scrollbar(screen,(w-10,60),(10,h-140),search=cross[diffsec]/80,length=len(i[diffsec]))
         
-        if 1==1: 
+        if getsetting('leaderboard'): 
             c=0
             lead=getleaderboard()
-            for a in lead: 
-                if a['username']==getsetting('username'): 
-                    col=166, 207, 255
-                else:
-                    col=(255,255,255) 
-                leadpos=(0,60*c+cross[2],300,60)
-                if pygame.Rect.collidepoint(pygame.Rect(leadpos[0]+10,leadpos[1]+h//2-140,leadpos[2],leadpos[3]),mouse[0],mouse[1]):
-                    hov=20
-                    leadmode=1
-                else:
-                    hov=0
-                pygame.draw.rect(lpanel,(maincolour[0][0]+hov,maincolour[0][1]+hov,maincolour[0][2]+hov),pygame.Rect(leadpos)) 
-                lpanel.blit(renderapi.getfonts(0).render('#'+str(c+1)+' '+a["username"],True,col),(leadpos[0]+10,leadpos[1]+10))
-                lpanel.blit(renderapi.getfonts(1).render(format(int(a['score']),',')+' - '+str(int(a["points"]))+'pp ('+str(int(a['combo']))+'x) '+timeform(int(time.time()-a['time'])),True,(255,255,255)),(leadpos[0]+10,leadpos[1]+38))
-                renderapi.center_text(lpanel,a['mods'],(leadpos[0]+250,leadpos[1]+45,0,0),('rtl','min'),(255,255,255)) 
-                c+=1
-            if c>5:
-                scrollbar(lpanel,(0,0),(10,300),search=cross[2]/60,length=len(lead)*60,colour=(255,255,255))
+            if len(lead):
+                for a in lead: 
+                    if a['username']==getsetting('username'): 
+                        col=166, 207, 255
+                    else:
+                        col=(255,255,255) 
+                    leadpos=(0,60*c+cross[2],300,60)
+                    if pygame.Rect.collidepoint(pygame.Rect(leadpos[0]+10,leadpos[1]+h//2-140,leadpos[2],leadpos[3]),mouse[0],mouse[1]):
+                        hov=20
+                        leadmode=1
+                    else:
+                        hov=0
+                    pygame.draw.rect(lpanel,(maincolour[0][0]+hov,maincolour[0][1]+hov,maincolour[0][2]+hov),pygame.Rect(leadpos)) 
+                    lpanel.blit(renderapi.getfonts(0).render('#'+str(c+1)+' '+a["username"],True,col),(leadpos[0]+10,leadpos[1]+10))
+                    lpanel.blit(renderapi.getfonts(1).render(format(int(a['score']),',')+' - '+str(int(a["points"]))+'pp ('+str(int(a['combo']))+'x) '+timeform(int(time.time()-a['time'])),True,(255,255,255)),(leadpos[0]+10,leadpos[1]+38))
+                    renderapi.center_text(lpanel,a['mods'],(leadpos[0]+250,leadpos[1]+45,0,0),('rtl','min'),(255,255,255)) 
+                    c+=1
+                if c>5:
+                    scrollbar(lpanel,(0,0),(10,300),search=cross[2]/60,length=len(lead)*60,colour=(255,255,255))
+            else:
+                renderapi.center_text(lpanel,'No Scores set ;-;',lpanel.get_rect(),'')
         screen.blit(lpanel,(10,h//2-140))
         if modsani[1]: # Animation for Mod Select :3
             pop=modsani[0].value
@@ -369,8 +372,7 @@ def prepare(buttonid,reloadmusic=True,reloadleaderboard=True,getranky=False):
     if reloadleaderboard:
         threading.Thread(target=rleaderboard, args=(get_info('beatmapids')[selected[1]],)).start()
     if getranky:
-        pass
-#        threading.Thread(target=getstat, args=(get_info('beatmapsetid'),)).start()
+        threading.Thread(target=getstat, args=(get_info('beatmapsetid'),)).start()
     if mod[0]==' ':
         mod=mod[1:]
     creator=get_info('creator')
