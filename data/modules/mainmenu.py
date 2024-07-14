@@ -24,8 +24,11 @@ fmove=[0 for a in mtext[0]]
 moveid=[0 for a in mtext[0]]
 pmove=[0 for a in mtext[0]]
 osam=0
+olds=0,0
+def getflash():
+    return flashscr
 def main(screen,w,h):
-    global moveid,pmove,fmove,menupos,tick,osam
+    global moveid,pmove,fmove,menupos,tick,osam,olds,flashscr,bg,topbar
     bpm=get_info('bpm')
     if not bpm:
         bpm=500
@@ -44,21 +47,25 @@ def main(screen,w,h):
         bgcolour=0
     if get_pos()//bpm>get_tick():
         inc_tick()
-    if getactivity()==1:
-        flashscr=pygame.surface.Surface((w,h))
+    if olds!=(w,h):
+        olds=w,h
+        flashscr=pygame.surface.Surface(olds)
         flashscr.set_alpha(10)
+        bg=pygame.surface.Surface(olds)
+        topbar=pygame.surface.Surface((olds[0],40))
+        topbar.set_alpha(80)
+    if getactivity()==1:
         if not bladeani[1] and getactivity()==1:
             bladeani[1]=1
             bladeani[0].start()    
         bladeani[0].update()
-        parallax=((pygame.mouse.get_pos()[0]/w)*10)-5,((pygame.mouse.get_pos()[1]/h)*10)-5
+        mouse=pygame.mouse.get_pos()
+        parallax=((mouse[0]/w)*10)-5,((mouse[1]/h)*10)-5
         parallax=(-5-parallax[0],-5-parallax[1])
         bgs=getbackground(w,h)
         if getsetting('bgmm') and bgs:
-            bg=pygame.surface.Surface((w,h))
             bg.blit(bgs,parallax)
         else:
-            bg=pygame.surface.Surface((w,h))
             bg.fill((maincolour[0][0],maincolour[0][1],maincolour[0][2]))
         flashscr.fill((bgcolour,bgcolour,bgcolour))
         screen.blits(((bg,(0,0)),(flashscr,(0,0))))
@@ -67,9 +74,7 @@ def main(screen,w,h):
             gameverstr=''
         else:
             gameverstr=version()
-        topbar=pygame.surface.Surface((w,40))
         pygame.draw.rect(topbar,(0,0,0),pygame.Rect(0,0,w,40))
-        topbar.set_alpha(80)
         screen.blit(topbar,(0,0))
         if beatmap_count():
             screen.blit(getfonts(0).render(get_info('songtitle'),True,(255,255,255)),(10,10))
@@ -84,7 +89,6 @@ def main(screen,w,h):
             txtrect=tmp.get_rect()
             pygame.draw.rect(screen,maincolour[1],pygame.Rect(w//2-(txtrect[2]//2)-10-parallax[0],h//2-170-parallax[1],txtrect[2]+20,50),border_radius=10)
             center_text(screen,notice,(w//2-(txtrect[2]//2)-10-parallax[0],h//2-170-parallax[1],txtrect[2]+20,50),'',(255,255,255))
-
         if getsigned():
             card(screen,(w//2-150-parallax[0],h//2+120-parallax[1]),accuracy=getmystats()[0],points=getmystats()[1],rank=getmystats()[2],score=getmystats()[3],level=getmystats()[4],username=getsetting('username'))
         for a in range(1,len(mtext[meid])+1):

@@ -369,4 +369,4 @@ def main():
             screen.blit(renderapi.getfonts(0).render(f'{fps} fps',True,(255,255,255)),(w - 90, 48))
             screen.blit(renderapi.getfonts(0).render(f'{round(updatetime,2)}ms',True,(255,255,255)),(w - 90, 68))
         drawtime=clock.tick(disactivity)/1000
-        pygame.display.flip()
+        pygame.display.update()

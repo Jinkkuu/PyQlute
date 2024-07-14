@@ -24,6 +24,7 @@ modsani[0].start()
 modsalias="Auto",'Blind','Slice','EZ','Random','Strict'#,'DT','HT'
 modsaliasab='AT','BD','SL','EZ','RND','SN'#,'DT','HT'
 mods=''
+starrating=0 # Star Rating
 if os.path.isfile(getuserdata()+'.developer'):
     modsen[0]=1 # Automatically enables Auto Mod
 def getmult():
@@ -66,6 +67,7 @@ def startani(val):
     songani[val][0].start()
 def main(screen,w,h):
     global cross,selected,diffsec,modshow,modsani,modsv,modsen,lpanel
+    from data.modules.mainmenu import flashscr,olds
     from data.modules.onlineapi import ranktype
     if not "lpanel" in globals():
         lpanel=pygame.surface.Surface((280,320),pygame.SRCALPHA, 32).convert_alpha()
@@ -96,7 +98,7 @@ def main(screen,w,h):
             screen.blit(bg,(-5-parallax[0],-5-parallax[1]))
         else:
             screen.fill((maincolour[4]))
-#        screen.blit(bpanel,(w//2,0))
+        screen.blit(flashscr,(0,0))
 #        screen.bl
         panel=pygame.surface.Surface((300,h-120))
         panel.set_alpha(51)
@@ -139,8 +141,6 @@ def main(screen,w,h):
             sets=get_info('maps')
             pp=(int(get_info('points')[0]),int(get_info('points')[-1]))
             sifyy=sify(len(get_info('maps')),' Set')
-            keyy=str(getkeycount()),sify(getkeycount(),' Key')
-            
             tmp = renderapi.getfonts(0).render(str(len(sets))+sifyy+' - '+clockify(get_info('lengths')[selected[1]]),True,(255,255,255))
             screen.blit(tmp,(20,80))
             t=renderapi.getfonts(0).render(rankmodes[ranktype][0],True,(255,255,255))
@@ -149,7 +149,7 @@ def main(screen,w,h):
             rtl=290-rtl[2],80
             pygame.draw.rect(screen,rankmodes[ranktype][1],(rtl[0],rtl[1],fr[2]+10,35),border_bottom_left_radius=10,border_top_left_radius=10)
             screen.blit(t,(rtl[0]+5,rtl[1]+7))
-            t=renderapi.getfonts(0).render(keyy[0]+keyy[1],True,(255,255,255))
+            t=renderapi.getfonts(0).render(str(round(starrating*(mult+1)/2,2))+' Stars',True,(255,255,255))
             rtl=t.get_rect()
             fr=rtl
             rtl=290-rtl[2],125
@@ -346,7 +346,7 @@ def reload_map():
             resetcursor()
             cache_beatmap(selectedqueue[0])
 def prepare(buttonid,reloadmusic=True,reloadleaderboard=True,getranky=False):
-    global selected
+    global selected,starrating
     from data.modules.beatmap_processor import beatmapselect
     reset_score()
     selected[diffsec]=buttonid
@@ -366,17 +366,28 @@ def prepare(buttonid,reloadmusic=True,reloadleaderboard=True,getranky=False):
     resetcursor()
     mod=selectedqueue[0].replace(' [no video]','')
     reloadbg(gamepath+selectedqueue[1]+'/'+selectedqueue[3],gamepath+selectedqueue[1]+'/')
-    print(get_info('beatmapids')[selected[1]],get_info('beatmapids'))
     if reloadleaderboard:
         threading.Thread(target=rleaderboard, args=(get_info('beatmapids')[selected[1]],)).start()
     if getranky:
-        threading.Thread(target=getstat, args=(get_info('beatmapsetid'),)).start()
+        pass
+#        threading.Thread(target=getstat, args=(get_info('beatmapsetid'),)).start()
     if mod[0]==' ':
         mod=mod[1:]
     creator=get_info('creator')
+    starrating=0
     if acc:
         grabobjects(gamepath+selectedqueue[1]+'/'+get_info('diffurl')[selid])
-
+        bpm=get_info('bpm')
+        x=0
+        for a in getobjects():
+            so=int(a[2])
+            if so>x:
+                suna=((so-x)/bpm)
+                if not suna<1.1:
+                    suna=0
+                print('[S U N A]',round(suna,2),str(round(starrating,2))+' Stars')
+                starrating+=suna*0.01
+                x=so
     else:
         print('No maps found')
     startani(diffsec)
