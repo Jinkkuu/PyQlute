@@ -65,9 +65,10 @@ def startani(val):
     global songani
     songani[val]=[Tween(begin=cross[val], end=-selected[val]*80,duration=350,easing=Easing.CUBIC,easing_mode=EasingMode.OUT),0]
     songani[val][0].start()
+olds=0,0
 def main(screen,w,h):
-    global cross,selected,diffsec,modshow,modsani,modsv,modsen,lpanel
-    from data.modules.mainmenu import flashscr,olds
+    global cross,selected,diffsec,modshow,modsani,modsv,modsen,lpanel,panel,olds
+    from data.modules.mainmenu import flashscr
     from data.modules.onlineapi import ranktype
     if not "lpanel" in globals():
         lpanel=pygame.surface.Surface((280,320),pygame.SRCALPHA, 32).convert_alpha()
@@ -76,6 +77,11 @@ def main(screen,w,h):
         lpanel.fill((0,0,0,0))
     if getactivity() == 2:
         from data.modules.beatmap_processor import beatmaplist,beatmapselect
+        if olds!=(w,h):
+            olds=w,h
+            panel=pygame.surface.Surface((300,olds[1]-120))
+            panel.set_alpha(51)
+            panel.fill(0)
         parallax=((pygame.mouse.get_pos()[0]/w)*10)-5,((pygame.mouse.get_pos()[1]/h)*10)-5
         mult=getmult()
         modsani[0].update()
@@ -86,7 +92,6 @@ def main(screen,w,h):
         elif not songani[diffsec][1]:
             songani[diffsec][0].update()
             cross[diffsec]=songani[diffsec][0].value
-        id=0
         obj=0
         leadmode=0
         tm=[]
@@ -99,10 +104,6 @@ def main(screen,w,h):
         else:
             screen.fill((maincolour[4]))
         screen.blit(flashscr,(0,0))
-#        screen.bl
-        panel=pygame.surface.Surface((300,h-120))
-        panel.set_alpha(51)
-        panel.fill(0)
         screen.blit(panel,(0,60))
         #pygame.draw.rect(screen,(255,255,255,51),)
         #pygame.Surface.blits(screen,((panel,(0,60))))
@@ -112,9 +113,19 @@ def main(screen,w,h):
             modtext=str(round(mult,2))+'x'
         else:
             modtext='Mods'
-        if len(beatmapselect):
-            i=(beatmapselect,get_info('maps'))
-            for a in i[diffsec]:
+        beatcount=len(beatmapselect)
+        diffs=get_info('maps')
+        pos=int(-cross[diffsec]//40//2)
+        if pos-10>0:
+            pos-=10
+        else:
+            pos=0
+        end=pos+20
+        id=pos
+        oid=0
+        if beatcount:
+            i=(beatmapselect,diffs)
+            for a in i[diffsec][pos:end]:
                 offset=cross[diffsec]+(80*id)+(h//2-80)
                 if 0>=-offset and -offset>=-h+60:
                     scr=pygame.surface.Surface((w//2,80))
@@ -138,10 +149,12 @@ def main(screen,w,h):
                     screen.blit(scr,(w//2,offset))
                     obj+=1
                 id+=1
-            sets=get_info('maps')
-            pp=(int(get_info('points')[0]),int(get_info('points')[-1]))
-            sifyy=sify(len(get_info('maps')),' Set')
-            tmp = renderapi.getfonts(0).render(str(len(sets))+sifyy+' - '+clockify(get_info('lengths')[selected[1]]),True,(255,255,255))
+                oid+=1
+
+            points=get_info('points')
+            pp=(int(points[0]),int(points[-1]))
+            sifyy=sify(len(diffs),' Set')
+            tmp = renderapi.getfonts(0).render(str(len(diffs))+sifyy+' - '+clockify(get_info('lengths')[selected[1]]),True,(255,255,255))
             screen.blit(tmp,(20,80))
             t=renderapi.getfonts(0).render(rankmodes[ranktype][0],True,(255,255,255))
             rtl=t.get_rect()
@@ -158,7 +171,7 @@ def main(screen,w,h):
                 tmp = renderapi.getfonts(0).render(format(int(pp[0]*mult),',')+'-'+format(int(pp[1]*mult),',')+'pp',True,(255,255,255))
             else:
                 tmp = renderapi.getfonts(0).render(format(int(pp[0]*mult),',')+'pp',True,(255,255,255))
-            if len(get_info('maps'))>1 and not diffsec:
+            if len(diffs)>1 and not diffsec:
                 starticon='next.png'
             else:
                 starticon='go.png'
@@ -189,7 +202,7 @@ def main(screen,w,h):
                     scrollbar(lpanel,(0,0),(10,300),search=cross[2]/60,length=len(lead)*60,colour=(255,255,255))
             else:
                 renderapi.center_text(lpanel,'No Scores set ;-;',lpanel.get_rect(),'')
-        screen.blit(lpanel,(10,h//2-140))
+            screen.blit(lpanel,(10,h//2-140))
         if modsani[1]: # Animation for Mod Select :3
             pop=modsani[0].value
         else:
@@ -211,7 +224,8 @@ def main(screen,w,h):
         pygame.draw.rect(screen,maincolour[1],pygame.Rect(0,h-60,w,60))
         card(screen,(w//2-80,h-55),mini=1,accuracy=getmystats()[0],points=getmystats()[1],rank=getmystats()[2],username=getsetting('username'))
         
-        if len(beatmapselect):
+        
+        if  beatcount:
             title = get_info('songtitle')
             gobutton = renderapi.draw_button(screen,((w-120,h-80,130,90),),('',),border_radius=10,icon=(starticon,),hidetext=1)
         else:
@@ -222,6 +236,7 @@ def main(screen,w,h):
         button = renderapi.draw_button(screen,((0,h-60,100,60),(100,h-60,100,60),),('Back',modtext),border_radius=0)
         tmp = renderapi.getfonts(0).render(title,True,(255,255,255))
         screen.blit(tmp,(20,20))
+        screen.blit(renderapi.getfonts(1).render(str(obj)+' out of '+str((id,oid))+' Objects ('+str(pos)+' pos)',True,(255,255,255)),(10,10))
         
 
 # MSG tooltip
@@ -239,8 +254,6 @@ def main(screen,w,h):
             setmsg('You have to aim your hits right! (+0.8)')
         elif modh==6:
             setmsg('We be easy on you (/0.5)')
-        else:
-            setmsg('')
 
 
 
@@ -262,7 +275,7 @@ def main(screen,w,h):
                     elif mod:
                         modsen[mod-1]=not modsen[mod-1]
                     elif gobutton:
-                        if not diffsec and len(get_info('maps'))>1:
+                        if not diffsec and len(diffs)>1:
                             diffsec = not diffsec
                         else:
                             transitionprep(5)
@@ -270,7 +283,7 @@ def main(screen,w,h):
                     elif buttonid != selected[diffsec] and click:
                         prepare(buttonid,reloadmusic=not diffsec,getranky=not diffsec)
                     elif buttonid == selected[diffsec] and click:
-                        if not diffsec and len(get_info('maps'))>1:
+                        if not diffsec and len(diffs)>1:
                             diffsec = not diffsec
                         else:
                             transitionprep(5)
@@ -287,7 +300,8 @@ def main(screen,w,h):
                         cross[2]-=30
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_END and len(beatmaplist):
-                    selected[diffsec]=id-1
+                    i=(beatmapselect,diffs)
+                    selected[diffsec]=len(i[diffsec])-1
                     prepare(selected[diffsec],reloadmusic=not diffsec,getranky=not diffsec)
                     resetdcursor()                    
                 elif event.key in (pygame.K_ESCAPE,pygame.K_q):
@@ -296,7 +310,7 @@ def main(screen,w,h):
                     else:
                         transitionprep(1)
                 elif event.key == pygame.K_RETURN and len(beatmaplist):
-                    if not diffsec and len(get_info('maps'))>1:
+                    if not diffsec and len(diffs)>1:
                         diffsec = not diffsec
                     else:
                         transitionprep(5)
@@ -387,7 +401,7 @@ def prepare(buttonid,reloadmusic=True,reloadleaderboard=True,getranky=False):
                 suna=((so-x)/bpm)
                 if not suna<1.1:
                     suna=0
-                print('[S U N A]',round(suna,2),str(round(starrating,2))+' Stars')
+                #print('[S U N A]',round(suna,2),str(round(starrating,2))+' Stars ')
                 starrating+=suna*0.01
                 x=so
     else:
