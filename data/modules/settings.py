@@ -34,6 +34,7 @@ settingstemplate={
         'screenshot_id' : 0,
         'hidegamehud' : 0,
         'master' : 100,
+        'classicmode' : False,
         'fpsmetre' : False
     }
 setupid=1
@@ -92,6 +93,8 @@ clickcol=(10,10,10),(150,150,255)
 def checkbutton(screen,buttonpos,buttontext,buttonticked,title='Test'):
     screen.blit(getfonts(0).render(title,True,(210, 158, 255)),(10,buttonpos[0][1]-40))
     id=1
+    clicked=0
+    cid=0
     for text in enumerate(buttontext):
         #print(text)
         butt=buttonpos[text[0]]
@@ -121,8 +124,9 @@ def checkbutton(screen,buttonpos,buttontext,buttonticked,title='Test'):
         screen.blit(tes,butt)
         for event in get_input():
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and clickedid:
-                return clickedid
-                break
+                clicked=1
+                cid=clickedid
+    return cid,clicked
 sh=0
 sw=0
 def togset():
@@ -151,10 +155,25 @@ def settingspage(screen,w,h):
         else:
             user=settingskeystore['username']
         setpage.fill((50,50,80))
-        setuplist={'general': {'Leaderboards':settingskeystore['leaderboard'],'Effects':settingskeystore['effects'],'Save Replays':settingskeystore['sreplay'],'Enable BG':settingskeystore['bgmm'],'Show FPS':settingskeystore['fpsmetre'],'Discord RPC':settingskeystore['discordrpc'],},'skinning':{},'audio':{'Hitsounds':settingskeystore['hitsound']},'graphics':{'FPS':tmp,'Fullscreen':settingskeystore['fullscreen']},'debug':{},'account':{'You are ':user}}
+        setuplist={'general': {'Leaderboards':settingskeystore['leaderboard'],
+                               'Save Replays':settingskeystore['sreplay'],
+                               'Discord RPC':settingskeystore['discordrpc'],
+                               'Wayback Mode':settingskeystore['classicmode']},
+                               'skinning':{},
+                               'audio':{'Hitsounds':settingskeystore['hitsound']
+                                        },
+                               'graphics':{'FPS':tmp,
+                                           'Fullscreen':settingskeystore['fullscreen'],
+                                           'Enable BG':settingskeystore['bgmm'],
+                                           'Effects':settingskeystore['effects'],
+                                           'Show FPS':settingskeystore['fpsmetre'],
+                                           },
+                               'debug':{},
+                               'account':{'You are ':user}}
         setpage.blit(getfonts(2).render('Settings',True,(255,255,255)),(10,10+settingscroll))
         tick=0
         suck=0
+        suckt=0
         for setupid in range(0,len(setupcatagory)):
             tmp=setuplist[setupcatagory[setupid].lower()]
             if len(tmp):
@@ -167,36 +186,40 @@ def settingspage(screen,w,h):
                     tmpp.append((10,120+tick+settingscroll))
                     tick+=20
                 tick+=50
-                boobs = checkbutton(setpage,tmpp,tmp,tmpc,title=setupcatagory[setupid])
-                if boobs:
+                boobs,cid = checkbutton(setpage,tmpp,tmp,tmpc,title=setupcatagory[setupid])
+
+                if cid:
                     bootid=suck+boobs
-                    if bootid  ==  8:
+                    if bootid  ==  6:
                         change=True
                         if fpsmode<1:
                             fpsmode=len(fpsmodes)-1
                         else:
                             fpsmode-=1
                         settingskeystore['fps']=fpsmodes[fpsmode]
-                    elif bootid == 3:
+                    elif bootid == 2:
                         settingskeystore['sreplay']=not settingskeystore['sreplay']
-                    elif bootid == 5:
+                    elif bootid == 10:
                         settingskeystore['fpsmetre']=not settingskeystore['fpsmetre']
-                    elif bootid == 6:
+                    elif bootid == 3:
                         settingskeystore['discordrpc']=not settingskeystore['discordrpc']
-                    elif bootid == 9:
-                        settingskeystore['fullscreen'] = not settingskeystore['fullscreen']
                     elif bootid == 7:
+                        settingskeystore['fullscreen'] = not settingskeystore['fullscreen']
+                    elif bootid == 5:
                         settingskeystore['hitsound'] = not settingskeystore['hitsound']
                     elif bootid == 1:
                         settingskeystore['leaderboard'] = not settingskeystore['leaderboard']
-                    elif bootid == 2:
+                    elif bootid == 9:
                         settingskeystore['effects'] = not settingskeystore['effects']
-                    elif bootid == 4:
+                    elif bootid == 8:
                         settingskeystore['bgmm'] = not settingskeystore['bgmm']
+                    elif bootid == 4:
+                        settingskeystore['classicmode'] = not settingskeystore['classicmode']
                     if bootid:
                         reloadsettings()
                 else:
                     suck+=len(tmpt)
+                    suckt+=1
         sysbutton=draw_button(setpage,((10,h-70,100,60),),('Back',),border_radius=10)
 
         screen.blit(blackout,(0,0))

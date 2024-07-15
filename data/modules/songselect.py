@@ -128,17 +128,24 @@ def main(screen,w,h):
             for a in i[diffsec][pos:end]:
                 offset=cross[diffsec]+(80*id)+(h//2-80)
                 if 0>=-offset and -offset>=-h+60:
-                    scr=pygame.surface.Surface((w//2,80))
                     if pygame.Rect.collidepoint(pygame.Rect(w//2,offset,w//2,80),mouse[0],mouse[1]):
                         hover=20
                         buttonid=id
                         click=1
+                        col=(maincolour[2][0]+hover,maincolour[2][1]+hover,maincolour[2][2]+hover)
                     else:
                         hover=0
-                    if id==selected[diffsec]:
-                        scr.fill(maincolour[3])
+                        if id==selected[diffsec]:
+                            col = maincolour[3]
+                        else:
+                            col=maincolour[2]
+                    if getsetting('classicmode'):
+                        scr=pygame.surface.Surface((w//2,80),pygame.SRCALPHA)
+                        scr.fill((0,0,0,0))
+                        pygame.draw.rect(scr,col,(0,3,w//2+10,75),border_radius=10)
                     else:
-                        scr.fill((maincolour[2][0]+hover,maincolour[2][1]+hover,maincolour[2][2]+hover))
+                        scr=pygame.surface.Surface((w//2,80))
+                        scr.fill(col)
                     if not diffsec:
                         meta = renderapi.getfonts(0).render(a['title'],True,(255,255,255)), renderapi.getfonts(0).render(a['artist']+' (mapped by '+str(a['creator'])+')',True,(255,255,255))
                     else:
@@ -236,7 +243,7 @@ def main(screen,w,h):
         button = renderapi.draw_button(screen,((0,h-60,100,60),(100,h-60,100,60),),('Back',modtext),border_radius=0)
         tmp = renderapi.getfonts(0).render(title,True,(255,255,255))
         screen.blit(tmp,(20,20))
-        screen.blit(renderapi.getfonts(1).render(str(obj)+' out of '+str((id,oid))+' Objects ('+str(pos)+' pos)',True,(255,255,255)),(10,10))
+        #screen.blit(renderapi.getfonts(1).render(str(obj)+' out of '+str((id,oid))+' Objects ('+str(pos)+' pos)',True,(255,255,255)),(10,10))
         
 
 # MSG tooltip
@@ -303,7 +310,7 @@ def main(screen,w,h):
                     i=(beatmapselect,diffs)
                     selected[diffsec]=len(i[diffsec])-1
                     prepare(selected[diffsec],reloadmusic=not diffsec,getranky=not diffsec)
-                    resetdcursor()                    
+                    resetdcursor()
                 elif event.key in (pygame.K_ESCAPE,pygame.K_q):
                     if diffsec:
                         diffsec=not diffsec

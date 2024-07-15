@@ -271,7 +271,7 @@ def main():
             stopnow()
             exit()
         elif not activity:
-            transitionprep(2)
+            transitionprep(1)
         if transani[1]:
             transani[0].update()
             if transani[0].value==1:
