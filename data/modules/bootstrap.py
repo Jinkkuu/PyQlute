@@ -36,6 +36,7 @@ else:
     gameedition=gameeditions[-1]
 print(gamename+'/'+str(gameedition),gamever) # Prints Game and version
 activity=0
+actto=activity
 stop=0
 def stopnow():
     global stop
@@ -198,12 +199,13 @@ def main():
     upl=[]
     img=reloadimg()
     threading.Thread(target=ondemand).start()
+    seeyanexttimetext = renderapi.getfonts(2).render('See you next time~',True,(255,255,255))
     if len(beatmaplist):
         tmp=random_beatmap()
         prepare(list(beatmaplist.keys()).index(tmp['songtitle']))
         del tmp
     transani=[Tween(begin=0, end=1,duration=150*2,easing=Easing.CUBIC,easing_mode=EasingMode.OUT,boomerang=True),0] # Animation for transitioning to another activity
-    goaway = renderapi.getfonts(2).render('See you next time~',True,(255,255,255))
+    goaway = seeyanexttimetext
     focused=1
     vol=settings.getsetting('master')
     volani=Tween(begin=volvisual, end=vol,duration=250,easing=Easing.CUBIC,easing_mode=EasingMode.OUT)
@@ -241,9 +243,9 @@ def main():
             if event.type == pygame.WINDOWFOCUSLOST:
                 focused=0
             if event.type == pygame.KEYDOWN:
-                if event.key  ==  pygame.K_MINUS:
+                if event.key  ==  pygame.K_MINUS and not getactivity() == 7:
                     volchg(0)
-                elif event.key  ==  pygame.K_EQUALS:
+                elif event.key  ==  pygame.K_EQUALS and not getactivity() == 7:
                     volchg(1)
                 elif event.key == pygame.K_F12:
                     sub = screen.subsurface(pygame.Rect(0,0,w,h))

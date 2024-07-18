@@ -52,18 +52,20 @@ def reset_score():
     global points,combo,ncombo,maxcombo,hits,clickedkeys, ncombo,keys, combotime, accuracy, timetaken,health,keyslight,pos
     e=getkeypos()
     if e:
-        pos=e
+        pos = e
     else:
-        pos=(64,192,320,448) # Keys
-    keyslight=[Tween(begin=0) for a in range(0,getkeycount())]
+        pos = (64,192,320,448) # Keys
+    keyslight = [Tween(begin=0) for a in range(0,getkeycount())]
     points = 0
     ncombo = 0
-    health=10
-    timetaken=time.time()
+    health = 10
+    timetaken = time.time()
+    ob=getobjects()
+    if ob:
+        clickedkeys=[[1,int(a[0]),int(a[2])] for a in ob]
     combo = 0
     ncombo = 0
     maxcombo = 0
-    clickedkeys = []
     hits = [0,0,0,0]
     keys = [0 for a in range(0,getkeycount())]
     combotime = time.time()
@@ -152,36 +154,34 @@ def main(screen,w,h):
         ti=get_pos()
         keyqueue=[]
         if objects:
-            for ob in objects[objecon:255+objecon]:
-                obid=1
+            obid=1
+            for ob in clickedkeys[objecon:255+objecon]:
                 block=ti-int(ob[2])+h
-                if (block <=h+100 and block>=-40 and not modsen[2]) or (block <=h+100 and block>=h//2 and modsen[2]):
+                if ((block <=h+100 and block>=-40 and not modsen[2]) or (block <=h+100 and block>=h//2 and modsen[2])) and ob[0]:
                     notfound=True
                     if obid==2:
                         if not end*1000000 >=999000 and (modsen[0] and health>1):
                             health-=t1*(combo+ncombo)
                     for kik in range(0,len(pos)):
-                        if int(ob[0])==int(pos[kik]):
+                        if int(ob[1])==int(pos[kik]):
                             barpos=kik
                             notfound=False
                             break
                     if notfound:
                         for kik in range(0,4):
-                            if int(ob[0])>=512-(128*(kik+1)):
+                            if int(ob[1])>=512-(128*(kik+1)):
                                 barpos=kik
                                 break
                     
-                    if not (barpos,int(ob[2])) in clickedkeys:
-                        if not modsen[1] or modsen[1] and block<=h//2:
-                            bar=getimg('note.png')
-                            if bar:
-                                keyoffset=bar.get_rect()[3]
-                                screen.blit(bar,(fieldpos[0]-((keymap[0][2]*getkeycount()//2))+keymap[barpos][0],block-keyoffset))
-                            else:
-                                pygame.draw.rect(screen,notecolour,(fieldpos[0]-((keymap[0][2]*getkeycount()//2))+keymap[barpos][0],block-keymap[0][3],keymap[0][2],keymap[0][3]))
+                    if not modsen[1] or modsen[1] and block<=h//2:
+                        bar=getimg('note.png')
+                        if bar:
+                            keyoffset=bar.get_rect()[3]
+                            screen.blit(bar,(fieldpos[0]-((keymap[0][2]*getkeycount()//2))+keymap[barpos][0],block-keyoffset))
+                        else:
+                            pygame.draw.rect(screen,notecolour,(fieldpos[0]-((keymap[0][2]*getkeycount()//2))+keymap[barpos][0],block-keymap[0][3],keymap[0][2],keymap[0][3]))
                     if obid==1:
                         firstobject=int(block)
-                        obid+=1
 
                     judge=iscatched(keymap,block,modsen[0],firstobject,obid,h)
 
@@ -190,46 +190,40 @@ def main(screen,w,h):
                             keys[kik]=1
                     if (judge[0] and keys[kik]) or judge[1]==3: 
                         hit=judge[1]
-                        clicked=1
-                        keyqueue.append((barpos,int(ob[2])))
-
-
-
+                        clickedkeys[objecon+obid-1][0] = 0
+                        print(clickedkeys[objecon+obid-1],objecon+obid-1)
+                        if hit==3:
+                            health-=t1*(ncombo+combo)
+                        else:
+                            health+=10
+                        try:
+                            judgewindow=hit
+                        except Exception:
+                            judgewindow=hit
+                        hits[hit]+=1
+                        if not hit==3:
+                            combo+=1
+                            if ncombo>0:
+                                ncombo-=1
+                            if combo>maxcombo:
+                                maxcombo=combo
+                            combotime=time.time()
+                            try:
+                                t=a.split(':')[-1]
+                                if not t=='' and getsetting('hitsound'):
+                                    pygame.mixer.Sound(gamepath+get_info('raw')+'/'+str(t)).play()
+                                    print('Played',t)
+                            except Exception:
+                                pass
+                        else:
+                            ncombo+=1
+                            combotime=time.time()
+                            combo=0
+                            #health-=t1
                     # Saves FRAMES
                     if pygame.Rect.colliderect(pygame.Rect(0,h+50,w,60),pygame.Rect(0,block,w,30)):
                         objecon+=1
-        if clicked:
-            for notes in keyqueue:
-                if not (notes[0],int(notes[1])) in clickedkeys:
-                    if hit==3:
-                        health-=t1*(ncombo+combo)
-                    else:
-                        health+=10
-                    try:
-                        judgewindow=hit
-                    except Exception:
-                        judgewindow=hit
-                    hits[hit]+=1
-                    clickedkeys.append((notes[0],int(notes[1])))
-                    if not hit==3:
-                        combo+=1
-                        if ncombo>0:
-                            ncombo-=1
-                        if combo>maxcombo:
-                            maxcombo=combo
-                        combotime=time.time()
-                        try:
-                            t=a.split(':')[-1]
-                            if not t=='' and getsetting('hitsound'):
-                                pygame.mixer.Sound(gamepath+get_info('raw')+'/'+str(t)).play()
-                                print('Played',t)
-                        except Exception:
-                            pass
-                    else:
-                        ncombo+=1
-                        combotime=time.time()
-                        combo=0
-                        #health-=t1
+                obid+=1
 
 
         for a in range(0,getkeycount()):

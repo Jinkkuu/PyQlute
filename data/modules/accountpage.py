@@ -10,6 +10,7 @@ logintext=['','']
 restricted=0
 maxletters=30
 profilehealth=0
+usrtxt=getfonts(0).render('Username:',True,(255,255,255)) , getfonts(0).render('Password:',True,(255,255,255))
 def loginscreen(screen,w,h):
     global sysbutton,l,logbutton,logintext,textboxid
     from data.modules.onlineapi import restricted,issigned
@@ -24,7 +25,7 @@ def loginscreen(screen,w,h):
         else:
             if issigned:
                 screen.blit(getfonts(0).render('You are logged in as '+str(getsetting('username')),True,(255,255,255)),(20,80))
-                logbutton=draw_button(screen,((w//2-50,h//2+90,100,25),),('Log out',),border_radius=10) 
+                logbutton=draw_button(screen,((w//2-60,h//2+90,120,40),),('Log out',),border_radius=10) 
                 for event in get_input(): 
                     if logbutton==1:
                         if issigned:
@@ -44,11 +45,11 @@ def loginscreen(screen,w,h):
                     if len(a)>=maxletters:
                         logintext[id]=logintext[id][:maxletters]
                     id+=1
-                screen.blit(getfonts(0).render('Username:',True,(255,255,255)),(w//2-300,h//2-80))
-                screen.blit(getfonts(0).render('Password: ('+format(len(logintext[1]),',')+' Characters)',True,(255,255,255)),(w//2-300,h//2))
+                screen.blit(usrtxt[0],(w//2-300,h//2-80))
+                screen.blit(usrtxt[1],(w//2-300,h//2))
                 textbox(screen,(w//2-300,h//2-50,600),40,text=logintext[0],border_colour=l[0],center=True)
                 textbox(screen,(w//2-300,h//2+30,600),40,text='*'*len(logintext[1]),border_colour=l[1],center=True)
-                logbutton=draw_button(screen,((w//2-150,h//2+90,100,25),(w//2+20,h//2+90,100,25),),('Log in','Sign Up'),border_radius=10)
+                logbutton=draw_button(screen,((w//2-160,h//2+90,120,40),(w//2+20,h//2+90,120,40),),('Log in','Sign Up'),border_radius=10)
                 for event in get_input():
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_TAB:

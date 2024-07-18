@@ -158,7 +158,7 @@ def settingspage(screen,w,h):
         setuplist={'general': {'Leaderboards':settingskeystore['leaderboard'],
                                'Save Replays':settingskeystore['sreplay'],
                                'Discord RPC':settingskeystore['discordrpc'],
-                               'Wayback Mode':settingskeystore['classicmode']},
+                               },
                                'skinning':{},
                                'audio':{'Hitsounds':settingskeystore['hitsound']
                                         },
@@ -190,31 +190,29 @@ def settingspage(screen,w,h):
 
                 if cid:
                     bootid=suck+boobs
-                    if bootid  ==  6:
+                    if bootid == 1:
+                        settingskeystore['leaderboard'] = not settingskeystore['leaderboard']
+                    elif bootid == 2:
+                        settingskeystore['sreplay']=not settingskeystore['sreplay']
+                    elif bootid == 3:
+                        settingskeystore['discordrpc']=not settingskeystore['discordrpc']
+                    elif bootid == 4:
+                        settingskeystore['hitsound'] = not settingskeystore['hitsound']
+                    elif bootid  ==  5:
                         change=True
                         if fpsmode<1:
                             fpsmode=len(fpsmodes)-1
                         else:
                             fpsmode-=1
                         settingskeystore['fps']=fpsmodes[fpsmode]
-                    elif bootid == 2:
-                        settingskeystore['sreplay']=not settingskeystore['sreplay']
-                    elif bootid == 10:
-                        settingskeystore['fpsmetre']=not settingskeystore['fpsmetre']
-                    elif bootid == 3:
-                        settingskeystore['discordrpc']=not settingskeystore['discordrpc']
-                    elif bootid == 7:
+                    elif bootid == 6:
                         settingskeystore['fullscreen'] = not settingskeystore['fullscreen']
-                    elif bootid == 5:
-                        settingskeystore['hitsound'] = not settingskeystore['hitsound']
-                    elif bootid == 1:
-                        settingskeystore['leaderboard'] = not settingskeystore['leaderboard']
-                    elif bootid == 9:
-                        settingskeystore['effects'] = not settingskeystore['effects']
-                    elif bootid == 8:
+                    elif bootid == 7:
                         settingskeystore['bgmm'] = not settingskeystore['bgmm']
-                    elif bootid == 4:
-                        settingskeystore['classicmode'] = not settingskeystore['classicmode']
+                    elif bootid == 8:
+                        settingskeystore['effects'] = not settingskeystore['effects']
+                    elif bootid == 9:
+                        settingskeystore['fpsmetre']=not settingskeystore['fpsmetre']
                     if bootid:
                         reloadsettings()
                 else:

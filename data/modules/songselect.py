@@ -99,10 +99,9 @@ def main(screen,w,h):
         buttonid=0
         click=0
         bg=getbackground(w,h)
+        screen.fill((maincolour[4]))
         if bg:
             screen.blit(bg,(-5-parallax[0],-5-parallax[1]))
-        else:
-            screen.fill((maincolour[4]))
         screen.blit(flashscr,(0,0))
         screen.blit(panel,(0,60))
         #pygame.draw.rect(screen,(255,255,255,51),)
@@ -139,20 +138,14 @@ def main(screen,w,h):
                             col = maincolour[3]
                         else:
                             col=maincolour[2]
-                    if getsetting('classicmode'):
-                        scr=pygame.surface.Surface((w//2,80),pygame.SRCALPHA)
-                        scr.fill((0,0,0,0))
-                        pygame.draw.rect(scr,col,(0,3,w//2+10,75),border_radius=10)
-                    else:
-                        scr=pygame.surface.Surface((w//2,80))
-                        scr.fill(col)
+                    scr=pygame.surface.Surface((w//2,80))
+                    scr.fill(col)
                     if not diffsec:
                         meta = renderapi.getfonts(0).render(a['title'],True,(255,255,255)), renderapi.getfonts(0).render(a['artist']+' (mapped by '+str(a['creator'])+')',True,(255,255,255))
                     else:
                         meta = renderapi.getfonts(0).render(a,True,(255,255,255)),renderapi.getfonts(0).render(str(int(get_info('points')[id]*mult))+'pp',True,(255,255,255))
                     scr.blit(meta[0],(10,10))
                     scr.blit(meta[1],(10,50))
-                    scr.set_alpha(255*0.95)
                     screen.blit(scr,(w//2,offset))
                     obj+=1
                 id+=1
@@ -160,13 +153,11 @@ def main(screen,w,h):
 
             points=get_info('points')
             pp=(int(points[0]),int(points[-1]))
-            sifyy=sify(len(diffs),' Set')
-            tmp = renderapi.getfonts(0).render(str(len(diffs))+sifyy+' - '+clockify(get_info('lengths')[selected[1]]),True,(255,255,255))
-            screen.blit(tmp,(20,80))
             t=renderapi.getfonts(0).render(rankmodes[ranktype][0],True,(255,255,255))
             rtl=t.get_rect()
             fr=rtl
             rtl=290-rtl[2],80
+            screen.blit(renderapi.getfonts(0).render(str(get_info('bpm'))+' BPM',True,(255,255,255)),(20,85))
             pygame.draw.rect(screen,rankmodes[ranktype][1],(rtl[0],rtl[1],fr[2]+10,35),border_bottom_left_radius=10,border_top_left_radius=10)
             screen.blit(t,(rtl[0]+5,rtl[1]+7))
             t=renderapi.getfonts(0).render(str(round(starrating*(mult+1)/2,2))+' Stars',True,(255,255,255))
@@ -174,10 +165,7 @@ def main(screen,w,h):
             fr=rtl
             rtl=290-rtl[2],125
             screen.blit(t,(rtl[0],rtl[1]))
-            if pp[0] != pp[1]:
-                tmp = renderapi.getfonts(0).render(format(int(pp[0]*mult),',')+'-'+format(int(pp[1]*mult),',')+'pp',True,(255,255,255))
-            else:
-                tmp = renderapi.getfonts(0).render(format(int(pp[0]*mult),',')+'pp',True,(255,255,255))
+            tmp = renderapi.getfonts(0).render(clockify(get_info('lengths')[selected[1]]),True,(255,255,255))
             if len(diffs)>1 and not diffsec:
                 starticon='next.png'
             else:
