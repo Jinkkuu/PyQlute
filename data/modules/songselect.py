@@ -24,6 +24,7 @@ modsani[0].start()
 modsalias="Auto",'Blind','Slice','EZ','Random','Strict'#,'DT','HT'
 modsaliasab='AT','BD','SL','EZ','RND','SN'#,'DT','HT'
 mods=''
+altbutton=0
 starrating=0 # Star Rating
 if os.path.isfile(getuserdata()+'.developer'):
     modsen[0]=1 # Automatically enables Auto Mod
@@ -67,7 +68,7 @@ def startani(val):
     songani[val][0].start()
 olds=0,0
 def main(screen,w,h):
-    global cross,selected,diffsec,modshow,modsani,modsv,modsen,lpanel,panel,olds
+    global cross,selected,diffsec,modshow,modsani,modsv,modsen,lpanel,panel,olds,altbutton
     from data.modules.mainmenu import flashscr
     from data.modules.onlineapi import ranktype
     if not "lpanel" in globals():
@@ -165,7 +166,10 @@ def main(screen,w,h):
             fr=rtl
             rtl=290-rtl[2],125
             screen.blit(t,(rtl[0],rtl[1]))
-            tmp = renderapi.getfonts(0).render(clockify(get_info('lengths')[selected[1]]),True,(255,255,255))
+            if altbutton:
+                tmp = renderapi.getfonts(0).render(str(points[selected[1]])+'pp',True,(255,255,255))
+            else:
+                tmp = renderapi.getfonts(0).render(clockify(get_info('lengths')[selected[1]]),True,(255,255,255))
             if len(diffs)>1 and not diffsec:
                 starticon='next.png'
             else:
@@ -293,6 +297,9 @@ def main(screen,w,h):
                         cross[diffsec]-=40
                     elif cross[2]-60>(60*-len(lead))+(4*60) and leadmode:
                         cross[2]-=30
+            elif event.type == pygame.KEYUP:
+                if event.key == pygame.K_LALT:
+                    altbutton=0
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_END and len(beatmaplist):
                     i=(beatmapselect,diffs)
@@ -304,6 +311,8 @@ def main(screen,w,h):
                         diffsec=not diffsec
                     else:
                         transitionprep(1)
+                elif event.key == pygame.K_LALT:
+                    altbutton=1
                 elif event.key == pygame.K_RETURN and len(beatmaplist):
                     if not diffsec and len(diffs)>1:
                         diffsec = not diffsec
