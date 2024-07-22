@@ -305,7 +305,7 @@ def main(screen,w,h):
                     transitionprep(2)
                 elif event.key == pygame.K_BACKQUOTE:
                     reload_map()
-                    reset_score()
+                    reset_score() # IDFK why this do not work as it should on windows
                 elif event.key == pygame.K_F3:
                     setsetting('hidegamehud',not getsetting('hidegamehud'))
                 for a in range(0,getkeycount()):
