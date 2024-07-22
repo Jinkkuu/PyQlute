@@ -57,7 +57,6 @@ def reset_score():
         pos = (64,192,320,448) # Keys
     keyslight = [Tween(begin=0) for a in range(0,getkeycount())]
     points = 0
-    ncombo = 0
     health = 10
     timetaken = time.time()
     ob=getobjects()
@@ -306,6 +305,7 @@ def main(screen,w,h):
                     transitionprep(2)
                 elif event.key == pygame.K_BACKQUOTE:
                     reload_map()
+                    reset_score()
                 elif event.key == pygame.K_F3:
                     setsetting('hidegamehud',not getsetting('hidegamehud'))
                 for a in range(0,getkeycount()):
