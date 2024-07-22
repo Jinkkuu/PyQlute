@@ -24,6 +24,7 @@ srank=1
 maxsentry=10
 loading=Tween(begin=0, end=1,duration=1000,easing=Easing.BOUNCE,easing_mode=EasingMode.OUT,boomerang=True,loop=True)
 loading.start()
+shopmsg=''
 def reload_background(value):
     global bgs
     bgs=pygame.Surface((0,0))
@@ -45,8 +46,9 @@ def getrank(id):
     else:
         return 1
 def shop_refresh(usecached):
-    global sbt,sentrynf,sref,serr,sentry,progress
+    global sbt,sentrynf,sref,serr,sentry,progress,shopmsg
     serr=0
+    shopmsg=''
     try:
         if not usecached:
             sref=1
@@ -56,13 +58,15 @@ def shop_refresh(usecached):
                 alt=''
             sentrynf=[]
             tick=0
-            retry=1
-            while retry:
+            retry=3
+            while retry>0:
                 try:
                     f = requests.get(beatmapapi+'search'+alt+'?limit=50',headers={'User-Agent': 'QluteClient'},timeout=10)
                     sentrynf=json.loads(f.text)
                     retry=0
                 except Exception as err:
+                    retry-=1
+                    shopmsg="Where's my connection?! ;n;"
                     print(err,'shopref')
         sentry=[]
         tmp=[]
@@ -70,6 +74,8 @@ def shop_refresh(usecached):
             if getrank(a['RankedStatus'])==srank:
                 sentry.append(a)
                 tmp.append((a['Artist'],a['Title']))
+        if len(sentry)<1:
+            shopmsg = 'Nothing is here yet o-o'
         sbt=tmp
         sref=0
     except Exception as err:
@@ -149,10 +155,11 @@ def shopdirect(screen,w,h):
         
         if sref:
             loading.update()
-            pygame.draw.rect(screen,(255,255,255),(25+(loading.value*(w-485)),h//2-25,40,40),border_radius=int(40-(loading.value*25)))
-            pygame.draw.rect(screen,(0,0,0),(27+(loading.value*(w-485)),h//2-22,35,35),border_radius=int(35-(loading.value*25)))
+            pygame.draw.aacircle(screen,(255,255,255),(w//2-300+(loading.value*(200)),h//2),16)
             te='Loading...'
             center_text(screen,te,(400*((w/800)-1),120,400,h-100),type='grade')
+        elif shopmsg:
+            center_text(screen,shopmsg,(400*((w/800)-1),120,400,h-100),type='')
         if len(sbt):
             scrollbar(screen,(0,120),(10,h-180),search=shopscroll//80,length=len(sbt))
         if sbid:
@@ -215,6 +222,7 @@ def shopdirect(screen,w,h):
                     shopref=1
                     sb=[]
                     sbt=[]
+                    sbid=0
                 elif event.key == pygame.K_BACKSPACE: 
                     search = search[:-1]
                 else:
