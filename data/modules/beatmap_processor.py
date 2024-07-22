@@ -206,7 +206,7 @@ def getbackground(w,h):
             oldw=w
             oldh=h
             bg = pygame.transform.smoothscale(background,(w+10,h+10))
-        else:
+        elif not background:
             bg=0
     except TypeError:
         bg=0
