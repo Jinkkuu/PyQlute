@@ -28,7 +28,7 @@ olds=0,0
 def getflash():
     return flashscr
 def main(screen,w,h):
-    global moveid,pmove,fmove,menupos,tick,osam,olds,flashscr,bg,topbar
+    global moveid,pmove,fmove,menupos,tick,osam,olds,flashscr,bg,topbar,sysbutton
     bpm=get_info('bpm')
     if not bpm:
         bpm=500
