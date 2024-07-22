@@ -34,7 +34,7 @@ settingstemplate={
         'screenshot_id' : 0,
         'hidegamehud' : 0,
         'master' : 100,
-        'classicmode' : False,
+        'animation' : True,
         'fpsmetre' : False
     }
 setupid=1
@@ -135,7 +135,7 @@ def togset():
     setani.start()
     setshow=not setshow
 def settingspage(screen,w,h):
-    global setupid,fpsmode,setbutton,catbutton,ctrl,obut,setshow,setani,settingscroll,setpage,sh,sw,blackout
+    global setupid,fpsmode,setbutton,catbutton,ctrl,obut,setshow,setani,settingscroll,setpage,sh,sw,blackout,sysbutton
     setani.update()
     if not "setpage" in globals() or sh!=h or sw!=w:
         print('changed')
@@ -166,6 +166,7 @@ def settingspage(screen,w,h):
                                            'Fullscreen':settingskeystore['fullscreen'],
                                            'Enable BG':settingskeystore['bgmm'],
                                            'Effects':settingskeystore['effects'],
+                                           'Animation':settingskeystore['animation'],
                                            'Show FPS':settingskeystore['fpsmetre'],
                                            },
                                'debug':{},
@@ -212,6 +213,8 @@ def settingspage(screen,w,h):
                     elif bootid == 8:
                         settingskeystore['effects'] = not settingskeystore['effects']
                     elif bootid == 9:
+                        settingskeystore['animation']=not settingskeystore['animation']
+                    elif bootid == 10:
                         settingskeystore['fpsmetre']=not settingskeystore['fpsmetre']
                     if bootid:
                         reloadsettings()
@@ -223,6 +226,9 @@ def settingspage(screen,w,h):
         screen.blit(blackout,(0,0))
         screen.blit(setpage,(-400+(400*setani.value),0))
     for event in get_input():
+        if event.type  ==  pygame.MOUSEBUTTONDOWN and setshow and "sysbutton" in globals():
+            if sysbutton:
+                togset()        
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LCTRL or event.key == pygame.K_RCTRL:
                 ctrl=1
