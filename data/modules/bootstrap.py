@@ -50,9 +50,13 @@ def setactivity(value):
     activity=value
 def transitionprep(act):
     global transani,actto
-    actto=act
-    transani[1]=1
-    transani[0].start()
+    from data.modules.settings import getsetting
+    if getsetting('animation'):
+        actto=act
+        transani[1]=1
+        transani[0].start()
+    else:
+        setactivity(act)
 def getact():
     return actto
 def getname():
@@ -290,20 +294,21 @@ def main():
             rec=getimg('logo.png').get_rect(center=pygame.Rect(w*trans,0,w,h).center)
             screen.blit(getimg('logo.png'),(rec[0],rec[1]))
         volvisual=volani.value
-        if int(volvisual)>int(vol) or int(volvisual)<int(vol):
-            volani.update()
-            v=1
+        if vol>1:
+            if int(volvisual)>int(vol) or int(volvisual)<int(vol):
+                volani.update()
+                v=1
+            if v:
+                voltime=time.time()
+            if not int(time.time()-voltime)>1:
+                pygame.mixer.music.set_volume(0.8*(volvisual*0.01))
+                volpos=(20, h//2-100, 20, 200)
+                pygame.draw.rect(screen,(60,60,100),(-15,h//2-105,115,210),border_radius=15)
+                pygame.draw.rect(screen,(20,20,20),volpos,border_radius=15)
+                pygame.draw.rect(screen,(168*(volvisual*0.01), 232*(volvisual*0.01), 255*(volvisual*0.01)),(volpos[0],volpos[1]+1+volpos[3]-((volvisual*0.01)*volpos[3]),volpos[2],(volvisual*0.01)*volpos[3]),border_radius=15)
+                renderapi.center_text(screen,str(int(volvisual))+'%',(volpos[0]+50,volpos[1],0,volpos[3]))
         else:
-            v=0
-        if v:
-            voltime=time.time()
-        if not int(time.time()-voltime)>1:
-            pygame.mixer.music.set_volume(0.8*(volvisual*0.01))
-            volpos=(20, h//2-100, 20, 200)
-            pygame.draw.rect(screen,(60,60,100),(-15,h//2-105,115,210),border_radius=15)
-            pygame.draw.rect(screen,(20,20,20),volpos,border_radius=15)
-            pygame.draw.rect(screen,(168*(volvisual*0.01), 232*(volvisual*0.01), 255*(volvisual*0.01)),(volpos[0],volpos[1]+1+volpos[3]-((volvisual*0.01)*volpos[3]),volpos[2],(volvisual*0.01)*volpos[3]),border_radius=15)
-            renderapi.center_text(screen,str(int(volvisual))+'%',(volpos[0]+50,volpos[1],0,volpos[3]))
+            pygame.mixer.music.set_volume(0)
         mouse=pygame.mouse.get_pos()
         rec=getimg('cursor.png').get_rect()
         if len(msg):
