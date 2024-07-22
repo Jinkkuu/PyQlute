@@ -101,8 +101,11 @@ def getleaderboard():
 def rleaderboard(value):
     global leaderboard
     leaderboard=[]
-    f=requests.get(getsetting('apiurl')+'api/getleaderboard?'+str(value))
-    leaderboard=f.json()
+    try:
+        f=requests.get(getsetting('apiurl')+'api/getleaderboard?'+str(value))
+        leaderboard=f.json()
+    except Exception:
+        pass
 def ondemand():
     global totperf,totscore,totrank,nettick,issigned,qlutaerror,menunotice,pingspeed,downloadqueue,level,multitime
     from data.modules.bootstrap import getactivity
