@@ -16,27 +16,29 @@ ok=perfect*3
 miss=50
 kdur=250
 accuracy=100 
-notecolour=(48, 183, 255)
+notecolour=(48, 183, 255), (255, 183, 48)
 maxhealth=110
 health=maxhealth
 hittext='PERFECT','GREAT','MEH','MISS'
+hitacc='LATE','GG','EARLY'
 hitcolour=(100, 120, 200),(100, 200, 100),(200, 200, 100),(200, 100, 100)
-def iscatched(keymap,block,isauto,ob,fir,h):
+rate=50
+def iscatched(keymap,block,isauto,ob,h):
     from data.modules.songselect import modsen
-    lean=(perfect,great,ok,miss,0) # Last one is for Auto
+    lean=(perfect,great,ok,miss)
     tick=0
     agree=1
     hitrange=h-60
     if block>=h+miss:
         lastcall=True
         tick=3
-    elif (block>=hitrange-lean[0] and block<=hitrange+keymap[0][3]+lean[0] and agree and not isauto) or (block>=hitrange-lean[4] and block<=hitrange+keymap[0][3]+lean[0] and agree and isauto):
+    elif (block>=hitrange-lean[0] and block<=hitrange+lean[0]):
         lastcall=True
         tick=0
-    elif block>=hitrange-lean[1] and block<=hitrange+keymap[0][3]+lean[1] and not isauto and agree and not modsen[5]:
+    elif block>=hitrange-lean[1] and block<=hitrange+lean[1] and not modsen[5]:
         lastcall=True
         tick=1
-    elif block>=hitrange-lean[2] and block<=hitrange+keymap[0][3]+lean[2] and not isauto and not modsen[5]:
+    elif block>=hitrange-lean[2] and block<=hitrange+lean[2] and not modsen[5]:
         lastcall=True
         tick=2
     else:
@@ -56,8 +58,10 @@ def reset_score():
     health = 10
     timetaken = time.time()
     ob=getobjects()
+    clickedkeys=[]
     if ob:
-        clickedkeys=[[1,int(a[0]),int(a[2])] for a in ob]
+        for a in ob:
+            clickedkeys.append([1,int(a[0]),int(a[2]),0])
     combo = 0
     ncombo = 0
     maxcombo = 0
@@ -177,24 +181,30 @@ def main(screen,w,h):
                             keyoffset=bar.get_rect()[3]
                             screen.blit(bar,(fieldpos[0]-((keymap[0][2]*getkeycount()//2))+keymap[barpos][0],block-keyoffset))
                         else:
-                            pygame.draw.rect(screen,notecolour,(fieldpos[0]-((keymap[0][2]*getkeycount()//2))+keymap[barpos][0],block-keymap[0][3],keymap[0][2],keymap[0][3]))
+                            pygame.draw.rect(screen,notecolour[ob[3]],(fieldpos[0]-((keymap[0][2]*getkeycount()//2))+keymap[barpos][0],block-keymap[0][3],keymap[0][2],keymap[0][3]))
 
-                    judge=iscatched(keymap,block,modsen[0],firstobject,obid,h)
+                    judge=iscatched(keymap,block,modsen[0],obid,h)
 
                     if modsen[0]:
-                        if judge[0]:
+                        if block>=h-rate:
                             keys[kik]=1
-                    if (judge[0] and keys[kik] and block==firstobject) or judge[1]==3: 
+                    if (judge[0] and keys[kik] and (block>=firstobject-10 and block<=firstobject+10)) or judge[1]==3: 
                         hit=judge[1]
                         clickedkeys[objecon+obid-1][0] = 0    
                         if hit==3:
                             health-=t1*(ncombo+combo)
                         else:
                             health+=10
+                        if block<h-rate-2:
+                            h=2
+                        elif block>h-rate-2 and block<h-rate+2:
+                            h=1
+                        elif block>h-rate+2:
+                            h=0
                         try:
-                            judgewindow=hit
+                            judgewindow=hit,h
                         except Exception:
-                            judgewindow=hit
+                            judgewindow=hit,h
                         hits[hit]+=1
                         if not hit==3:
                             combo+=1
@@ -214,7 +224,7 @@ def main(screen,w,h):
                             ncombo+=1
                             combotime=time.time()
                             combo=0
-                            #health-=t1
+                            health-=t1
                     # Saves FRAMES
                 if pygame.Rect.colliderect(pygame.Rect(0,h+100,w,20),pygame.Rect(0,block,w,30)):
                     objecon+=1
@@ -256,7 +266,8 @@ def main(screen,w,h):
                 renderapi.center_text(screen,comboo,(kek[0]-sre,kek[1],kek[2],kek[3]),'score',(255,0,0))
                 renderapi.center_text(screen,comboo,(kek[0]+sre,kek[1],kek[2],kek[3]),'score',(0,0,255))
                 renderapi.center_text(screen,comboo,(kek[0],kek[1]+sre,kek[2],kek[3]),'score',(0,255,0))
-                renderapi.center_text(screen,hittext[judgewindow],(kek[0],kek[1]+60,kek[2],kek[3]),'score',hitcolour[judgewindow])
+                renderapi.center_text(screen,hittext[judgewindow[0]],(kek[0],kek[1]+60,kek[2],kek[3]),'score',hitcolour[judgewindow[0]])
+                renderapi.center_text(screen,hitacc[judgewindow[1]],(kek[0],kek[1]+90,kek[2],kek[3]),colour=(255,255,255))
             renderapi.center_text(screen,comboo,(kek),'score',(255,255,255))
             
 
@@ -305,6 +316,7 @@ def main(screen,w,h):
                     reload_map()
                 elif event.key == pygame.K_F3:
                     setsetting('hidegamehud',not getsetting('hidegamehud'))
-                for a in range(0,getkeycount()):
-                    if event.unicode  ==  getsetting('Key'+str(a+1)):
-                        keys[a]=1
+                if not modsen[0]:
+                    for a in range(0,getkeycount()):
+                        if event.unicode  ==  getsetting('Key'+str(a+1)):
+                            keys[a]=1
