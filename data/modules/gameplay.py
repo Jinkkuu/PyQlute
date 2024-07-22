@@ -190,8 +190,7 @@ def main(screen,w,h):
                             keys[kik]=1
                     if (judge[0] and keys[kik]) or judge[1]==3: 
                         hit=judge[1]
-                        clickedkeys[objecon+obid-1][0] = 0
-                        print(clickedkeys[objecon+obid-1],objecon+obid-1)
+                        clickedkeys[objecon+obid-1][0] = 0    
                         if hit==3:
                             health-=t1*(ncombo+combo)
                         else:
@@ -221,8 +220,8 @@ def main(screen,w,h):
                             combo=0
                             #health-=t1
                     # Saves FRAMES
-                    if pygame.Rect.colliderect(pygame.Rect(0,h+50,w,60),pygame.Rect(0,block,w,30)):
-                        objecon+=1
+                if pygame.Rect.colliderect(pygame.Rect(0,h+50,w,60),pygame.Rect(0,block,w,30)):
+                    objecon+=1
                 obid+=1
 
 
@@ -239,9 +238,9 @@ def main(screen,w,h):
                     setsubmit(1)
                     threading.Thread(target=submit_score,args=(int(points),maxcombo,get_info('beatmapids')[selected[1]],get_info('beatmapsetid'),hits[0],hits[1],hits[2],hits[3],get_info('maps')[selected[1]],mods,int(getmaxpoints()),int(time.time()-timetaken),)).start()
                 transitionprep(9)
-            if getsetting('hidegamehud'):
+            if not getsetting('hidegamehud'):
                 song_progress(screen,get_pos(),length+1000,w,h)
-        if getsetting('hidegamehud'):
+        if not getsetting('hidegamehud'):
             pygame.draw.rect(screen,maincolour[0],pygame.Rect(0,0,w,55),border_bottom_left_radius=20,border_bottom_right_radius=20)
             pygame.draw.rect(screen,maincolour[1],pygame.Rect(w//2-200,19,401,61),border_radius=20)
             renderapi.center_text(screen,format(end,','),(w//2-200,30,401,60),'score',(255,255,255))
