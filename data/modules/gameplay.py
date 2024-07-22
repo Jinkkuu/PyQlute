@@ -150,8 +150,10 @@ def main(screen,w,h):
         keyqueue=[]
         if objects:
             obid=1
-            firstobject=ti-int(clickedkeys[objecon:255+objecon][0][2])+h
-            for ob in clickedkeys[objecon:255+objecon]:
+            objectcache=clickedkeys[objecon:255+objecon]
+            if len(objectcache):
+                firstobject=ti-int(objectcache[0][2])+h
+            for ob in objectcache:
                 block=ti-int(ob[2])+h
                 if ((block <=h+100 and block>=-40 and not modsen[2]) or (block <=h+100 and block>=h//2 and modsen[2])) and ob[0]:
                     notfound=True
@@ -214,7 +216,7 @@ def main(screen,w,h):
                             combo=0
                             #health-=t1
                     # Saves FRAMES
-                if pygame.Rect.colliderect(pygame.Rect(0,h+50,w,60),pygame.Rect(0,block,w,30)):
+                if pygame.Rect.colliderect(pygame.Rect(0,h+100,w,20),pygame.Rect(0,block,w,30)):
                     objecon+=1
                 obid+=1
 
