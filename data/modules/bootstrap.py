@@ -56,6 +56,7 @@ def transitionprep(act):
         transani[1]=1
         transani[0].start()
     else:
+        actto=act
         setactivity(act)
 def getact():
     return actto
@@ -298,6 +299,8 @@ def main():
             if int(volvisual)>int(vol) or int(volvisual)<int(vol):
                 volani.update()
                 v=1
+            else:
+                v=0
             if v:
                 voltime=time.time()
             if not int(time.time()-voltime)>1:

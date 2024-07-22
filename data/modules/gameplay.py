@@ -13,9 +13,9 @@ from tweener import *
 perfect=80
 great=perfect*2
 ok=perfect*3
-miss=0
+miss=50
 kdur=250
-accuracy=100
+accuracy=100 
 notecolour=(48, 183, 255)
 maxhealth=110
 health=maxhealth
@@ -26,12 +26,8 @@ def iscatched(keymap,block,isauto,ob,fir,h):
     lean=(perfect,great,ok,miss,0) # Last one is for Auto
     tick=0
     agree=1
-    if ob==fir or isauto:
-        agree=True
-    else:
-        agree=False
     hitrange=h-60
-    if block>=h-lean[3]:
+    if block>=h+miss:
         lastcall=True
         tick=3
     elif (block>=hitrange-lean[0] and block<=hitrange+keymap[0][3]+lean[0] and agree and not isauto) or (block>=hitrange-lean[4] and block<=hitrange+keymap[0][3]+lean[0] and agree and isauto):
@@ -154,12 +150,13 @@ def main(screen,w,h):
         keyqueue=[]
         if objects:
             obid=1
+            firstobject=ti-int(clickedkeys[objecon:255+objecon][0][2])+h
             for ob in clickedkeys[objecon:255+objecon]:
                 block=ti-int(ob[2])+h
                 if ((block <=h+100 and block>=-40 and not modsen[2]) or (block <=h+100 and block>=h//2 and modsen[2])) and ob[0]:
                     notfound=True
-                    if obid==2:
-                        if not end*1000000 >=999000 and (modsen[0] and health>1):
+                    if obid==1:
+                        if not end*1000000 >=999000 and health>1:
                             health-=t1*(combo+ncombo)
                     for kik in range(0,len(pos)):
                         if int(ob[1])==int(pos[kik]):
@@ -179,15 +176,13 @@ def main(screen,w,h):
                             screen.blit(bar,(fieldpos[0]-((keymap[0][2]*getkeycount()//2))+keymap[barpos][0],block-keyoffset))
                         else:
                             pygame.draw.rect(screen,notecolour,(fieldpos[0]-((keymap[0][2]*getkeycount()//2))+keymap[barpos][0],block-keymap[0][3],keymap[0][2],keymap[0][3]))
-                    if obid==1:
-                        firstobject=int(block)
 
                     judge=iscatched(keymap,block,modsen[0],firstobject,obid,h)
 
                     if modsen[0]:
                         if judge[0]:
                             keys[kik]=1
-                    if (judge[0] and keys[kik]) or judge[1]==3: 
+                    if (judge[0] and keys[kik] and block==firstobject) or judge[1]==3: 
                         hit=judge[1]
                         clickedkeys[objecon+obid-1][0] = 0    
                         if hit==3:
@@ -304,8 +299,8 @@ def main(screen,w,h):
                 if event.key in (pygame.K_ESCAPE,pygame.K_q):
                     transitionprep(2)
                 elif event.key == pygame.K_BACKQUOTE:
-                    reload_map()
                     reset_score() # IDFK why this do not work as it should on windows
+                    reload_map()
                 elif event.key == pygame.K_F3:
                     setsetting('hidegamehud',not getsetting('hidegamehud'))
                 for a in range(0,getkeycount()):
