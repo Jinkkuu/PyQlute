@@ -223,9 +223,6 @@ def settingspage(screen,w,h):
         screen.blit(blackout,(0,0))
         screen.blit(setpage,(-400+(400*setani.value),0))
     for event in get_input():
-        if event.type  ==  pygame.MOUSEBUTTONDOWN and setshow:
-            if sysbutton:
-                togset()
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LCTRL or event.key == pygame.K_RCTRL:
                 ctrl=1
