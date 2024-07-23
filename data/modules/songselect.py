@@ -167,7 +167,7 @@ def main(screen,w,h):
             rtl=290-rtl[2],125
             screen.blit(t,(rtl[0],rtl[1]))
             if altbutton:
-                tmp = renderapi.getfonts(0).render(str(points[selected[1]])+'pp',True,(255,255,255))
+                tmp = renderapi.getfonts(0).render(str(points[selected[1]]*mult)+'pp',True,(255,255,255))
             else:
                 tmp = renderapi.getfonts(0).render(clockify(get_info('lengths')[selected[1]]),True,(255,255,255))
             if len(diffs)>1 and not diffsec:
