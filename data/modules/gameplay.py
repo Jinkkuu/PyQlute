@@ -23,6 +23,7 @@ hittext='PERFECT','GREAT','MEH','MISS'
 hitacc='LATE','GG','EARLY'
 hitcolour=(100, 120, 200),(100, 200, 100),(200, 200, 100),(200, 100, 100)
 rate=65
+judgewindow=0,0
 def iscatched(keymap,block,isauto,ob,h):
     from data.modules.songselect import modsen
     lean=(perfect,great,ok,miss)
@@ -57,6 +58,7 @@ def reset_score():
     clickedkeys=[]
     firstrow=[0 for a in pos]
     if ob:
+        step=get_info('bpm')
         for a in ob:
             notfound=1
             for kik in range(0,len(pos)):
@@ -69,7 +71,11 @@ def reset_score():
                     if int(a[0])>=512-(128*(kik+1)):
                         barpos=kik
                         break            
-            clickedkeys.append([1,barpos,int(a[2]),a[0]])
+#            leng=int(a[-1].split(':')[0])//1000 # ~~ Do not uncomment this ;-;
+#            if leng>0:
+#                clickedkeys.extend([1,barpos,int(a[2])+(step*(bob)),a[0],1] for bob in range(0,leng))
+#            else:
+                clickedkeys.append([1,barpos,int(a[2]),a[0],0])
     combo = 0
     ncombo = 0
     maxcombo = 0
