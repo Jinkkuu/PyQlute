@@ -24,7 +24,8 @@ hitacc='LATE','GG','EARLY'
 hitcolour=(100, 120, 200),(100, 200, 100),(200, 200, 100),(200, 100, 100)
 rate=65
 judgewindow=0,0
-def iscatched(keymap,block,isauto,ob,h):
+keymap = tuple((100*id,30,100,30) for id in range(0,4))
+def iscatched(block,isauto,ob,h):
     from data.modules.songselect import modsen
     lean=(perfect,great,ok,miss)
     tick=0
@@ -75,7 +76,7 @@ def reset_score():
 #            if leng>0:
 #                clickedkeys.extend([1,barpos,int(a[2])+(step*(bob)),a[0],1] for bob in range(0,leng))
 #            else:
-                clickedkeys.append([1,barpos,int(a[2]),a[0],0])
+            clickedkeys.append([1,barpos,int(a[2]),a[0],0])
     combo = 0
     ncombo = 0
     maxcombo = 0
@@ -99,10 +100,10 @@ def song_progress(screen,start,end,w,h):
         screen.blit(tmp,(25,h-50))
         pygame.draw.rect(screen,(50,50,50),pygame.Rect(10,h-20,w-20,10))
         pygame.draw.rect(screen,(255,255,255),pygame.Rect(10,h-20,slop*(w-20),10))
-def showplayfield(screen,pos,keymap,bypass=False):
+def showplayfield(screen,pos,bypass=False):
     linecol=(80,80,100)
     h=screen.get_height()
-    count=getkeycount()
+    count=4
     space=(keymap[0][2]*count//2)
     pygame.draw.rect(screen,(50,50,50),(pos[0]-space,h-60+pos[1]-10,keymap[0][2]*count,10)) # Judgement Line
     col=(10,30),(20,40)
@@ -161,8 +162,7 @@ def main(screen,w,h):
             accuracy=round(((hits[0]+(hits[1]/2)+(hits[2]/3))/(maxc))*100,2)
         else:
             accuracy=100
-        keymap=tuple((100*id,h-30,100,30) for id in range(0,getkeycount()))
-        showplayfield(screen,fieldpos,keymap)
+        showplayfield(screen,fieldpos)
         objects=getobjects()
         ti=get_pos()
         keyqueue=[]
@@ -190,7 +190,7 @@ def main(screen,w,h):
                         else:
                             pygame.draw.rect(screen,notecolour[0],(fieldpos[0]-((keymap[0][2]*getkeycount()//2))+keymap[ob[1]][0],block-keymap[0][3],keymap[0][2],keymap[0][3]))
 
-                    judge=iscatched(keymap,block,modsen[0],obid,h)
+                    judge=iscatched(block,modsen[0],obid,h)
 
                     if modsen[0]:
                         if block>=h-rate:
