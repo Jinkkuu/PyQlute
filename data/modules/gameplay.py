@@ -22,7 +22,7 @@ health=maxhealth
 hittext='PERFECT','GREAT','MEH','MISS'
 hitacc='LATE','GG','EARLY'
 hitcolour=(100, 120, 200),(100, 200, 100),(200, 200, 100),(200, 100, 100)
-rate=50
+rate=65
 def iscatched(keymap,block,isauto,ob,h):
     from data.modules.songselect import modsen
     lean=(perfect,great,ok,miss)
@@ -47,21 +47,29 @@ def iscatched(keymap,block,isauto,ob,h):
     return (lastcall,tick,tim)
 
 def reset_score():
-    global points,combo,ncombo,maxcombo,hits,clickedkeys, ncombo,keys, combotime, accuracy, timetaken,health,keyslight,pos
-    e=getkeypos()
-    if e:
-        pos = e
-    else:
-        pos = (64,192,320,448) # Keys
+    global points,combo,ncombo,maxcombo,hits,clickedkeys, ncombo,keys, combotime, accuracy, timetaken,health,keyslight,pos,firstrow
+    pos = (64,192,320,448) # Keys
     keyslight = [Tween(begin=0) for a in range(0,getkeycount())]
     points = 0
     health = 10
     timetaken = time.time()
     ob=getobjects()
     clickedkeys=[]
+    firstrow=[0 for a in pos]
     if ob:
         for a in ob:
-            clickedkeys.append([1,int(a[0]),int(a[2]),0])
+            notfound=1
+            for kik in range(0,len(pos)):
+                if int(a[0])==int(pos[kik]):
+                    barpos=kik
+                    notfound=False
+                    break
+            if notfound:
+                for kik in range(0,4):
+                    if int(a[0])>=512-(128*(kik+1)):
+                        barpos=kik
+                        break            
+            clickedkeys.append([1,barpos,int(a[2]),a[0]])
     combo = 0
     ncombo = 0
     maxcombo = 0
@@ -109,7 +117,7 @@ def resetcursor():
     global objecon
     objecon = 0
 def main(screen,w,h):
-    global objecon, points,combo,maxcombo,hits,clickedkeys,judgewindow, ncombo,keyslight,keys, combotime,accuracy,health,firstobject
+    global objecon, points,combo,maxcombo,hits,clickedkeys,judgewindow, ncombo,keyslight,keys , combotime,accuracy,health
     if getactivity() == 5:
         tick=time.time()
         from data.modules.songselect import modsen,reload_map,getmaxpoints,selected,mods,get_mods,getmult
@@ -125,7 +133,7 @@ def main(screen,w,h):
         elif health>=maxhealth:
             health=maxhealth
         t1=0.01
-        maxt1=0.15
+        maxt1=0.10
         t1=t1*(combo+ncombo+0.01)
         if t1>=maxt1:
             t1=maxt1
@@ -153,66 +161,63 @@ def main(screen,w,h):
         ti=get_pos()
         keyqueue=[]
         if objects:
+            koala=[]
             obid=1
             objectcache=clickedkeys[objecon:255+objecon]
+            tmp=objectcache[:4]
             if len(objectcache):
-                firstobject=ti-int(objectcache[0][2])+h
+                firstobject=int(ti-int(objectcache[0][2])+h)
             for ob in objectcache:
-                block=ti-int(ob[2])+h
+                block=int(ti-int(ob[2])+h)
                 if ((block <=h+100 and block>=-40 and not modsen[2]) or (block <=h+100 and block>=h//2 and modsen[2])) and ob[0]:
-                    notfound=True
+
                     if obid==1:
-                        if not end*1000000 >=999000 and health>1:
-                            health-=t1*(combo+ncombo)
-                    for kik in range(0,len(pos)):
-                        if int(ob[1])==int(pos[kik]):
-                            barpos=kik
-                            notfound=False
-                            break
-                    if notfound:
-                        for kik in range(0,4):
-                            if int(ob[1])>=512-(128*(kik+1)):
-                                barpos=kik
-                                break
+                        if health-t1>1 and accuracy<95:
+                            health-=t1
+                    
                     
                     if not modsen[1] or modsen[1] and block<=h//2:
                         bar=getimg('note.png')
                         if bar:
                             keyoffset=bar.get_rect()[3]
-                            screen.blit(bar,(fieldpos[0]-((keymap[0][2]*getkeycount()//2))+keymap[barpos][0],block-keyoffset))
+                            screen.blit(bar,(fieldpos[0]-((keymap[0][2]*getkeycount()//2))+keymap[ob[1]][0],block-keyoffset))
                         else:
-                            pygame.draw.rect(screen,notecolour[ob[3]],(fieldpos[0]-((keymap[0][2]*getkeycount()//2))+keymap[barpos][0],block-keymap[0][3],keymap[0][2],keymap[0][3]))
+                            pygame.draw.rect(screen,notecolour[0],(fieldpos[0]-((keymap[0][2]*getkeycount()//2))+keymap[ob[1]][0],block-keymap[0][3],keymap[0][2],keymap[0][3]))
 
                     judge=iscatched(keymap,block,modsen[0],obid,h)
 
                     if modsen[0]:
                         if block>=h-rate:
-                            keys[kik]=1
-                    if (judge[0] and keys[kik] and (block>=firstobject-10 and block<=firstobject+10)) or judge[1]==3: 
+                            keys[ob[1]]=1
+                    if (judge[0] and keys[ob[1]]) or judge[1]==3: 
                         hit=judge[1]
+                        keys[ob[1]]=0
                         clickedkeys[objecon+obid-1][0] = 0    
                         if hit==3:
                             health-=t1*(ncombo+combo)
                         else:
-                            health+=10
+                            koala.append(ob[1])
+                            health+=1
                         if block<h-rate-2:
-                            tmp=2
+                            hitratio=2
                         elif block>h-rate-2 and block<h-rate+2:
-                            tmp=1
+                            hitratio=1
                         elif block>h-rate+2:
-                            tmp=0
+                            hitratio=0
+                        else:
+                            hitratio=1
                         try:
-                            judgewindow=hit,tmp
+                            judgewindow=hit,hitratio
                         except Exception:
-                            judgewindow=hit,tmp
+                            judgewindow=hit,hitratio
                         hits[hit]+=1
+                        combotime=time.time()
                         if not hit==3:
                             combo+=1
                             if ncombo>0:
                                 ncombo-=1
                             if combo>maxcombo:
                                 maxcombo=combo
-                            combotime=time.time()
                             try:
                                 t=a.split(':')[-1]
                                 if not t=='' and getsetting('hitsound'):
@@ -221,10 +226,8 @@ def main(screen,w,h):
                             except Exception:
                                 pass
                         else:
-                            ncombo+=1
-                            combotime=time.time()
+                            ncombo+=combo+1
                             combo=0
-                            health-=t1
                     # Saves FRAMES
                 if pygame.Rect.colliderect(pygame.Rect(0,h+100,w,20),pygame.Rect(0,block,w,30)):
                     objecon+=1
@@ -232,8 +235,8 @@ def main(screen,w,h):
 
 
         for a in range(0,getkeycount()):
-            if keys[a]:
-                keyslight[a]=Tween(begin=1, end=0,duration=kdur,easing=Easing.BOUNCE,easing_mode=EasingMode.OUT)
+            if a in koala or keys[a]:
+                keyslight[a]=Tween(begin=1, end=0,duration=kdur,easing=Easing.CUBIC,easing_mode=EasingMode.OUT)
                 keyslight[a].start()
                 keys[a]=0
         if length:
@@ -261,16 +264,18 @@ def main(screen,w,h):
                 tmp=400
             pygame.draw.rect(screen,(255,255,255),(w//2-200,5,tmp,10),border_radius=10)
             get_mods(screen,(20,20))
+        kek=(w//2-200,100,400,100)
         if combo!=0:
-            kek=(w//2-200,100,400,100)
             comboo=str(format(int(combo),','))
             if sre:
                 renderapi.center_text(screen,comboo,(kek[0]-sre,kek[1],kek[2],kek[3]),'score',(255,0,0))
                 renderapi.center_text(screen,comboo,(kek[0]+sre,kek[1],kek[2],kek[3]),'score',(0,0,255))
                 renderapi.center_text(screen,comboo,(kek[0],kek[1]+sre,kek[2],kek[3]),'score',(0,255,0))
-                renderapi.center_text(screen,hittext[judgewindow[0]],(kek[0],kek[1]+60,kek[2],kek[3]),'score',hitcolour[judgewindow[0]])
-                renderapi.center_text(screen,hitacc[judgewindow[1]],(kek[0],kek[1]+90,kek[2],kek[3]),colour=(255,255,255))
             renderapi.center_text(screen,comboo,(kek),'score',(255,255,255))
+        if sre:
+            renderapi.center_text(screen,hittext[judgewindow[0]],(kek[0],kek[1]+60,kek[2],kek[3]),'score',hitcolour[judgewindow[0]])
+            if judgewindow[0]!=3:
+                renderapi.center_text(screen,hitacc[judgewindow[1]],(kek[0],kek[1]+90,kek[2],kek[3]),colour=(255,255,255))
             
 
 #        tmp = renderapi.getfonts(0).render(str(combo),True,(255,255,255))
