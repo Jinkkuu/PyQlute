@@ -196,15 +196,15 @@ def main(screen,w,h):
                         else:
                             health+=10
                         if block<h-rate-2:
-                            h=2
+                            tmp=2
                         elif block>h-rate-2 and block<h-rate+2:
-                            h=1
+                            tmp=1
                         elif block>h-rate+2:
-                            h=0
+                            tmp=0
                         try:
-                            judgewindow=hit,h
+                            judgewindow=hit,tmp
                         except Exception:
-                            judgewindow=hit,h
+                            judgewindow=hit,tmp
                         hits[hit]+=1
                         if not hit==3:
                             combo+=1
@@ -246,6 +246,8 @@ def main(screen,w,h):
                 transitionprep(9)
             if not getsetting('hidegamehud'):
                 song_progress(screen,get_pos(),length+1000,w,h)
+        else:
+            print('...')
         if not getsetting('hidegamehud'):
             pygame.draw.rect(screen,maincolour[0],pygame.Rect(0,0,w,55),border_bottom_left_radius=20,border_bottom_right_radius=20)
             pygame.draw.rect(screen,maincolour[1],pygame.Rect(w//2-200,19,401,61),border_radius=20)
