@@ -2,7 +2,7 @@ import pygame.gfxdraw,time,threading,os
 import data.modules.renderapi as renderapi
 from data.modules.bootstrap import getactivity,setactivity,transitionprep,gamepath,sify,clockify,scrollbar,getact,getimg,setmsg,timeform,getuserdata
 from data.modules.beatmap_processor import get_info,cache_beatmap,grabobjects,getobjects,random_beatmap,reloadbg,getbackground,loadstats,beatmaplist,beatmapselect,getkeycount
-from data.modules.colours import maincolour,emblemcolour
+from data.modules.colours import maincolour,emblemcolour,songselectcolour,mapidlecolour,mapselectedcolour
 from data.modules.audio import load_music,music_control,set_gametime
 from data.modules.input import get_input
 from data.modules.gameplay import resetcursor,reset_score
@@ -132,13 +132,15 @@ def main(screen,w,h):
                         hover=20
                         buttonid=id
                         click=1
-                        col=(maincolour[2][0]+hover,maincolour[2][1]+hover,maincolour[2][2]+hover)
-                    else:
-                        hover=0
                         if id==selected[diffsec]:
-                            col = maincolour[3]
+                            col = mapselectedcolour
                         else:
-                            col=maincolour[2]
+                            col=(mapidlecolour[0]+hover,mapidlecolour[1]+hover,mapidlecolour[2]+hover)
+                    else:
+                        if id==selected[diffsec]:
+                            col = mapselectedcolour
+                        else:
+                            col=mapidlecolour
                     scr=pygame.surface.Surface((w//2,80))
                     scr.fill(col)
                     if not diffsec:
@@ -192,7 +194,7 @@ def main(screen,w,h):
                         leadmode=1
                     else:
                         hov=0
-                    pygame.draw.rect(lpanel,(maincolour[0][0]+hov,maincolour[0][1]+hov,maincolour[0][2]+hov),pygame.Rect(leadpos)) 
+                    pygame.draw.rect(lpanel,(mapidlecolour[0]+hov,mapidlecolour[1]+hov,mapidlecolour[2]+hov),pygame.Rect(leadpos)) 
                     lpanel.blit(renderapi.getfonts(0).render('#'+str(c+1)+' '+a["username"],True,col),(leadpos[0]+10,leadpos[1]+10))
                     lpanel.blit(renderapi.getfonts(1).render(format(int(a['score']),',')+' - '+str(int(a["points"]))+'pp ('+str(int(a['combo']))+'x) '+timeform(int(time.time()-a['time'])),True,(255,255,255)),(leadpos[0]+10,leadpos[1]+38))
                     renderapi.center_text(lpanel,a['mods'],(leadpos[0]+250,leadpos[1]+45,0,0),('rtl','min'),(255,255,255)) 
@@ -220,8 +222,8 @@ def main(screen,w,h):
             else:
                 tm.append(t[b-1])
         mod,modh=renderapi.draw_button(screen,((tm[0],h-(160*pop),90,40) ,(tm[1],h-(110*pop),90,40) ,(tm[2],h-(160*pop),90,40) ,(tm[3],h-(110*pop),90,40) ,(tm[4],h-(160*pop),90,40) ,(tm[5],h-(160*pop),90,40)),modsalias,return_hover=1,enabled_button=modsen)
-        pygame.draw.rect(screen,maincolour[1],pygame.Rect(0,h-60,w,60))
-        card(screen,(w//2-80,h-55),mini=1,accuracy=getmystats()[0],points=getmystats()[1],rank=getmystats()[2],username=getsetting('username'))
+        pygame.draw.rect(screen,songselectcolour,pygame.Rect(0,h-60,w,60))
+        card(screen,(w//2-80,h-55),hidebg=1,overidecolour=(60,60,60),mini=1,accuracy=getmystats()[0],points=getmystats()[1],rank=getmystats()[2],username=getsetting('username'))
         
         
         if  beatcount:
@@ -230,7 +232,7 @@ def main(screen,w,h):
         else:
             gobutton = 0
             title = 'No Beatmaps Installed :<'
-        pygame.draw.rect(screen,maincolour[1],pygame.Rect(0,0,w,60))
+        pygame.draw.rect(screen,songselectcolour,pygame.Rect(0,0,w,60))
         
         button = renderapi.draw_button(screen,((0,h-60,100,60),(100,h-60,100,60),),('Back',modtext),border_radius=0)
         tmp = renderapi.getfonts(0).render(title,True,(255,255,255))
