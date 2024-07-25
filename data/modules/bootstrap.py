@@ -122,7 +122,7 @@ def setmsg(value):
 def check_gameversion():
     import requests
     ver=requests.get('https://github.com/Jinkkuu/PyQlute/releases/latest/download/RELEASE',timeout=10).text.rstrip('\n') # type: ignore
-    if gamever!=ver and gamever=='0.0.0':
+    if gamever!=ver and gamever!='0.0.0':
         notification('New update is avaliable!',desc=str(ver)+' is available, check on itch.io to update!')
 
 
