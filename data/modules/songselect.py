@@ -1,7 +1,7 @@
 import pygame.gfxdraw,time,threading,os
 import data.modules.renderapi as renderapi
 from data.modules.bootstrap import getactivity,setactivity,transitionprep,gamepath,sify,clockify,scrollbar,getact,getimg,setmsg,timeform,getuserdata
-from data.modules.beatmap_processor import get_info,cache_beatmap,grabobjects,getobjects,random_beatmap,reloadbg,getbackground,loadstats,beatmaplist,beatmapselect,getkeycount
+from data.modules.beatmap_processor import get_info,cache_beatmap,grabobjects,getobjects,random_beatmap,reloadbg,getbackground,loadstats,beatmaplist,beatmapselect,getkeycount,suna
 from data.modules.colours import maincolour,emblemcolour,songselectcolour,mapidlecolour,mapselectedcolour
 from data.modules.audio import load_music,music_control,set_gametime
 from data.modules.input import get_input
@@ -396,20 +396,10 @@ def prepare(buttonid,reloadmusic=True,reloadleaderboard=True,getranky=False):
     if mod[0]==' ':
         mod=mod[1:]
     creator=get_info('creator')
-    starrating=0
     if acc:
         grabobjects(gamepath+selectedqueue[1]+'/'+get_info('diffurl')[selid])
         bpm=get_info('bpm')
-        x=0
-        for a in getobjects():
-            so=int(a[2])
-            if so>x:
-                suna=((so-x)/bpm)
-                if not suna<1.1:
-                    suna=0
-                #print('[S U N A]',round(suna,2),str(round(starrating,2))+' Stars ')
-                starrating+=suna*0.01
-                x=so
+        starrating=suna(getobjects())
     else:
         print('No maps found')
     startani(diffsec)

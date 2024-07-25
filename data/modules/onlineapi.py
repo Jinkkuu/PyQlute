@@ -115,7 +115,6 @@ def ondemand():
     nettick=0
     if getsetting('username') and getsetting('password'):
         issigned=1
-    reloadprofile()
     while True:
         if getstop():
             exit()
@@ -134,6 +133,7 @@ def ondemand():
                     f=f.text
                     menunotice=requests.get(getsetting('apiurl')+'api/menunotice',headers={'User-Agent': 'Qlutev3Client-'+version()[0]},timeout=5).text
                     qlutaerror=False
+                    reloadprofile()
                 except Exception as err:
                     print(err)
                     totperf=0

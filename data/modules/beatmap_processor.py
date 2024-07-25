@@ -194,6 +194,21 @@ def grabobjects(value):
         pos=None
         setkeycount(4)
         objects=None
+def suna(ob):
+    starrating=0
+    if ob:
+        x=0
+        bpm=get_info('bpm')
+        for a in ob:
+            so=int(a[2])
+            if so>x:
+                suna=((so-x)/bpm)
+                if not suna<1.1:
+                    suna=0
+                #print('[S U N A]',round(suna,2),str(round(starrating,2))+' Stars ')
+                starrating+=suna*0.01
+                x=so
+    return starrating
 def getobjects():
     return objects
 oldw=0
