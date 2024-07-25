@@ -150,8 +150,7 @@ def scrollbar(screen,startpos,endsize,search=3,length=5,colour=None):
 def getscreen():
     return screen.get_width(),screen.get_height()
 
-notemsg=['','']
-noteani=[Tween(begin=0, end=1,duration=150,easing=Easing.CUBIC,easing_mode=EasingMode.OUT,boomerang=True),0]
+note=[]
 ## Notifications prestart
 vol=100
 volvisual=0
@@ -171,19 +170,19 @@ def volchg(t):
     setsetting('master',vol)
 
 def notification(title,desc=''):
-    global noteani,notemsg
+    global noteani,note
     if os.path.isfile(samplepath+'notify.wav'):
         pygame.mixer.Sound(samplepath+'notify.wav').play()
-    notemsg=[title,desc]
-    noteani=[Tween(begin=0, end=1,duration=500,easing=Easing.CUBIC,easing_mode=EasingMode.OUT,boomerang=True),0]
-    noteani[0].start()
+    note.append([title,desc,[Tween(begin=0, end=1,duration=500,easing=Easing.CUBIC,easing_mode=EasingMode.OUT,boomerang=True),0]])
+    note[-1][2][0].start()
 def main():
-    global transani,img,screen,notemsg,vol,volani,volvisual
+    global transani,img,screen,note,vol,volani,volvisual
     import data.modules.settings as settings
     import data.modules.renderapi as renderapi
     from data.modules.mainmenu import main as mainmenu
     from data.modules.songselect import main as songselect
     from data.modules.accountpage import loginscreen
+    from data.modules.editmenu import editmenu
     from data.modules.songselect import ecross,prepare
     from data.modules.gameplay import main as gameplay
     from data.modules.resultsscreen import beatres
@@ -252,6 +251,8 @@ def main():
                     volchg(0)
                 elif event.key  ==  pygame.K_EQUALS and not getactivity() == 7:
                     volchg(1)
+                elif event.key == pygame.K_F10:
+                    notification('S-Ranker',desc='Like to show off. huh?')
                 elif event.key == pygame.K_F12:
                     sub = screen.subsurface(pygame.Rect(0,0,w,h))
                     scid=settings.getsetting('screenshot_id')
@@ -260,10 +261,12 @@ def main():
                     settings.setsetting('screenshot_id',scid+1)
                 elif event.key == pygame.K_F11:
                     pygame.display.toggle_fullscreen()
+                    settings.setsetting('fullscreen',not settings.getsetting('fullscreen'))
                 elif event.key == pygame.K_F5:
                     settings.setsetting('fpsmetre',not settings.getsetting('fpsmetre'))
         mainmenu(screen,w,h)
         songselect(screen,w,h)
+        editmenu(screen,w,h)
         try:
             gameplay(screen,w,h)
         except Exception as err:
@@ -320,31 +323,31 @@ def main():
             pygame.draw.rect(screen,(50,50,50),pygame.Rect(mouse[0]+rec[2]+5,mouse[1]+rec[3]+5,txtrect[2]+4,txtrect[3]+4),border_radius=5)
             screen.blit(tmp,(mouse[0]+rec[2]+8,mouse[1]+rec[3]+8))
             setmsg('')
-        if not notemsg[0]=='':
-            sh=0
-            sw=0
-            for a in range(1,3):
-                tmp = renderapi.getfonts(a-1).render(str(notemsg[a-1]),  True,  (0,0,0))
-                txtrect=tmp.get_rect()
-                if txtrect[2]+20>sw:
-                    sw+=(txtrect[2]+20)-sw
-                sh+=txtrect[3]+30
-            notepos=w//2-(sw//2),(noteani[0].value*120)-100,sw,sh
-            fcolor=(255*noteani[0].value,255*noteani[0].value,255*noteani[0].value)
-            pygame.draw.rect(screen,(noteani[0].value*92,noteani[0].value*90,noteani[0].value*145),notepos,border_radius=10)
-            renderapi.center_text(screen,notemsg[0],(notepos[0],notepos[1]+15,notepos[2],10),colour=fcolor)
-            renderapi.center_text(screen,notemsg[1],(notepos[0],notepos[1]+20,notepos[2],notepos[3]-20),type='min',colour=fcolor)
-            if noteani[0].value==1 and not noteani[1]:
-                if noteani[1]==0:
-                    noteani[1]=time.time()
-                noteani[0].pause()
-            elif noteani[1]!=0 and time.time()-noteani[1]>3:
-                noteani[0].resume()
-                if noteani[0].value==0:
-                    noteani[0].pause()
-                    notemsg=['','']
-                    noteani[1]=0
-        noteani[0].update()
+        offset=0
+        for notes in enumerate(note):
+            if not notes[1][0]=='':
+                sh=0
+                sw=0
+                for a in range(1,3):
+                    tmp = renderapi.getfonts(a-1).render(str(notes[1][a-1]),  True,  (0,0,0))
+                    txtrect=tmp.get_rect()
+                    if txtrect[2]+20>sw:
+                        sw+=(txtrect[2]+20)-sw
+                    sh+=txtrect[3]+10
+                notepos=w-(notes[1][2][0].value*(sw+10)),h-10-sh-offset,sw,sh
+                offset+=notes[1][2][0].value*(sh+10)
+                pygame.draw.rect(screen,(92,90,145),notepos,border_radius=5)
+                screen.blit(renderapi.getfonts(0).render(notes[1][0],1,(255,255,255)),(notepos[0]+10,notepos[1]+10))
+                screen.blit(renderapi.getfonts(1).render(notes[1][1],1,(255,255,255)),(notepos[0]+10,notepos[1]+35))
+                if notes[1][2][0].value==1 and not notes[1][2][1]:
+                    if notes[1][2][1]==0:
+                        note[notes[0]][2][1]=time.time()
+                    notes[1][2][0].pause()
+                elif notes[1][2][1]!=0 and time.time()-notes[1][2][1]>3:
+                    notes[1][2][0].resume()
+                    if notes[1][2][0].value==0:
+                        note.remove(notes[1])
+            notes[1][2][0].update()
 #        x=0
 #        for a in maincolour:
 #            pygame.draw.rect(screen,a,(20*x,100,20,20))
