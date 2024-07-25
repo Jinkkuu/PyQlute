@@ -115,6 +115,7 @@ def ondemand():
     nettick=0
     if getsetting('username') and getsetting('password'):
         issigned=1
+    reloadprofile()
     while True:
         if getstop():
             exit()
@@ -128,19 +129,16 @@ def ondemand():
 #                reloadrooms()
             if issigned:
                 try:
-                    reloadprofile()
                     ps=time.time()
                     f=requests.get(getsetting('apiurl')+'api/setstatus?'+str(getsetting('username'))+'?playing?'+str(status),headers={'User-Agent': 'Qlutev3Client-'+version()[0]},timeout=5)
                     f=f.text
                     menunotice=requests.get(getsetting('apiurl')+'api/menunotice',headers={'User-Agent': 'Qlutev3Client-'+version()[0]},timeout=5).text
                     qlutaerror=False
-                    pingspeed=int((time.time()-ps)/0.01)
                 except Exception as err:
                     print(err)
                     totperf=0
                     totscore=0
                     totacc=0
-                    pingspeed=0
                     totrank=0
                     level=1
                     menunotice='Server is Busy'
