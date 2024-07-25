@@ -8,7 +8,7 @@ gameeditions='stable','beta','canary','dev'
 gameauthor='Jinkku'
 from tweener import *
 import os,pygame,zipfile,time,gc
-from data.modules.colours import maincolour
+from data.modules.colours import maincolour,scrollfront,scrollback
 gc.enable()
 def resource_path(relative_path):
     from os.path import abspath, join
@@ -116,6 +116,18 @@ for a in paths:
 def setmsg(value):
     global msg
     msg=value
+
+
+
+def check_gameversion():
+    import requests
+    ver=requests.get('https://github.com/Jinkkuu/PyQlute/releases/latest/download/RELEASE',timeout=10).text.rstrip('\n') # type: ignore
+    if gamever!=ver and gamever=='0.0.0':
+        notification('New update is avaliable!',desc=str(ver)+' is available, check on itch.io to update!')
+
+
+
+
 def clockify(clo):
     clo/=1000
     minraw=int(clo/60)
@@ -138,13 +150,13 @@ def sify(val1,val2):
 def getcopyrighttext():
     return gameauthor+' 2023-2024'
 def scrollbar(screen,startpos,endsize,search=3,length=5,colour=None):
+    barheight=150
     if not colour:
-        colour=maincolour[2]
+        colour=scrollfront
     try:
         t=-20
-        t=(search/(length))*(endsize[1])
-        pygame.draw.rect(screen,maincolour[1],pygame.Rect(startpos[0],startpos[1],endsize[0],endsize[1]))
-        pygame.draw.rect(screen,colour,pygame.Rect(startpos[0],startpos[1]-t,endsize[0],endsize[1]//length))
+        t=(search/(length))*(endsize[1]-barheight+5)
+        pygame.draw.rect(screen,colour,pygame.Rect(startpos[0],startpos[1]-t,endsize[0],barheight))
     except Exception:
         pass
 def getscreen():
@@ -202,6 +214,7 @@ def main():
     fpsl=[]
     upl=[]
     img=reloadimg()
+    threading.Thread(target=check_gameversion).start()
     threading.Thread(target=ondemand).start()
     seeyanexttimetext = renderapi.getfonts(2).render('See you next time~',True,(255,255,255))
     if len(beatmaplist):
