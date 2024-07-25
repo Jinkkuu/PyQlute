@@ -337,8 +337,8 @@ def main():
                 notepos=w-(notes[1][2][0].value*(sw+10)),h-10-sh-offset,sw,sh
                 offset+=notes[1][2][0].value*(sh+10)
                 pygame.draw.rect(screen,(92,90,145),notepos,border_radius=5)
-                screen.blit(renderapi.getfonts(0).render(notes[1][0],1,(255,255,255)),(notepos[0]+10,notepos[1]+10))
-                screen.blit(renderapi.getfonts(1).render(notes[1][1],1,(255,255,255)),(notepos[0]+10,notepos[1]+35))
+                screen.blit(renderapi.getfonts(0).render(str(notes[1][0]),1,(255,255,255)),(notepos[0]+10,notepos[1]+10))
+                screen.blit(renderapi.getfonts(1).render(str(notes[1][1]),1,(255,255,255)),(notepos[0]+10,notepos[1]+35))
                 if notes[1][2][0].value==1 and not notes[1][2][1]:
                     if notes[1][2][1]==0:
                         note[notes[0]][2][1]=time.time()
