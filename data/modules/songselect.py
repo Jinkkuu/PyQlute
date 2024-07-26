@@ -1,11 +1,11 @@
 import pygame.gfxdraw,time,threading,os
 import data.modules.renderapi as renderapi
 from data.modules.bootstrap import getactivity,setactivity,transitionprep,gamepath,sify,clockify,scrollbar,getact,getimg,setmsg,timeform,getuserdata
-from data.modules.beatmap_processor import get_info,cache_beatmap,grabobjects,getobjects,random_beatmap,reloadbg,getbackground,loadstats,beatmaplist,beatmapselect,getkeycount,suna
+from data.modules.beatmap_processor import get_info,cache_beatmap,grabobjects,getobjects,random_beatmap,reloadbg,getbackground,loadstats,beatmaplist,getkeycount,suna
 from data.modules.colours import maincolour,emblemcolour,songselectcolour,mapidlecolour,mapselectedcolour
 from data.modules.audio import load_music,music_control,set_gametime
 from data.modules.input import get_input
-from data.modules.gameplay import resetcursor,reset_score
+from data.modules.gameplay import resetcursor,reset_score,getpoint
 from data.modules.card import main as card
 from data.modules.shopscreen import rankmodes
 from data.modules.onlineapi import getmystats,getleaderboard,rleaderboard,getstat
@@ -77,7 +77,7 @@ def main(screen,w,h):
     else:
         lpanel.fill((0,0,0,0))
     if getactivity() == 2:
-        from data.modules.beatmap_processor import beatmaplist,beatmapselect
+        from data.modules.beatmap_processor import beatmaplist
         if olds!=(w,h):
             olds=w,h
             panel=pygame.surface.Surface((300,olds[1]-120))
@@ -101,7 +101,7 @@ def main(screen,w,h):
         click=0
         bg=getbackground(w,h)
         screen.fill((maincolour[4]))
-        if bg:
+        if bg and len(beatmaplist):
             screen.blit(bg,(-5-parallax[0],-5-parallax[1]))
         screen.blit(getflash(),(0,0))
         screen.blit(panel,(0,60))
@@ -109,7 +109,7 @@ def main(screen,w,h):
             modtext=str(round(mult,2))+'x'
         else:
             modtext='Mods'
-        beatcount=len(beatmapselect)
+        beatcount=len(beatmaplist)
         diffs=get_info('maps')
         pos=int(-cross[diffsec]//40//2)
         if pos-10>0:
@@ -120,7 +120,7 @@ def main(screen,w,h):
         id=pos
         oid=0
         if beatcount:
-            i=(beatmapselect,diffs)
+            i=(beatmaplist,eval(diffs))
             for a in i[diffsec][pos:end]:
                 offset=cross[diffsec]+(80*id)+(h//2-80)
                 if 0>=-offset and -offset>=-h+60:
@@ -143,21 +143,18 @@ def main(screen,w,h):
                     if not diffsec:
                         meta = renderapi.getfonts(0).render(a['title'],True,(255,255,255)), renderapi.getfonts(0).render(a['artist']+' (mapped by '+str(a['creator'])+')',True,(255,255,255))
                     else:
-                        meta = renderapi.getfonts(0).render(a,True,(255,255,255)),renderapi.getfonts(0).render(str(int(get_info('points')[id]*mult))+'pp',True,(255,255,255))
+                        meta = renderapi.getfonts(0).render(a,True,(255,255,255)),renderapi.getfonts(0).render(str(round(eval(get_info('starratings'))[id]*mult,2))+' Stars',True,(255,255,255))
                     scr.blit(meta[0],(10,10))
                     scr.blit(meta[1],(10,50))
                     screen.blit(scr,(w//2,offset))
                     obj+=1
                 id+=1
                 oid+=1
-
-            points=get_info('points')
-            pp=(int(points[0]),int(points[-1]))
             t=renderapi.getfonts(0).render(rankmodes[ranktype][0],True,(255,255,255))
             rtl=t.get_rect()
             fr=rtl
             rtl=290-rtl[2],80
-            screen.blit(renderapi.getfonts(0).render(str(get_info('bpm'))+' BPM',True,(255,255,255)),(20,85))
+            screen.blit(renderapi.getfonts(0).render(str(60000//get_info('bpm'))+' BPM',True,(255,255,255)),(20,85))
             pygame.draw.rect(screen,rankmodes[ranktype][1],(rtl[0],rtl[1],fr[2]+10,35),border_bottom_left_radius=10,border_top_left_radius=10)
             screen.blit(t,(rtl[0]+5,rtl[1]+7))
             t=renderapi.getfonts(0).render(str(round(starrating*(mult+1)/2,2))+' Stars',True,(255,255,255))
@@ -166,9 +163,9 @@ def main(screen,w,h):
             rtl=290-rtl[2],125
             screen.blit(t,(rtl[0],rtl[1]))
             if altbutton:
-                tmp = renderapi.getfonts(0).render(str(points[selected[1]]*mult)+'pp',True,(255,255,255))
+                tmp = renderapi.getfonts(0).render(str(getmaxpoints())+'pp',True,(255,255,255))
             else:
-                tmp = renderapi.getfonts(0).render(clockify(get_info('lengths')[selected[1]]),True,(255,255,255))
+                tmp = renderapi.getfonts(0).render(clockify(eval(get_info('lengths'))[selected[1]]),True,(255,255,255))
             if len(diffs)>1 and not diffsec:
                 starticon='next.png'
             else:
@@ -301,7 +298,7 @@ def main(screen,w,h):
                     altbutton=0
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_END and len(beatmaplist):
-                    i=(beatmapselect,diffs)
+                    i=(beatmaplist,diffs)
                     selected[diffsec]=len(i[diffsec])-1
                     prepare(selected[diffsec],reloadmusic=not diffsec,getranky=not diffsec)
                     resetdcursor()
@@ -313,7 +310,7 @@ def main(screen,w,h):
                 elif event.key == pygame.K_LALT:
                     altbutton=1
                 elif event.key == pygame.K_RETURN and len(beatmaplist):
-                    if not diffsec and len(diffs)>1:
+                    if not diffsec and len(eval(diffs))>1:
                         diffsec = not diffsec
                     else:
                         transitionprep(5)
@@ -333,9 +330,9 @@ def main(screen,w,h):
                     modsani[0].start()
                 elif event.key == pygame.K_F2 and len(beatmaplist) and not diffsec:
                     tmp=random_beatmap()
-                    prepare(list(beatmaplist.keys()).index(tmp['songtitle']),reloadmusic=not diffsec,getranky=not diffsec)
+                    prepare(tmp[1],reloadmusic=not diffsec,getranky=not diffsec)
                     resetdcursor()                    
-                elif event.key == pygame.K_DOWN and len(beatmaplist):
+                elif event.key == pygame.K_DOWN and len(beatmaplist) and not diffsec:
                     if not selected[diffsec] >= id-1:
                         selected[diffsec]+=1
                     else:
@@ -344,17 +341,16 @@ def main(screen,w,h):
                     if not diffsec:
                         resetdcursor()                    
 
-                elif event.key == pygame.K_HOME and len(beatmaplist):
+                elif event.key == pygame.K_HOME and len(beatmaplist) and not diffsec:
                     selected[diffsec]=0
                     prepare(selected[diffsec])
-                    resetdcursor()     
-def getmaxpoints():
-    p=get_info('points')[selected[1]]*getmult()
-    return p               
+                    resetdcursor()       
 def reload_map():
-    from data.modules.beatmap_processor import beatmapselect
+    global maxpoints
+    from data.modules.beatmap_processor import beatmaplist
+    from data.modules.songselect import selected
     if len(beatmaplist):
-        selectedqueue = beatmapselect[selected[0]]['songtitle'],beatmapselect[selected[0]]['raw'],beatmapselect[selected[0]]['audiofile']
+        selectedqueue = beatmaplist[selected[0]]['songtitle'],beatmaplist[selected[0]]['raw'],beatmaplist[selected[0]]['audiofile']
         if getact() != 5:
             startani(diffsec)
             if selectedqueue[2]:
@@ -364,12 +360,15 @@ def reload_map():
             music_control(1)
             reset_score()
             resetcursor()
-            cache_beatmap(selectedqueue[0])
+            cache_beatmap(selected[0])
+def getmaxpoints():
+    return maxpoints      
 def prepare(buttonid,reloadmusic=True,reloadleaderboard=True,getranky=False):
-    global selected,starrating
-    from data.modules.beatmap_processor import beatmapselect
+    global selected,starrating,maxpoints
+    from data.modules.beatmap_processor import beatmaplist
     reset_score()
     selected[diffsec]=buttonid
+    print(selected)
     if not diffsec:
         selected[1]=0
         cross[1]=0
@@ -381,13 +380,13 @@ def prepare(buttonid,reloadmusic=True,reloadleaderboard=True,getranky=False):
         acc=1
     else:
         acc=0
-    selectedqueue = beatmapselect[selected[0]]['songtitle'],beatmapselect[selected[0]]['raw'],beatmapselect[selected[0]]['audiofile'],beatmapselect[selected[0]]['diffurl'][selid]
-    cache_beatmap(selectedqueue[0])
+    selectedqueue = beatmaplist[selected[0]]['songtitle'],beatmaplist[selected[0]]['raw'],beatmaplist[selected[0]]['audiofile'],eval(beatmaplist[selected[0]]['diffurl'])[selid]
+    cache_beatmap(selected[0])
     resetcursor()
     mod=selectedqueue[0].replace(' [no video]','')
     reloadbg(gamepath+selectedqueue[1]+'/'+selectedqueue[3],gamepath+selectedqueue[1]+'/')
     if reloadleaderboard:
-        threading.Thread(target=rleaderboard, args=(get_info('beatmapids')[selected[1]],)).start()
+        threading.Thread(target=rleaderboard, args=(eval(get_info('beatmapids'))[selected[1]],)).start()
     if getranky:
         threading.Thread(target=getstat, args=(get_info('beatmapsetid'),)).start()
     if mod[0]==' ':
@@ -395,9 +394,11 @@ def prepare(buttonid,reloadmusic=True,reloadleaderboard=True,getranky=False):
     creator=get_info('creator')
     starrating=0
     if acc:
-        grabobjects(gamepath+selectedqueue[1]+'/'+get_info('diffurl')[selid])
+        grabobjects(gamepath+selectedqueue[1]+'/'+eval(get_info('diffurl'))[selid])
         bpm=get_info('bpm')
-        starrating=suna(getobjects())
+        print(bpm)
+        maxpoints = getpoint(len(getobjects()),0,0,0,1,len(getobjects()),int)*getmult()
+        starrating=suna(getobjects(),get_info('bpm'))
     else:
         print('No maps found')
     startani(diffsec)

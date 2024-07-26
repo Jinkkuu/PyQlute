@@ -32,8 +32,6 @@ def main(screen,w,h):
     bpm=get_info('bpm')
     if not bpm:
         bpm=500
-    else:
-        bpm=60000/bpm
     flashylights=(1-((get_pos()/bpm)-get_tick()))
     if flashylights<0:
         flashylights=0
@@ -64,7 +62,7 @@ def main(screen,w,h):
         parallax=((mouse[0]/w)*10)-5,((mouse[1]/h)*10)-5
         parallax=(-5-parallax[0],-5-parallax[1])
         bgs=getbackground(w,h)
-        if getsetting('bgmm') and bgs:
+        if getsetting('bgmm') and bgs and len(beatmaplist):
             bg.blit(bgs,parallax)
         else:
             bg.fill((maincolour[0][0],maincolour[0][1],maincolour[0][2]))
@@ -111,11 +109,11 @@ def main(screen,w,h):
 
 ## Progress bar for media
         if beatmap_count():
-            if get_pos() >= get_info('lengths')[selected[1]]+1000:
+            if get_pos() >= eval(get_info('lengths'))[selected[1]]+1000:
                 resetdcursor()
                 tmp=random_beatmap()
-                prepare(list(beatmaplist.keys()).index(tmp['songtitle']))
-            song_progress(screen,get_pos(),get_info('lengths')[selected[1]]+1000,w,h)
+                prepare(tmp[1])
+            song_progress(screen,get_pos(),eval(get_info('lengths'))[selected[1]]+1000,w,h)
 
 ## Animation
         for a in range(0,len(mtext[0])):

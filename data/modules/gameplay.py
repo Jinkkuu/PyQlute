@@ -139,7 +139,7 @@ def main(screen,w,h):
         if kiai:
             screen.blit(getflash(),(0,0))
         clicked=0
-        length=get_info('lengths')[selected[1]]
+        length=eval(get_info('lengths'))[selected[1]]
         fieldpos = (w//2,0) # Gameplay field
         if health<0:
             health=maxhealth
@@ -262,7 +262,7 @@ def main(screen,w,h):
             else:
                 kiai=0
             fon=1
-        tim=int(ti-int(tim[0])+h),tim[1]
+        tim=int(ti-float(tim[0])+h),tim[1]
         if tim[0] <=h+100 and tim[0]>=-40:
             pygame.draw.rect(screen,(255,255,255),(w//2-(100*2)-100,int(tim[0]),keymap[0][2]*6,5))
             
@@ -279,7 +279,7 @@ def main(screen,w,h):
             if  get_pos()>=length+1000:
                 if not getsubmitstatus():
                     setsubmit(1)
-                    threading.Thread(target=submit_score,args=(int(points),maxcombo,get_info('beatmapids')[selected[1]],get_info('beatmapsetid'),hits[0],hits[1],hits[2],hits[3],get_info('maps')[selected[1]],mods,int(getmaxpoints()),int(time.time()-timetaken),)).start()
+                    threading.Thread(target=submit_score,args=(int(points),maxcombo,eval(get_info('beatmapids'))[selected[1]],get_info('beatmapsetid'),hits[0],hits[1],hits[2],hits[3],eval(get_info('maps'))[selected[1]],mods,int(getmaxpoints()),int(time.time()-timetaken),)).start()
                 transitionprep(9)
             if not getsetting('hidegamehud'):
                 song_progress(screen,get_pos(),length+1000,w,h)

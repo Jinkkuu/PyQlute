@@ -219,7 +219,7 @@ def main():
     seeyanexttimetext = renderapi.getfonts(2).render('See you next time~',True,(255,255,255))
     if len(beatmaplist):
         tmp=random_beatmap()
-        prepare(list(beatmaplist.keys()).index(tmp['songtitle']))
+        prepare(tmp[1])
         del tmp
     transani=[Tween(begin=0, end=1,duration=150*2,easing=Easing.CUBIC,easing_mode=EasingMode.OUT,boomerang=True),0] # Animation for transitioning to another activity
     goaway = seeyanexttimetext
@@ -280,12 +280,13 @@ def main():
         mainmenu(screen,w,h)
         songselect(screen,w,h)
         editmenu(screen,w,h)
-        try:
-            gameplay(screen,w,h)
-        except Exception as err:
-            import sys
-            setactivity(2)
-            notification('Game Crashed',desc=str(err)+' at Line '+str(str(sys.exc_info()[-1].tb_lineno)))
+        gameplay(screen,w,h)
+#        try:
+#            gameplay(screen,w,h)
+#        except Exception as err:
+#            import sys
+#            setactivity(2)
+#            notification('Game Crashed',desc=str(err)+' at Line '+str(str(sys.exc_info()[-1].tb_lineno)))
         beatres(screen,w,h)
         shopdirect(screen,w,h)
         downloads(screen,w,h)
