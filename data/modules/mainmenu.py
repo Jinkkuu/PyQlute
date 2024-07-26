@@ -41,7 +41,7 @@ def main(screen,w,h):
         flashylights=1
     elif get_pos()<=-1:
         flashylights=0
-    if settingskeystore['effects']:
+    if settingskeystore['effects'] or getactivity() == 5:
         bgcolour=255*flashylights
     else:
         bgcolour=0
@@ -54,6 +54,7 @@ def main(screen,w,h):
         bg=pygame.surface.Surface(olds)
         topbar=pygame.surface.Surface((olds[0],40))
         topbar.set_alpha(80)
+    flashscr.fill((bgcolour,bgcolour,bgcolour))
     if getactivity()==1:
         if not bladeani[1] and getactivity()==1:
             bladeani[1]=1
@@ -67,7 +68,6 @@ def main(screen,w,h):
             bg.blit(bgs,parallax)
         else:
             bg.fill((maincolour[0][0],maincolour[0][1],maincolour[0][2]))
-        flashscr.fill((bgcolour,bgcolour,bgcolour))
         screen.blits(((bg,(0,0)),(flashscr,(0,0))))
         micon='logomini.png','edit.png','browse.png','exit.png'
         if version()=='0.0.0':

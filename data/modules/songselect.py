@@ -69,7 +69,7 @@ def startani(val):
 olds=0,0
 def main(screen,w,h):
     global cross,selected,diffsec,modshow,modsani,modsv,modsen,lpanel,panel,olds,altbutton
-    from data.modules.mainmenu import flashscr
+    from data.modules.mainmenu import getflash
     from data.modules.onlineapi import ranktype
     if not "lpanel" in globals():
         lpanel=pygame.surface.Surface((280,320),pygame.SRCALPHA, 32).convert_alpha()
@@ -103,12 +103,8 @@ def main(screen,w,h):
         screen.fill((maincolour[4]))
         if bg:
             screen.blit(bg,(-5-parallax[0],-5-parallax[1]))
-        screen.blit(flashscr,(0,0))
+        screen.blit(getflash(),(0,0))
         screen.blit(panel,(0,60))
-        #pygame.draw.rect(screen,(255,255,255,51),)
-        #pygame.Surface.blits(screen,((panel,(0,60))))
-        
-        #panelf=pygame.surface.Surface((200,h-60))
         if mult!=1:
             modtext=str(round(mult,2))+'x'
         else:
@@ -137,6 +133,7 @@ def main(screen,w,h):
                         else:
                             col=(mapidlecolour[0]+hover,mapidlecolour[1]+hover,mapidlecolour[2]+hover)
                     else:
+                        hover=0
                         if id==selected[diffsec]:
                             col = mapselectedcolour
                         else:
@@ -396,6 +393,7 @@ def prepare(buttonid,reloadmusic=True,reloadleaderboard=True,getranky=False):
     if mod[0]==' ':
         mod=mod[1:]
     creator=get_info('creator')
+    starrating=0
     if acc:
         grabobjects(gamepath+selectedqueue[1]+'/'+get_info('diffurl')[selid])
         bpm=get_info('bpm')

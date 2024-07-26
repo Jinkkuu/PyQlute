@@ -174,11 +174,14 @@ def getkeypos():
 def setkeycount(val):
     global keycount
     keycount=val
-
+def gettiming():
+    return timings
 def grabobjects(value):
-    global objects,pos
+    global objects,pos,timings
     try:
-        objects=loadstats(value)['hitobjects']
+        before = loadstats(value)
+        timings=[(a[0],a[-1]) for a in before['timingpoints']]
+        objects=before['hitobjects']
         x=[]
         for a in objects:
             key=a[0]

@@ -3,7 +3,7 @@ from data.modules.input import get_input
 from data.modules.colours import maincolour
 from data.modules.settings import getsetting,setsetting
 from data.modules.audio import load_music,get_pos,music_control
-from data.modules.beatmap_processor import get_info,getobjects,getpoint,getkeycount,getkeypos
+from data.modules.beatmap_processor import get_info,getobjects,getpoint,getkeycount,getkeypos,gettiming
 from data.modules.onlineapi import getleaderboard,submit_score,issubmiting,setsubmit,getsubmitstatus
 from data.modules.bootstrap import getimg,getactivity,transitionprep,clockify,gamepath
 import data.modules.renderapi as renderapi
@@ -49,15 +49,18 @@ def iscatched(block,isauto,ob,h):
     return (lastcall,tick,tim)
 
 def reset_score():
-    global points,combo,ncombo,maxcombo,hits,clickedkeys, ncombo,keys, combotime, accuracy, timetaken,health,keyslight,pos,firstrow
+    global points,combo,ncombo,maxcombo,hits,clickedkeys, ncombo,keys, combotime, accuracy, timetaken,health,keyslight,pos,firstrow,score,kiai,timestep
     pos = (64,192,320,448) # Keys
     keyslight = [Tween(begin=0) for a in range(0,getkeycount())]
     points = 0
     health = 10
     timetaken = time.time()
     ob=getobjects()
+    kiai=0
+    timestep=0
     clickedkeys=[]
     firstrow=[0 for a in pos]
+    score=Tween()
     if ob:
         step=get_info('bpm')
         for a in ob:
@@ -124,13 +127,17 @@ def resetcursor():
     global objecon
     objecon = 0
 def main(screen,w,h):
-    global objecon, points,combo,maxcombo,hits,clickedkeys,judgewindow, ncombo,keyslight,keys , combotime,accuracy,health
+    global objecon, points,combo,maxcombo,hits,clickedkeys,judgewindow, ncombo,keyslight,keys , combotime,accuracy,health,score,kiai,timestep
     if getactivity() == 5:
+        score.update()
         tick=time.time()
+        from data.modules.mainmenu import getflash
         from data.modules.songselect import modsen,reload_map,getmaxpoints,selected,mods,get_mods,getmult
         for a in keyslight:
             a.update()
         screen.fill((20,20,20))
+        if kiai:
+            screen.blit(getflash(),(0,0))
         clicked=0
         length=get_info('lengths')[selected[1]]
         fieldpos = (w//2,0) # Gameplay field
@@ -154,7 +161,7 @@ def main(screen,w,h):
         if points>maxpoints:
             points=maxpoints
         if maxpoints!=0:
-            end=int((points/maxpoints)*(1000000*getmult()))
+            end=int(score.value)
         else:
             end=0
         maxc=hits[0]+hits[1]+hits[2]+hits[3]
@@ -196,6 +203,9 @@ def main(screen,w,h):
                         if block>=h-rate:
                             keys[ob[1]]=1
                     if (judge[0] and keys[ob[1]]) or judge[1]==3: 
+                        if maxpoints:
+                            score=Tween(begin=score.value,end=int((points/maxpoints)*(1000000*getmult())),duration=150)
+                            score.start()
                         hit=judge[1]
                         keys[ob[1]]=0
                         clickedkeys[objecon+obid-1][0] = 0    
@@ -239,6 +249,24 @@ def main(screen,w,h):
                     objecon+=1
                 obid+=1
 
+# Kiai
+        fon=0
+        t=gettiming()
+        tim=t[timestep]
+        if ti>=int(float(tim[0])) and not fon:
+#            print(timestep,a)
+            if not timestep+1>len(t)-1:
+                timestep+=1
+            if int(tim[1])==1:
+                kiai=1
+            else:
+                kiai=0
+            fon=1
+        tim=int(ti-int(tim[0])+h),tim[1]
+        if tim[0] <=h+100 and tim[0]>=-40:
+            pygame.draw.rect(screen,(255,255,255),(w//2-(100*2)-100,int(tim[0]),keymap[0][2]*6,5))
+            
+
 
         for a in range(0,getkeycount()):
             if a in koala or keys[a]:
@@ -278,7 +306,7 @@ def main(screen,w,h):
                 renderapi.center_text(screen,comboo,(kek[0]+sre,kek[1],kek[2],kek[3]),'score',(0,0,255))
                 renderapi.center_text(screen,comboo,(kek[0],kek[1]+sre,kek[2],kek[3]),'score',(0,255,0))
             renderapi.center_text(screen,comboo,(kek),'score',(255,255,255))
-        if sre:
+        if sre and length:
             renderapi.center_text(screen,hittext[judgewindow[0]],(kek[0],kek[1]+60,kek[2],kek[3]),'score',hitcolour[judgewindow[0]])
             if judgewindow[0]!=3:
                 renderapi.center_text(screen,hitacc[judgewindow[1]],(kek[0],kek[1]+90,kek[2],kek[3]),colour=(255,255,255))
