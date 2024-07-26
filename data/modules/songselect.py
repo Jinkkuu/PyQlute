@@ -368,7 +368,6 @@ def prepare(buttonid,reloadmusic=True,reloadleaderboard=True,getranky=False):
     from data.modules.beatmap_processor import beatmaplist
     reset_score()
     selected[diffsec]=buttonid
-    print(selected)
     if not diffsec:
         selected[1]=0
         cross[1]=0
@@ -396,7 +395,6 @@ def prepare(buttonid,reloadmusic=True,reloadleaderboard=True,getranky=False):
     if acc:
         grabobjects(gamepath+selectedqueue[1]+'/'+eval(get_info('diffurl'))[selid])
         bpm=get_info('bpm')
-        print(bpm)
         maxpoints = getpoint(len(getobjects()),0,0,0,1,len(getobjects()),int)*getmult()
         starrating=suna(getobjects(),get_info('bpm'))
     else:

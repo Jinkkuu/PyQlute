@@ -12,6 +12,7 @@ objects=None
 keycount=4
 pos=[]
 enable_experimental=0
+oldnames='beatmaps.json','beatmaps.db'
 def getpoint(perfect,good,meh,bad,multiplier,combo=1,type=int): # Points System 2024/06/15
     multiplier=multiplier
     if bad==0:
@@ -121,9 +122,12 @@ def addbeatmap(value,save=False):
         beatmaplist=beatmaplocalapi.execute("SELECT * FROM beatmaps;").fetchall()
 def reloadbeatmaps():
     global beatmaplist,beatmaps,beatmaplocalapi
-    beatmaps = sqlite3.connect(getuserdata()+'beatmaps.db')
+    beatmaps = sqlite3.connect(getuserdata()+'qlute.db')
     beatmaps.row_factory = sqlite3.Row
     beatmaplocalapi = beatmaps.cursor()
+    for a in oldnames:
+        if os.path.isfile(getuserdata()+a):
+            os.remove(getuserdata()+a)
     if not beatmaplocalapi.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='beatmaps';").fetchone():
         beatmaplocalapi.execute("CREATE TABLE beatmaps(raw,artist,title,creator,beatmapsetid INT,songtitle,audiofile,maps,diffurl,starratings,beatmapids,bpm INT,lengths)")
         for a in sorted(os.listdir(gamepath), key=get_creation_time):
