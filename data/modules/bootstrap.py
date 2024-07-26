@@ -280,13 +280,12 @@ def main():
         mainmenu(screen,w,h)
         songselect(screen,w,h)
         editmenu(screen,w,h)
-        gameplay(screen,w,h)
-#        try:
-#            gameplay(screen,w,h)
-#        except Exception as err:
-#            import sys
-#            setactivity(2)
-#            notification('Game Crashed',desc=str(err)+' at Line '+str(str(sys.exc_info()[-1].tb_lineno)))
+        try:
+            gameplay(screen,w,h)
+        except Exception as err:
+            import sys
+            setactivity(2)
+            notification('Game Crashed',desc=str(err)+' at Line '+str(str(sys.exc_info()[-1].tb_lineno)))
         beatres(screen,w,h)
         shopdirect(screen,w,h)
         downloads(screen,w,h)

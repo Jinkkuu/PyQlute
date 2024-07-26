@@ -73,16 +73,15 @@ def main(screen,w,h):
     from data.modules.onlineapi import ranktype
     if not "lpanel" in globals():
         lpanel=pygame.surface.Surface((280,320),pygame.SRCALPHA, 32).convert_alpha()
-        lpanel.set_alpha(216)
     else:
         lpanel.fill((0,0,0,0))
     if getactivity() == 2:
         from data.modules.beatmap_processor import beatmaplist
         if olds!=(w,h):
             olds=w,h
-            panel=pygame.surface.Surface((300,olds[1]-120))
-            panel.set_alpha(51)
-            panel.fill(0)
+            panel=pygame.surface.Surface((w,h),pygame.SRCALPHA, 32).convert_alpha()
+            pygame.draw.polygon(panel,(0,0,0),((w,h),(0,h),(0,0),(w,0),(w,60),(300,60),(300,h-60),(w,h-60)))
+            panel.set_alpha(100)
         parallax=((pygame.mouse.get_pos()[0]/w)*10)-5,((pygame.mouse.get_pos()[1]/h)*10)-5
         mult=getmult()
         modsani[0].update()
@@ -104,7 +103,6 @@ def main(screen,w,h):
         if bg and len(beatmaplist):
             screen.blit(bg,(-5-parallax[0],-5-parallax[1]))
         screen.blit(getflash(),(0,0))
-        screen.blit(panel,(0,60))
         if mult!=1:
             modtext=str(round(mult,2))+'x'
         else:
@@ -123,7 +121,7 @@ def main(screen,w,h):
             i=(beatmaplist,eval(diffs))
             for a in i[diffsec][pos:end]:
                 offset=cross[diffsec]+(80*id)+(h//2-80)
-                if 0>=-offset and -offset>=-h+60:
+                if 0>=-offset-60 and -offset>=-h:
                     if pygame.Rect.collidepoint(pygame.Rect(w//2,offset,w//2,80),mouse[0],mouse[1]):
                         hover=20
                         buttonid=id
@@ -150,6 +148,13 @@ def main(screen,w,h):
                     obj+=1
                 id+=1
                 oid+=1
+            if len(diffs)>1 and not diffsec:
+                starticon='next.png'
+            else:
+                starticon='go.png'
+            scrollbar(screen,(w-10,60),(10,h-140),search=cross[diffsec]/80,length=len(i[diffsec]))
+        screen.blit(panel,(0,0))
+        if beatcount:
             t=renderapi.getfonts(0).render(rankmodes[ranktype][0],True,(255,255,255))
             rtl=t.get_rect()
             fr=rtl
@@ -166,12 +171,7 @@ def main(screen,w,h):
                 tmp = renderapi.getfonts(0).render(str(getmaxpoints())+'pp',True,(255,255,255))
             else:
                 tmp = renderapi.getfonts(0).render(clockify(eval(get_info('lengths'))[selected[1]]),True,(255,255,255))
-            if len(diffs)>1 and not diffsec:
-                starticon='next.png'
-            else:
-                starticon='go.png'
             screen.blit(tmp,(20,125))
-            scrollbar(screen,(w-10,60),(10,h-140),search=cross[diffsec]/80,length=len(i[diffsec]))
         
         if getsetting('leaderboard'): 
             c=0
@@ -216,7 +216,6 @@ def main(screen,w,h):
             else:
                 tm.append(t[b-1])
         mod,modh=renderapi.draw_button(screen,((tm[0],h-(160*pop),90,40) ,(tm[1],h-(110*pop),90,40) ,(tm[2],h-(160*pop),90,40) ,(tm[3],h-(110*pop),90,40) ,(tm[4],h-(160*pop),90,40) ,(tm[5],h-(160*pop),90,40)),modsalias,return_hover=1,enabled_button=modsen)
-        pygame.draw.rect(screen,songselectcolour,pygame.Rect(0,h-60,w,60))
         card(screen,(w//2-80,h-55),hidebg=1,overidecolour=(60,60,60),mini=1,accuracy=getmystats()[0],points=getmystats()[1],rank=getmystats()[2],username=getsetting('username'))
         
         
@@ -226,7 +225,6 @@ def main(screen,w,h):
         else:
             gobutton = 0
             title = 'No Beatmaps Installed :<'
-        pygame.draw.rect(screen,songselectcolour,pygame.Rect(0,0,w,60))
         
         button = renderapi.draw_button(screen,((0,h-60,100,60),(100,h-60,100,60),),('Back',modtext),border_radius=0)
         tmp = renderapi.getfonts(0).render(title,True,(255,255,255))
@@ -298,7 +296,7 @@ def main(screen,w,h):
                     altbutton=0
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_END and len(beatmaplist):
-                    i=(beatmaplist,diffs)
+                    i=(beatmaplist,eval(diffs))
                     selected[diffsec]=len(i[diffsec])-1
                     prepare(selected[diffsec],reloadmusic=not diffsec,getranky=not diffsec)
                     resetdcursor()
@@ -332,7 +330,7 @@ def main(screen,w,h):
                     tmp=random_beatmap()
                     prepare(tmp[1],reloadmusic=not diffsec,getranky=not diffsec)
                     resetdcursor()                    
-                elif event.key == pygame.K_DOWN and len(beatmaplist) and not diffsec:
+                elif event.key == pygame.K_DOWN and len(beatmaplist):
                     if not selected[diffsec] >= id-1:
                         selected[diffsec]+=1
                     else:
