@@ -208,7 +208,8 @@ def main(screen,w,h):
                             score.start()
                         hit=judge[1]
                         keys[ob[1]]=0
-                        clickedkeys[objecon+obid-1][0] = 0    
+                        if objecon+obid-1 < len(clickedkeys):
+                            clickedkeys[objecon+obid-1][0] = 0    
                         if hit==3:
                             health-=t1*(ncombo+combo)
                         else:
