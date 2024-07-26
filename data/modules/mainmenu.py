@@ -63,7 +63,8 @@ def main(screen,w,h):
         parallax=(-5-parallax[0],-5-parallax[1])
         bgs=getbackground(w,h)
         if getsetting('bgmm') and bgs and len(beatmaplist):
-            bg.blit(bgs,parallax)
+            bgrect=bgs.get_rect(center = screen.get_rect().center)[:2]
+            bg.blit(bgs,(bgrect[0]-parallax[0],bgrect[1]-parallax[1]))
         else:
             bg.fill((maincolour[0][0],maincolour[0][1],maincolour[0][2]))
         screen.blits(((bg,(0,0)),(flashscr,(0,0))))

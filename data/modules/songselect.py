@@ -82,7 +82,9 @@ def main(screen,w,h):
             panel=pygame.surface.Surface((w,h),pygame.SRCALPHA, 32).convert_alpha()
             pygame.draw.polygon(panel,(0,0,0),((w,h),(0,h),(0,0),(w,0),(w,60),(300,60),(300,h-60),(w,h-60)))
             panel.set_alpha(100)
-        parallax=((pygame.mouse.get_pos()[0]/w)*10)-5,((pygame.mouse.get_pos()[1]/h)*10)-5
+        mouse=pygame.mouse.get_pos()
+        parallax=((mouse[0]/w)*10)-5,((mouse[1]/h)*10)-5
+        parallax=(-5-parallax[0],-5-parallax[1])
         mult=getmult()
         modsani[0].update()
         if modsani[0].value==100 or not modshow:
@@ -95,13 +97,13 @@ def main(screen,w,h):
         obj=0
         leadmode=0
         tm=[]
-        mouse=pygame.mouse.get_pos()
         buttonid=0
         click=0
         bg=getbackground(w,h)
         screen.fill((maincolour[4]))
         if bg and len(beatmaplist):
-            screen.blit(bg,(-5-parallax[0],-5-parallax[1]))
+            bgrect=bg.get_rect(center = screen.get_rect().center)[:2]
+            screen.blit(bg,(bgrect[0]-parallax[0],bgrect[1]-parallax[1]))
         screen.blit(getflash(),(0,0))
         if mult!=1:
             modtext=str(round(mult,2))+'x'

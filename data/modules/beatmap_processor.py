@@ -226,21 +226,7 @@ oldw=0
 oldh=0
 bg=pygame.surface.Surface((0,0))
 def getbackground(w,h):
-    global oldw,oldh,bg
-    try:
-        if oldw != w or oldh != h and background:
-            oldw=w
-            oldh=h
-            back=background.get_rect()
-            scub=(back[2]/back[3])-((w+10)/(h+10))
-            if scub<0.1:
-                scub=1
-            bg = pygame.transform.smoothscale_by(background,scub)
-        elif not background:
-            bg=0
-    except TypeError:
-        bg=0
-    return bg
+    return background
 def reloadbg(value,base):
     global background,bump,sc,bg,oldw,oldh
     try:
