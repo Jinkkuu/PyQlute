@@ -71,14 +71,8 @@ def reset_score():
                     notfound=False
                     break
             if notfound:
-                for kik in range(0,4):
-                    if int(a[0])>=512-(128*(kik+1)):
-                        barpos=kik
-                        break            
-#            leng=int(a[-1].split(':')[0])//1000 # ~~ Do not uncomment this ;-;
-#            if leng>0:
-#                clickedkeys.extend([1,barpos,int(a[2])+(step*(bob)),a[0],1] for bob in range(0,leng))
-#            else:
+                tick=1
+                barpos = int(round(int(a[0])/256)+round(int(a[1])/192))-1 
             clickedkeys.append([1,barpos,int(a[2]),a[0],0])
     combo = 0
     ncombo = 0
