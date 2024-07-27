@@ -50,13 +50,16 @@ def get_creation_time(item):
     item_path = os.path.join(gamepath, item)
     return os.path.getctime(item_path)
 def addbeatmap(value,save=False):
-    global beatmaplist
+    global beatmaplist,cache
     difficulties=[]
     starratings=[]
     tmp=[]
     lengths=[]
     diffs=[]
     beatmapids=[]
+    bpm=0
+    version='Untitled'
+    beatmapid=None
     for b in os.listdir(gamepath+value):
         if b.endswith('.osu'):
             cache=loadstats(gamepath+value+'/'+b)
@@ -68,14 +71,13 @@ def addbeatmap(value,save=False):
                 lengths.append(0)
             if "version" in cache['metadata']:
                 version=cache['metadata']['version']
-            else:
-                version='Untitled'
             if "beatmapid" in cache['metadata']:
                 beatmapid=cache['metadata']['beatmapid']
-            else:
-                beatmapid=None
-            #exit()
-            tmp.append((version,suna(hits,float(cache['timingpoints'][0][1])),b,beatmapid,getpoint(len(cache['hitobjects']),0,0,0,1,len(cache['hitobjects']),float)))
+            try:
+                bpm=float(cache['timingpoints'][0][1])
+            except Exception:
+                pass
+            tmp.append((version,suna(hits,bpm),b,beatmapid,getpoint(len(cache['hitobjects']),0,0,0,1,len(cache['hitobjects']),float)))
     tmp=sorted(tmp, key=lambda x: x[4])
     beatmapids=[]
     for b in tmp:
@@ -88,14 +90,13 @@ def addbeatmap(value,save=False):
     except Exception:
         songtitle=value
     try:
-        bpm=float(cache['timingpoints'][0][1])
+        if "audiofilename" in cache['general']:
+            audiofile=cache['general']['audiofilename']
+            if audiofile[0] == ' ':
+                audiofile=audiofile[1:]
+        else:
+            audiofile=None
     except Exception:
-        bpm=0
-    if "audiofilename" in cache['general']:
-        audiofile=cache['general']['audiofilename']
-        if audiofile[0] == ' ':
-            audiofile=audiofile[1:]
-    else:
         audiofile=None
     metadata={}
     metadata['raw'] = value
@@ -115,6 +116,8 @@ def addbeatmap(value,save=False):
         except KeyError as err:
             if c == 'beatmapsetid':
                 metadata[c]=0
+            else:
+                metadata[c]=None
         id+=1
     beatmaplocalapi.execute("INSERT INTO beatmaps (raw,artist,title,creator,beatmapsetid,songtitle,audiofile,maps,diffurl,starratings,beatmapids,bpm,lengths) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",(metadata['raw'],metadata['artist'],metadata['title'],metadata['creator'],metadata['beatmapsetid'],metadata['songtitle'],metadata['audiofile'],metadata['maps'],metadata['diffurl'],metadata['starratings'],metadata['beatmapids'],metadata['bpm'],metadata['lengths']))
     if save:
@@ -158,12 +161,19 @@ def reloadbeatmaps():
                 uhohmusic=1
             if uhohmusic:
                 print('Uh-Oh!, All my music has disappeared!! >n<\nReloading your beatmaps, might take a while')
+                beatmaps.commit()
                 beatmaplocalapi.execute('DROP TABLE beatmaps')
                 reloadbeatmaps()
         except Exception as err:
             print('Uh-Oh!, Your database for your beatmaps has been corrupted >n<\nReloading your beatmaps, might take a while\n'+str(err))
+            exit()
+            beatmaps.commit()
             beatmaplocalapi.execute('DROP TABLE beatmaps')
             reloadbeatmaps()
+def chkscore():
+    if not beatmaplocalapi.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='scores';").fetchone():
+        beatmaplocalapi.execute("CREATE TABLE scores(beatmapsetid INT,beatmapid INT,username,points,max,great,meh,bad,accuracy,combo,mods)")
+        print('Updated qlute.db')
 def random_beatmap():
     global songcache
     from random import randint
@@ -189,12 +199,15 @@ def setkeycount(val):
     keycount=val
 def gettiming():
     return timings
+def getevents():
+    return events
 def grabobjects(value):
-    global objects,pos,timings
+    global objects,pos,timings,events
     try:
         before = loadstats(value)
-        timings=[(a[0],a[-1]) for a in before['timingpoints']]
-        objects=before['hitobjects']
+        #events = [(a[1],a[3].rstrip('"').strip('"')) for a in before['events'][before['events'].index(['//Storyboard Sound Samples'])+1:]]
+        timings = [(a[0],a[-1]) for a in before['timingpoints']]
+        objects = before['hitobjects']
         x=[]
         for a in objects:
             key=a[0]
@@ -227,6 +240,8 @@ def suna(ob,bpm):
                 x=so
             else:
                 tick=0.01
+        if starrating<0:
+            starrating=-starrating
     return starrating
 def getobjects():
     return objects
@@ -255,3 +270,4 @@ def reloadbg(value,base):
         background=0
 rankmodes=('Ranked',(100,200,100)),('Unranked',(200,100,100)),('Special',(200,200,100)),('Loading...',(200,200,200)),
 reloadbeatmaps()
+chkscore()

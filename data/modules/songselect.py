@@ -33,7 +33,7 @@ def getmult():
     for a in range(2,len(modsen)+1):
         if modsen[a-1] and a==2:
             scoremult+=1.5
-        elif modsen[a-1] and a == 6:
+        elif modsen[a-1] and a == 5:
             scoremult+=0.8
         elif modsen[a-1] and not a in (4,5,7,8):
             scoremult+=0.5
@@ -142,10 +142,17 @@ def main(screen,w,h):
                     scr.fill(col)
                     if not diffsec:
                         meta = renderapi.getfonts(0).render(a['title'],True,(255,255,255)), renderapi.getfonts(0).render(str(a['artist'])+' (mapped by '+str(a['creator'])+')',True,(255,255,255))
+                        scr.blit(meta[0],(10,10))
+                        scr.blit(meta[1],(10,50))
                     else:
-                        meta = renderapi.getfonts(0).render(a,True,(255,255,255)),renderapi.getfonts(0).render(str(round(eval(get_info('starratings'))[id]*mult,2))+' Stars',True,(255,255,255))
-                    scr.blit(meta[0],(10,10))
-                    scr.blit(meta[1],(10,50))
+                        meta = renderapi.getfonts(0).render(a,True,(255,255,255))#,renderapi.getfonts(0).render(str()+' Stars',True,(255,255,255))
+                        scr.blit(meta,(10,10))
+                        star=round(eval(get_info('starratings'))[id]*(mult+1)/2,2)
+                        if star>10.99:
+                            star=10.99
+                        pygame.draw.rect(scr,(50,50,50),(10,50,300,10))
+                        pygame.draw.rect(scr,(255,255,255),(10,50,(star/10.99)*300,10))
+                    #scr.blit(meta[1],(10,50))
                     screen.blit(scr,(w//2,offset))
                     obj+=1
                 id+=1
@@ -245,10 +252,8 @@ def main(screen,w,h):
         elif modh==3:
             setmsg("makes everything easy (/0.5)")
         elif modh==4:
-            setmsg('Adds new fun! (0)')
-        elif modh==5:
             setmsg('You have to aim your hits right! (+0.8)')
-        elif modh==6:
+        elif modh==5:
             setmsg('We be easy on you (/0.5)')
 
 
