@@ -125,8 +125,11 @@ def check_gameversion():
     if gamever!=ver and gamever!='0.0.0':
         notification('New update is avaliable!',desc=str(ver)+' is available, check on itch.io to update!')
 
-
-
+# Message test randomizer
+rndmsgs=('S-Ranker','Like to show off. huh?'),('Messages','aquapoki had sent you a private message!'),('Multiplayer','someone invited you to a match!'),('Quests','Congratulations you had won the daily Quest!'),('QlutaBot','Welcome back!')
+def rndmsg():
+    from random import choice
+    return choice(rndmsgs)
 
 def clockify(clo):
     clo/=1000
@@ -194,6 +197,7 @@ def main():
     from data.modules.mainmenu import main as mainmenu
     from data.modules.songselect import main as songselect
     from data.modules.accountpage import loginscreen
+    from data.modules.questoftheday import questoftheday
     from data.modules.editmenu import editmenu
     from data.modules.songselect import ecross,prepare
     from data.modules.gameplay import main as gameplay
@@ -265,7 +269,8 @@ def main():
                 elif event.key  ==  pygame.K_EQUALS and not getactivity() == 7:
                     volchg(1)
                 elif event.key == pygame.K_F10:
-                    notification('S-Ranker',desc='Like to show off. huh?')
+                    title,desc = rndmsg()
+                    notification(title,desc=desc)
                 elif event.key == pygame.K_F12:
                     sub = screen.subsurface(pygame.Rect(0,0,w,h))
                     scid=settings.getsetting('screenshot_id')
@@ -280,6 +285,7 @@ def main():
         mainmenu(screen,w,h)
         songselect(screen,w,h)
         editmenu(screen,w,h)
+        questoftheday(screen,w,h)
         try:
             gameplay(screen,w,h)
         except Exception as err:
