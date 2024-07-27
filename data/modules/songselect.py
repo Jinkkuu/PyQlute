@@ -141,7 +141,7 @@ def main(screen,w,h):
                     scr=pygame.surface.Surface((w//2,80))
                     scr.fill(col)
                     if not diffsec:
-                        meta = renderapi.getfonts(0).render(a['title'],True,(255,255,255)), renderapi.getfonts(0).render(a['artist']+' (mapped by '+str(a['creator'])+')',True,(255,255,255))
+                        meta = renderapi.getfonts(0).render(a['title'],True,(255,255,255)), renderapi.getfonts(0).render(str(a['artist'])+' (mapped by '+str(a['creator'])+')',True,(255,255,255))
                     else:
                         meta = renderapi.getfonts(0).render(a,True,(255,255,255)),renderapi.getfonts(0).render(str(round(eval(get_info('starratings'))[id]*mult,2))+' Stars',True,(255,255,255))
                     scr.blit(meta[0],(10,10))
