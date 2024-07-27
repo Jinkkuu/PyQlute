@@ -75,8 +75,8 @@ def addbeatmap(value,save=False):
             else:
                 beatmapid=None
             #exit()
-            tmp.append((version,suna(hits,float(cache['timingpoints'][0][1])),b,beatmapid))
-    tmp=sorted(tmp, key=lambda x: x[1])
+            tmp.append((version,suna(hits,float(cache['timingpoints'][0][1])),b,beatmapid,getpoint(len(cache['hitobjects']),0,0,0,1,len(cache['hitobjects']),float)))
+    tmp=sorted(tmp, key=lambda x: x[4])
     beatmapids=[]
     for b in tmp:
         difficulties.append(b[0])
@@ -120,6 +120,10 @@ def addbeatmap(value,save=False):
     if save:
         beatmaps.commit()
         beatmaplist=beatmaplocalapi.execute("SELECT * FROM beatmaps;").fetchall()
+def recalculate():
+    print('Recalculating..')
+    beatmaplocalapi.execute('DROP TABLE beatmaps')
+    reloadbeatmaps()
 def reloadbeatmaps():
     global beatmaplist,beatmaps,beatmaplocalapi
     beatmaps = sqlite3.connect(getuserdata()+'qlute.db')
@@ -210,15 +214,19 @@ def suna(ob,bpm):
     starrating=0
     if ob:
         x=0
+        tick=0.01
         for a in ob:
             so=int(a[2])
             if so>x:
-                suna=((so-x)/bpm)
-                if not suna<1.1:
+                tick-=0.0001
+                suna=((so-x)/(60000/bpm))
+                if not suna<1.0:
                     suna=0
-                #print('[S U N A]',round(suna,2),str(round(starrating,2))+' Stars ')
-                starrating+=suna*0.01
+                #print('[S U N A]',round(suna,2),str(round(starrating,2))+' Stars ',tick)
+                starrating+=suna*tick
                 x=so
+            else:
+                tick=0.01
     return starrating
 def getobjects():
     return objects
