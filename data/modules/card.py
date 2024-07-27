@@ -1,6 +1,6 @@
 import pygame,time,sys
 from data.modules.renderapi import getfonts
-from data.modules.colours import maincolour
+from data.modules.colours import maincolour,rankcolour
 def main(screen,pos,points=0,score=0,overidecolour=0,hidebg=0,level=0,rank=0,accuracy=69,username=None,mini=False):
     ticker=time.time()
     p=points
@@ -9,8 +9,10 @@ def main(screen,pos,points=0,score=0,overidecolour=0,hidebg=0,level=0,rank=0,acc
     rank = format(rank,',')
     level = format(level,',')
     score = format(score,',')
-    if not overidecolour:
+    if not overidecolour and r and not r<6:
         blend=maincolour[5][0]-20,maincolour[5][1]-20,maincolour[5][2]-20
+    elif r and r<6:
+        blend=rankcolour[r-1]
     else:
         blend=overidecolour
     if mini:

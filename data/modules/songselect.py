@@ -21,8 +21,8 @@ modshow=0
 modsv=0
 modsani=[Tween(begin=0, end=1,duration=350,easing=Easing.CUBIC,easing_mode=EasingMode.OUT),0]
 modsani[0].start()
-modsalias="Auto",'Blind','Slice','EZ','Random','Strict'#,'DT','HT'
-modsaliasab='AT','BD','SL','EZ','RND','SN'#,'DT','HT'
+modsalias="Auto",'Blind','Slice','EZ','Strict'#,'DT','HT'
+modsaliasab='AT','BD','SL','EZ','SN'#,'DT','HT'
 mods=''
 altbutton=0
 starrating=0 # Star Rating
@@ -207,7 +207,7 @@ def main(screen,w,h):
         if not modsani[1]:
             mod=0
         get_mods(screen,(100,h-(110*(1-pop))))
-        pygame.draw.rect(screen,maincolour[0],pygame.Rect(0,h-(170*pop),430,120),border_top_left_radius=10,border_top_right_radius=10)
+        pygame.draw.rect(screen,maincolour[0],pygame.Rect((380*pop)-420,h-170,380,110),border_top_right_radius=10,border_bottom_right_radius=10)
         #(340,h-160,90,40) ~ Placeholder
         # This will be here for now, it WILL get better and more optimized over time
         t=(20,20,120,120,220,320,420,480)
@@ -217,8 +217,9 @@ def main(screen,w,h):
                 tm.append(-999)
             else:
                 tm.append(t[b-1])
-        mod,modh=renderapi.draw_button(screen,((tm[0],h-(160*pop),90,40) ,(tm[1],h-(110*pop),90,40) ,(tm[2],h-(160*pop),90,40) ,(tm[3],h-(110*pop),90,40) ,(tm[4],h-(160*pop),90,40) ,(tm[5],h-(160*pop),90,40)),modsalias,return_hover=1,enabled_button=modsen)
-        card(screen,(w//2-80,h-55),hidebg=1,overidecolour=(60,60,60),mini=1,accuracy=getmystats()[0],points=getmystats()[1],rank=getmystats()[2],username=getsetting('username'))
+        mod,modh=renderapi.draw_button(screen,((tm[0]+(100*pop)-110,h-160,90,40) ,(tm[1]+(100*pop)-110,h-110,90,40) ,(tm[2]+(200*pop)-210,h-160,90,40) ,(tm[3]+(200*pop)-210,h-110,90,40) ,(tm[4]+(300*pop)-310,h-160,90,40)),modsalias,return_hover=1,enabled_button=modsen)
+        pygame.draw.rect(screen,songselectcolour,(w//2-80,h-60,300,60))
+        card(screen,(w//2-80,h-55),hidebg=1,overidecolour=(100,100,100),mini=1,accuracy=getmystats()[0],points=getmystats()[1],rank=getmystats()[2],username=getsetting('username'))
         
         
         if  beatcount:
