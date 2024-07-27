@@ -235,8 +235,7 @@ def main(screen,w,h):
         else:
             gobutton = 0
             title = 'No Beatmaps Installed :<'
-        
-        button = renderapi.draw_button(screen,((0,h-60,100,60),(100,h-60,100,60),),('Back',modtext),border_radius=0)
+        button = button = renderapi.draw_button(screen,((0,h-60,100,60),(100,h-60,100,60),(200,h,100,60),),('Back',modtext,'Quest'),border_radius=0)
         tmp = renderapi.getfonts(0).render(title,True,(255,255,255))
         screen.blit(tmp,(20,20))
         #screen.blit(renderapi.getfonts(1).render(str(obj)+' out of '+str((id,oid))+' Objects ('+str(pos)+' pos)',True,(255,255,255)),(10,10))
@@ -275,6 +274,7 @@ def main(screen,w,h):
                         modsani[0].start()
                     elif mod:
                         modsen[mod-1]=not modsen[mod-1]
+                        reloadpoints()
                     elif gobutton:
                         if not diffsec and len(diffs)>1:
                             diffsec = not diffsec
@@ -369,6 +369,9 @@ def reload_map():
             cache_beatmap(selected[0])
 def getmaxpoints():
     return maxpoints      
+def reloadpoints():
+    global maxpoints
+    maxpoints = int(getpoint(len(getobjects()),0,0,0,1,len(getobjects()),int)*getmult())
 def prepare(buttonid,reloadmusic=True,reloadleaderboard=True,getranky=False):
     global selected,starrating,maxpoints
     from data.modules.beatmap_processor import beatmaplist
@@ -401,7 +404,7 @@ def prepare(buttonid,reloadmusic=True,reloadleaderboard=True,getranky=False):
     if acc:
         grabobjects(gamepath+selectedqueue[1]+'/'+eval(get_info('diffurl'))[selid])
         bpm=get_info('bpm')
-        maxpoints = getpoint(len(getobjects()),0,0,0,1,len(getobjects()),int)*getmult()
+        reloadpoints()
         starrating=suna(getobjects(),get_info('bpm'))
     else:
         print('No maps found')
