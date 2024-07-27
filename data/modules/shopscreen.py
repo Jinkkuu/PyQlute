@@ -73,7 +73,7 @@ def shop_refresh(usecached):
         for a in sentrynf:
             if getrank(a['RankedStatus'])==srank:
                 sentry.append(a)
-                tmp.append((a['Artist'],a['Title']))
+                tmp.append((a['Title'],a['Artist']))
         if len(sentry)<1:
             shopmsg = 'Nothing is here yet o-o'
         sbt=tmp
@@ -168,16 +168,16 @@ def shopdirect(screen,w,h):
             rank=getrank(entry['RankedStatus'])
             pygame.draw.rect(screen,(50,50,50),(w-400+25,120,350,180))
             screen.blit(bgs,(w-400+25,120))
-            screen.blit(getfonts(0).render(entry['Title'],True,(255,255,255)),(w-400+25,340))
-            screen.blit(getfonts(0).render(entry['Artist'],True,(255,255,255)),(w-400+25,370))
-            screen.blit(getfonts(0).render(entry['Creator'],True,(255,255,255)),(w-400+25,400))
+            screen.blit(getfonts(0).render('Title: '+entry['Title'],True,(255,255,255)),(w-400+25,340))
+            screen.blit(getfonts(0).render('Artist: '+entry['Artist'],True,(255,255,255)),(w-400+25,370))
+            screen.blit(getfonts(0).render('Created by: '+entry['Creator'],True,(255,255,255)),(w-400+25,400))
             if entry['ChildrenBeatmaps'][0]['MaxCombo']:
                 com=entry['ChildrenBeatmaps'][0]['MaxCombo']
             else:
                 com=0
             screen.blit(getfonts(0).render(str('BPM:'+str(entry['ChildrenBeatmaps'][0]['BPM'])+' - '+str(getpoint(com,0,0,0,1,combo=com))+'pp - '+clockify(entry['ChildrenBeatmaps'][0]['TotalLength']*1000)),True,(255,255,255)),(w-400+25,310))
-            pygame.draw.rect(screen,rankmodes[rank][1],(w-400+25,260,100,40),border_top_right_radius=10)
-            center_text(screen,rankmodes[rank][0],(w-400+25,265,100,35  ))
+            pygame.draw.rect(screen,rankmodes[rank][1],(w-400+25,260,110,40),border_top_right_radius=10)
+            center_text(screen,rankmodes[rank][0],(w-400+25,265,110,35  ))
         else:
             crok=999
 
