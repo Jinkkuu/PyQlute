@@ -13,7 +13,7 @@ def initscreen(): # Initialize the screen
 def initfont():
     from data.modules.bootstrap import getsysdata,fontpath
     pygame.font.init()
-    fontname={'default':fontpath+'default.otf','bold':getsysdata()+'fonts/default.otf','score':getsysdata()+'fonts/score.ttf'}
+    fontname={'default':fontpath+'default.ttf','bold':getsysdata()+'fonts/default.ttf','score':getsysdata()+'fonts/score.ttf'}
     return pygame.font.Font(fontname['default'],  int(20)),pygame.font.Font(fontname['default'],  12),pygame.font.Font(fontname['default'],  48),pygame.font.Font(fontname['bold'],  int(24)),pygame.font.Font(fontname['score'],  int(48))
 
 fonts=initfont() # Loads up the fonts
