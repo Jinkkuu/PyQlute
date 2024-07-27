@@ -1,4 +1,5 @@
-from data.modules.bootstrap import getuserdata,getactivity,setmsg,transitionprep,gamever,gamename
+from data.modules.bootstrap import getuserdata,getactivity,setmsg,transitionprep,gamever,gamename,notification
+from data.modules.beatmap_processor import recalculate
 from data.modules.renderapi import getfonts,draw_button
 from data.modules.colours import maincolour
 from data.modules.input import get_input
@@ -105,7 +106,10 @@ def checkbutton(screen,buttonpos,buttontext,buttonticked,title='Test'):
         if tmp in (0,1):
             buttpos=pygame.Rect(rect[2]+20,buttonpos[text[0]][1]-2,35,rect[3])
         else:
-            txt=getfonts(1).render(': '+tmp,True,(255,255,255))
+            if tmp != '':
+                txt=getfonts(1).render(': '+tmp,True,(255,255,255))
+            else:
+                txt=getfonts(1).render('',True,(255,255,255))
             buttpos=txt.get_rect()[-1]
             buttpos=pygame.Rect(0,buttonpos[text[0]][1]-2,400,buttpos)
         mouse=pygame.mouse.get_pos()
@@ -141,7 +145,7 @@ def settingspage(screen,w,h):
         print('changed')
         sh=h
         sw=w
-        setpage=pygame.surface.Surface((400,h),pygame.SRCALPHA).convert()
+        setpage=pygame.surface.Surface((400,h)).convert()
         blackout=pygame.surface.Surface((w,h)).convert()
     if setani.value <= 0.99 and setani.value > 0.01:
         blackout.set_alpha(100*setani.value)
@@ -169,7 +173,7 @@ def settingspage(screen,w,h):
                                            'Animation':settingskeystore['animation'],
                                            'Show FPS':settingskeystore['fpsmetre'],
                                            },
-                               'debug':{},
+                               'debug':{'Recalculate Star Ratings (WILL HANG THE GAME FOR A WHILE)':''},
                                'account':{'You are ':user}}
         setpage.blit(getfonts(2).render('Settings',True,(255,255,255)),(10,10+settingscroll))
         tick=0
@@ -216,6 +220,9 @@ def settingspage(screen,w,h):
                         settingskeystore['animation']=not settingskeystore['animation']
                     elif bootid == 10:
                         settingskeystore['fpsmetre']=not settingskeystore['fpsmetre']
+                    elif bootid == 11:
+                        recalculate()
+                        notification('Recalculation',desc='Recalculation is complete!')
                     if bootid:
                         reloadsettings()
                 else:
@@ -226,9 +233,15 @@ def settingspage(screen,w,h):
         screen.blit(blackout,(0,0))
         screen.blit(setpage,(-400+(400*setani.value),0))
     for event in get_input():
-        if event.type  ==  pygame.MOUSEBUTTONDOWN and setshow and "sysbutton" in globals():
-            if sysbutton:
+        if event.type  ==  pygame.MOUSEBUTTONDOWN:
+            if setshow and "sysbutton" in globals() and sysbutton:
                 togset()        
+            elif setshow and event.button==4:
+                if not settingscroll+40>0:
+                    settingscroll+=40
+            elif setshow and event.button==5:
+                if not settingscroll-40<-80:
+                    settingscroll-=40
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LCTRL or event.key == pygame.K_RCTRL:
                 ctrl=1
@@ -246,14 +259,4 @@ def settingspage(screen,w,h):
         togset()
         ctrl=0
         obut=0
-## Input
-        for event in get_input():
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if catbutton and not catbutton==2:
-                    setupid=catbutton
-                elif catbutton==2: # will introduce a better version
-                    pass
-#                    transitionprep(11)
-#                    sbid=skinid
-#                    shopscroll=0
 
