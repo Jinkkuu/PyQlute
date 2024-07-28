@@ -239,8 +239,10 @@ def main(screen,w,h):
             else:
                 tm.append(t[b-1])
         mod,modh=renderapi.draw_button(screen,((tm[0]+(100*pop)-110,h-160,90,40) ,(tm[1]+(100*pop)-110,h-110,90,40) ,(tm[2]+(200*pop)-210,h-160,90,40) ,(tm[3]+(200*pop)-210,h-110,90,40) ,(tm[4]+(300*pop)-310,h-160,90,40)),modsalias,return_hover=1,enabled_button=modsen)
-        pygame.draw.rect(screen,songselectcolour,(w//2-80,h-60,300,60))
-        card(screen,(w//2-80,h-55),hidebg=1,overidecolour=(100,100,100),mini=1,accuracy=getmystats()[0],points=getmystats()[1],rank=getmystats()[2],username=getsetting('username'))
+        from data.modules.onlineapi import issigned
+        if issigned:
+            pygame.draw.rect(screen,songselectcolour,(w//2-80,h-60,300,60))
+            card(screen,(w//2-80,h-55),hidebg=1,overidecolour=(100,100,100),mini=1,accuracy=getmystats()[0],points=getmystats()[1],rank=getmystats()[2],username=getsetting('username'))
         
         
         if  beatcount:

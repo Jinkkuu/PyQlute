@@ -4,7 +4,7 @@ from data.modules.colours import maincolour
 from data.modules.settings import getsetting,setsetting
 from data.modules.audio import load_music,get_pos,music_control
 from data.modules.beatmap_processor import get_info,getobjects,getpoint,getkeycount,getkeypos,gettiming
-from data.modules.onlineapi import getleaderboard,submit_score,issubmiting,setsubmit,getsubmitstatus
+from data.modules.onlineapi import getleaderboard,submit_score,issubmiting,setsubmit,getsubmitstatus,getlocalleaderboard
 from data.modules.bootstrap import getimg,getactivity,transitionprep,clockify,gamepath
 import data.modules.renderapi as renderapi
 import pygame,time,threading
@@ -322,7 +322,10 @@ def main(screen,w,h):
 #        tmp = renderapi.getfonts(0).render(str(combo),True,(255,255,255))
 #        screen.blit(tmp,(10,10))
 ## Leaderboard Section
-        lead=getleaderboard()
+        if getsetting('leaderboardtype'): 
+            lead=getleaderboard()
+        else:
+            lead=getlocalleaderboard()
         if getsetting('leaderboard') and len(lead)>0:
             players=1
             t=1
