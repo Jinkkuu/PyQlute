@@ -275,6 +275,18 @@ def main(screen,w,h):
                 if not getsubmitstatus():
                     setsubmit(1)
                     threading.Thread(target=submit_score,args=(int(points),maxcombo,eval(get_info('beatmapids'))[selected[1]],get_info('beatmapsetid'),hits[0],hits[1],hits[2],hits[3],eval(get_info('maps'))[selected[1]],mods,int(getmaxpoints()),int(time.time()-timetaken),)).start()
+                    if not modsen[0]:
+                        from data.modules.beatmap_processor import beatmaplocalapi,beatmaps
+                        from data.modules.onlineapi import rlocalleaderboard
+                        from data.modules.bootstrap import notification
+                        if getsetting('username'):
+                            username=getsetting('username')
+                        else:
+                            username='Guest'
+                        beatmaplocalapi.execute("INSERT INTO scores (beatmapid,beatmapsetid,username,points,max,great,meh,bad,accuracy,combo,mods,time) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",(eval(get_info('beatmapids'))[selected[1]],get_info('beatmapsetid'),username,points,hits[0],hits[1],hits[2],hits[3],accuracy,maxcombo,mods,int(time.time())))
+                        beatmaps.commit()                    
+                        rlocalleaderboard(eval(get_info('beatmapids'))[selected[1]])
+                        notification('Score Saved',desc='I saved your scores to the local leaderboard for you to see :>')
                 transitionprep(9)
             if not getsetting('hidegamehud'):
                 song_progress(screen,get_pos(),length+1000,w,h)

@@ -8,8 +8,8 @@ from data.modules.input import get_input
 from data.modules.gameplay import resetcursor,reset_score,getpoint
 from data.modules.card import main as card
 from data.modules.shopscreen import rankmodes
-from data.modules.onlineapi import getmystats,getleaderboard,rleaderboard,getstat
-from data.modules.settings import getsetting
+from data.modules.onlineapi import getmystats,getleaderboard,rleaderboard,getstat,getlocalleaderboard,rlocalleaderboard
+from data.modules.settings import getsetting,setsetting
 import pygame
 from tweener import *
 cross=[0,0,0]
@@ -167,24 +167,34 @@ def main(screen,w,h):
             t=renderapi.getfonts(0).render(rankmodes[ranktype][0],True,(255,255,255))
             rtl=t.get_rect()
             fr=rtl
-            rtl=290-rtl[2],80
-            screen.blit(renderapi.getfonts(0).render(str(60000//get_info('bpm'))+' BPM',True,(255,255,255)),(20,85))
+            rtl=290-rtl[2],65
+            screen.blit(renderapi.getfonts(0).render(str(60000//get_info('bpm'))+' BPM',True,(255,255,255)),(10,rtl[1]+7))
             pygame.draw.rect(screen,rankmodes[ranktype][1],(rtl[0],rtl[1],fr[2]+10,35),border_bottom_left_radius=10,border_top_left_radius=10)
             screen.blit(t,(rtl[0]+5,rtl[1]+7))
             t=renderapi.getfonts(0).render(str(round(starrating*(mult+1)/2,2))+' Stars',True,(255,255,255))
             rtl=t.get_rect()
             fr=rtl
-            rtl=290-rtl[2],125
+            rtl=290-rtl[2],110
             screen.blit(t,(rtl[0],rtl[1]))
             if altbutton:
                 tmp = renderapi.getfonts(0).render(str(getmaxpoints())+'pp',True,(255,255,255))
             else:
                 tmp = renderapi.getfonts(0).render(clockify(eval(get_info('lengths'))[selected[1]]),True,(255,255,255))
-            screen.blit(tmp,(20,125))
+            screen.blit(tmp,(10,110))
         
         if getsetting('leaderboard'): 
+            leadbutton=renderapi.draw_button(screen,((10,h//2-160,140,20),(150,h//2-160,140,20)), ('Local','Online'),fonttype=1,border_radius=0,selected_button=getsetting('leaderboardtype')+1)
+            if leadbutton:
+                setsetting('leaderboardtype',leadbutton-1)
+                if getsetting('leaderboardtype'): 
+                    threading.Thread(target=rleaderboard, args=(eval(get_info('beatmapids'))[selected[1]],)).start()
+                else:
+                    rlocalleaderboard(eval(get_info('beatmapids'))[selected[1]])
             c=0
-            lead=getleaderboard()
+            if getsetting('leaderboardtype'): 
+                lead=getleaderboard()
+            else:
+                lead=getlocalleaderboard()
             if len(lead):
                 for a in lead: 
                     if a['username']==getsetting('username'): 
@@ -200,7 +210,11 @@ def main(screen,w,h):
                     pygame.draw.rect(lpanel,(mapidlecolour[0]+hov,mapidlecolour[1]+hov,mapidlecolour[2]+hov),pygame.Rect(leadpos)) 
                     lpanel.blit(renderapi.getfonts(0).render('#'+str(c+1)+' '+a["username"],True,col),(leadpos[0]+10,leadpos[1]+10))
                     lpanel.blit(renderapi.getfonts(1).render(format(int(a['score']),',')+' - '+str(int(a["points"]))+'pp ('+str(int(a['combo']))+'x) '+timeform(int(time.time()-a['time'])),True,(255,255,255)),(leadpos[0]+10,leadpos[1]+38))
-                    renderapi.center_text(lpanel,a['mods'],(leadpos[0]+250,leadpos[1]+45,0,0),('rtl','min'),(255,255,255)) 
+                    t=renderapi.getfonts(1).render(a['mods'],True,(255,255,255))
+                    rtl=t.get_rect()
+                    fr=rtl
+                    rtl=270-fr[2],leadpos[1]+38
+                    lpanel.blit(t,rtl)
                     c+=1
                 if c>5:
                     scrollbar(lpanel,(0,0),(10,300),search=cross[2]/60,length=len(lead)*60,colour=(255,255,255))
@@ -394,7 +408,10 @@ def prepare(buttonid,reloadmusic=True,reloadleaderboard=True,getranky=False):
     mod=selectedqueue[0].replace(' [no video]','')
     reloadbg(gamepath+selectedqueue[1]+'/'+selectedqueue[3],gamepath+selectedqueue[1]+'/')
     if reloadleaderboard:
-        threading.Thread(target=rleaderboard, args=(eval(get_info('beatmapids'))[selected[1]],)).start()
+        if getsetting('leaderboardtype'):
+            threading.Thread(target=rleaderboard, args=(eval(get_info('beatmapids'))[selected[1]],)).start()
+        else:
+            rlocalleaderboard(eval(get_info('beatmapids'))[selected[1]])
     if getranky:
         threading.Thread(target=getstat, args=(get_info('beatmapsetid'),)).start()
     if mod[0]==' ':

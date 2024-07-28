@@ -56,10 +56,6 @@ def beatres(screen,w,h):
         elif getsetting('username'):
             pygame.draw.rect(screen,maincolour[1],pygame.Rect(w//2-110,h//2+40,220,35),border_radius=10)
             center_text(screen,'You are Level '+str(format(level,','))+'!',(w//2,h//2+60,0,0),colour=(255,255,255))
-#            center_text(screen,'Overall Rank - #'+str(),(w//2+160,h//2+95,0,0),colour=(255,255,255))
-#            center_text(screen,'Overall Points - '+str(),(w//2-150,h//2+95,0,0),colour=(255,255,255))
-#            center_text(screen,'Overall Accuracy - '+str()+'%',(w//2-150,h//2+135,0,0),colour=(255,255,255))
-#            center_text(screen,'Ranked Score - '+str(),(w//2+160,h//2+135,0,0),colour=(255,255,255))
             queue='#'+format(totrank,','),format(totperf,','),str(round(totacc,2))+'%',format(totscore,',')
             for a in range(0,4):
                 pygame.draw.rect(screen,maincolour[2],(w//2-210+(110*a),h//2+100,100,55),border_radius=10)

@@ -36,6 +36,7 @@ settingstemplate={
         'hidegamehud' : 0,
         'master' : 100,
         'animation' : True,
+        'leaderboardtype' : 1,
         'fpsmetre' : False
     }
 setupid=1

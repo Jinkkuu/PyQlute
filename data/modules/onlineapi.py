@@ -44,17 +44,18 @@ def setsubmit(val):
     issubmiting=val
 def submit_score(perf,combo,beatmapid,beatmapsetid,max,great,meh,bad,difficulty,mods,maxperf,taken):
     global oldstats,issubmiting,prevrank
-    prevrank=totrank
-    oldstats=[totperf,totscore,totacc,level]
-    print('Submitting Score...')
-    template=get_info('songtitle')+';'+str(perf)+';'+str(combo)+';'+str(beatmapid)+';'+str(beatmapsetid)+';'+str(max)+';'+str(great)+';'+str(meh)+';'+str(bad)+';'+str(difficulty)+';'+str(mods)+';'+str(maxperf)+';'+str(taken) # type: ignore
-    f=requests.get(getsetting('apiurl')+'api/submitscore?'+str(getsetting('username'))+';'+str(getsetting('password'))+';'+str(template),headers={'User-Agent': 'Qlutev3Client-'+version()[0]},timeout=10) # type: ignore
-    f=f.text
-    reloadprofile() # type: ignore
-    issubmiting = 0
-    if f!='':
-        print(f.rstrip('\n'))
-        notification('QlutaBot',desc=f.rstrip('\n')) # type: ignore
+    if issigned:
+        prevrank=totrank
+        oldstats=[totperf,totscore,totacc,level]
+        print('Submitting Score...')
+        template=get_info('songtitle')+';'+str(perf)+';'+str(combo)+';'+str(beatmapid)+';'+str(beatmapsetid)+';'+str(max)+';'+str(great)+';'+str(meh)+';'+str(bad)+';'+str(difficulty)+';'+str(mods)+';'+str(maxperf)+';'+str(taken) # type: ignore
+        f=requests.get(getsetting('apiurl')+'api/submitscore?'+str(getsetting('username'))+';'+str(getsetting('password'))+';'+str(template),headers={'User-Agent': 'Qlutev3Client-'+version()[0]},timeout=10) # type: ignore
+        f=f.text
+        reloadprofile() # type: ignore
+        issubmiting = 0
+        if f!='':
+            print(f.rstrip('\n'))
+            notification('QlutaBot',desc=f.rstrip('\n')) # type: ignore
 def reloadprofile():
     global totperf,totscore,totrank,totacc,issigned,successfulsignin,restricted,level,qlutaerror
     if getsetting('username')!='':
@@ -96,16 +97,52 @@ def reloadprofile():
             totacc=0
             level=1
             totrank=0
+
+
+localleaderboard=[]
 def getleaderboard():
     return leaderboard
+def rlocalleaderboard(value):
+    global localleaderboard
+    from data.modules.beatmap_processor import beatmaplocalapi
+    from data.modules.gameplay import getpoint
+    from data.modules.songselect import modsaliasab
+    localleaderboard = []
+    beatmaplocalapi.execute('SELECT * FROM scores WHERE beatmapid = ? ORDER BY points DESC',(value,))
+    for a in beatmaplocalapi.fetchall():
+        multiplier = 1
+        for b in modsaliasab:
+            if b in str(a['mods']):
+               if b=='BD':
+                  multiplier+=1.5
+               elif b in ('HT','EZ'):
+                  multiplier/=2
+               elif b == 'SN':
+                  multiplier+=0.8
+               elif not b in ('RND','AT','SN'):
+                  multiplier+=0.5
+        points = getpoint(a['max'],a['great'],a['meh'],a['bad'],multiplier,a['combo'],int)
+        maxpoints = getpoint(a['max']+a['great']+a['meh']+a['bad'],0,0,0,multiplier,a['combo'],int)
+        score = int((points/maxpoints)*(1000000*multiplier))
+        localleaderboard.append({'username':a['username'],'combo':a['combo'],'MAX':a['max'],'GOOD':a['great'],'MEH':a['meh'],'BAD':a['bad'],'mods':a['mods'],'time':a['time'],'points':points,'score':score})
+
+def getlocalleaderboard():
+    return localleaderboard
+idl=0 # Checks if its already been fetched
 def rleaderboard(value):
-    global leaderboard
-    leaderboard=[]
-    try:
-        f=requests.get(getsetting('apiurl')+'api/getleaderboard?'+str(value))
-        leaderboard=f.json()
-    except Exception:
-        pass
+    global leaderboard,idl
+    if idl != value:
+        idl = value
+        leaderboard=[]
+        if getsetting('leaderboardtype'):
+            try:
+                f=requests.get(getsetting('apiurl')+'api/getleaderboard?'+str(value))
+                if getsetting('leaderboardtype'):
+                    leaderboard=f.json()
+            except Exception:
+                pass
+        else:
+            leaderboard=getlocalleaderboard()
 def ondemand():
     global totperf,totscore,totrank,nettick,issigned,qlutaerror,menunotice,pingspeed,downloadqueue,level,multitime
     from data.modules.bootstrap import getactivity

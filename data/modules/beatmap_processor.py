@@ -172,7 +172,7 @@ def reloadbeatmaps():
             reloadbeatmaps()
 def chkscore():
     if not beatmaplocalapi.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='scores';").fetchone():
-        beatmaplocalapi.execute("CREATE TABLE scores(beatmapsetid INT,beatmapid INT,username,points,max,great,meh,bad,accuracy,combo,mods)")
+        beatmaplocalapi.execute("CREATE TABLE scores(beatmapsetid INT,beatmapid INT,username,points,max,great,meh,bad,accuracy,combo,mods,time)")
         print('Updated qlute.db')
 def random_beatmap():
     global songcache
