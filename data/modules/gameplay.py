@@ -24,6 +24,7 @@ hitacc='LATE','GG','EARLY'
 hitcolour=(100, 120, 200),(100, 200, 100),(200, 200, 100),(200, 100, 100)
 rate=65
 judgewindow=0,0
+pos = (64,192,320,448) # Keys
 keymap = tuple((100*id,30,100,30) for id in range(0,4))
 def iscatched(block,isauto,ob,h):
     from data.modules.songselect import modsen
@@ -49,8 +50,7 @@ def iscatched(block,isauto,ob,h):
     return (lastcall,tick,tim)
 
 def reset_score():
-    global points,combo,ncombo,maxcombo,hits,clickedkeys, ncombo,keys, combotime, accuracy, timetaken,health,keyslight,pos,firstrow,score,kiai,timestep
-    pos = (64,192,320,448) # Keys
+    global points,combo,ncombo,maxcombo,hits,clickedkeys, ncombo,keys, combotime, accuracy, timetaken,health,keyslight,firstrow,score,kiai,timestep
     keyslight = [Tween(begin=0) for a in range(0,getkeycount())]
     points = 0
     health = 10
