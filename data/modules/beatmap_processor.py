@@ -249,7 +249,17 @@ oldw=0
 oldh=0
 bg=pygame.surface.Surface((0,0))
 def getbackground(w,h):
-    return background
+    global oldw,oldh,bg
+    try:
+        if oldw != w or oldh != h and background:
+            oldw=w
+            oldh=h
+            bg = pygame.transform.smoothscale(background,(w+10,h+10))
+        elif not background:
+            bg=0
+    except TypeError:
+        bg=0
+    return bg
 def reloadbg(value,base):
     global background,bump,sc,bg,oldw,oldh
     try:

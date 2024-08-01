@@ -63,8 +63,7 @@ def main(screen,w,h):
         parallax=(-5-parallax[0],-5-parallax[1])
         bgs=getbackground(w,h)
         if getsetting('bgmm') and bgs and len(beatmaplist):
-            bgrect=bgs.get_rect(center = screen.get_rect().center)[:2]
-            bg.blit(bgs,(bgrect[0]-parallax[0],bgrect[1]-parallax[1]))
+            bg.blit(bgs,parallax)
         else:
             bg.fill((maincolour[0][0],maincolour[0][1],maincolour[0][2]))
         screen.blits(((bg,(0,0)),(flashscr,(0,0))))
@@ -90,10 +89,9 @@ def main(screen,w,h):
             center_text(screen,notice,(w//2-(txtrect[2]//2)-10-parallax[0],h//2-170-parallax[1],txtrect[2]+20,50),'',(255,255,255))
         if getsigned():
             card(screen,(w//2-150-parallax[0],h//2+120-parallax[1]),accuracy=getmystats()[0],points=getmystats()[1],rank=getmystats()[2],score=getmystats()[3],level=getmystats()[4],username=getsetting('username'))
-        for a in range(1,len(mtext[meid])+1):
-            mmenu.append((fmove[a-1]+(bla-parallax[0]+(w//2-((wid*scale)*(len(mtext[meid])/2))+((wid*scale)*(a-1))))-(moveid[a-1]//2)-pmove[a-1],h//2-(75*scale)-parallax[1],(wid*scale)+moveid[a-1],hei*scale))
+        mmenu = ((fmove[a-1]+(bla-parallax[0]+(w//2-((wid*scale)*(len(mtext[meid])/2))+((wid*scale)*(a-1))))-(moveid[a-1]//2)-pmove[a-1],h//2-(75*scale)-parallax[1],(wid*scale)+moveid[a-1],hei*scale) for a in range(1,len(mtext[meid])+1))
         drawRhomboid(screen,dcolour,bla-25-parallax[0],h//2-(76*scale)+1-parallax[1],w+80,hei*scale,26)
-        tmenu=[(w-(40*a),0,40,40) for a in range(1,4)]
+        tmenu=((w-(40*a),0,40,40) for a in range(1,4))
         button, highlight=draw_button(screen,mmenu,mtext[meid],isblade=1,return_hover=1,icon=micon,textoffset=(-10,25),iconoffset=(-7,-10))
         topbutton=draw_button(screen,tmenu,'',hidetext=1,icon=('settings.png','user.png','download.png'),border_radius=0)
         if version()[0]!='0.0.0':
