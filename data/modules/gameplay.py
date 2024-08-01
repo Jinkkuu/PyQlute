@@ -125,13 +125,14 @@ def main(screen,w,h):
     if getactivity() == 5:
         score.update()
         tick=time.time()
-        from data.modules.mainmenu import getflash
+        from data.modules.mainmenu import flashylights
         from data.modules.songselect import modsen,reload_map,getmaxpoints,selected,mods,get_mods,getmult
         for a in keyslight:
             a.update()
-        screen.fill((20,20,20))
         if kiai:
-            screen.blit(getflash(),(0,0))
+            screen.fill((20+(10*flashylights),20+(10*flashylights),20+(10*flashylights)))
+        else:
+            screen.fill((20,20,20))
         clicked=0
         length=eval(get_info('lengths'))[selected[1]]
         fieldpos = (w//2,0) # Gameplay field

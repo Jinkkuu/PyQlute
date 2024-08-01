@@ -103,7 +103,7 @@ def main(screen,w,h):
         screen.fill((maincolour[4]))
         if bg and len(beatmaplist):
             screen.blit(bg,parallax)
-        screen.blit(getflash(),(0,0))
+        #screen.blit(getflash(),(0,0))
         if mult!=1:
             modtext=str(round(mult,2))+'x'
         else:
