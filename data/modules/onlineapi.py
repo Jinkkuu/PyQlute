@@ -64,6 +64,7 @@ def reloadprofile():
                 f=requests.get(getsetting('apiurl')+'api/chkprofile?'+str(getsetting('username'))+'?'+str(getsetting('password')),headers={'User-Agent': 'Qlutev3Client-'+version()[0]},timeout=5)
                 cache=json.loads(f.text)
                 if int(cache['success'])==1:
+                    notification('QlutaBot','Welcome Back, '+str(getsetting('username'))+'!')
                     if len(cache['notification']):
                        notification('QlutaBot',cache['notification'])
                     bypass=0
