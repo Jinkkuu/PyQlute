@@ -24,7 +24,7 @@ def editmenu(screen,w,h):
             pou = pygame.Rect(w//2+(100*id)-200,mouse[1],100,30)
             if pygame.Rect.collidepoint(pou,mouse[0],mouse[1]):
                 pygame.draw.rect(screen,(255,255,255),pou)
-                screen.blit(getfonts(0).render('- '+str(ti+(blockpos)),True,(255,255,255)),(w//2+210,mouse[1]))
+                screen.blit(getfonts(0).render('- '+clockify(blockpos),True,(255,255,255)),(w//2+210,mouse[1]))
                 break
         for ob in edittmp:
             block=int(ti-int(ob[1])+h)
