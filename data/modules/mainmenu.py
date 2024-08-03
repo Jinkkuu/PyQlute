@@ -52,8 +52,10 @@ def main(screen,w,h):
         bg=pygame.surface.Surface(olds)
         topbar=pygame.surface.Surface((olds[0],40))
         topbar.set_alpha(80)
-    flashscr.fill((bgcolour,bgcolour,bgcolour))
+    elif settingskeystore['effects'] and getactivity() == 1:
+        bg.set_alpha(235+(20*flashylights))
     if getactivity()==1:
+        screen.fill((bgcolour,bgcolour,bgcolour))
         if not bladeani[1] and getactivity()==1:
             bladeani[1]=1
             bladeani[0].start()    
@@ -86,9 +88,9 @@ def main(screen,w,h):
             #tmp = getfonts(0).render(notice,  True,  (0,0,0))
             #txtrect=tmp.get_rect()
             #pygame.draw.rect(screen,maincolour[1],pygame.Rect(w//2-(txtrect[2]//2)-10-parallax[0],h//2-170-parallax[1],txtrect[2]+20,50),border_radius=10)
-            pygame.draw.rect(screen,(maincolour[1]),(0,h//2-90-parallax[1],w+10,32))
+            pygame.draw.rect(screen,(maincolour[1]),(bla,h//2-90-parallax[1],w+10,32))
             #screen.blit(getfonts(0).render(notice,True,(255,255,255)),(10-parallax[0],h//2-85-parallax[1]))
-            center_text(screen,notice,(10-parallax[0],h//2-90-parallax[1],w+10,30),'',(255,255,255))
+            center_text(screen,notice,(bla-10-parallax[0],h//2-90-parallax[1],w+10,30),'',(255,255,255))
         if getsigned():
             card(screen,(w//2-150-parallax[0],h//2+120-parallax[1]),accuracy=getmystats()[0],points=getmystats()[1],rank=getmystats()[2],score=getmystats()[3],level=getmystats()[4],username=getsetting('username'))
         mmenu = ((fmove[a-1]+(bla-parallax[0]+(w//2-((wid*scale)*(len(mtext[meid])/2))+((wid*scale)*(a-1))))-(moveid[a-1]//2)-pmove[a-1],h//2-(75*scale)-parallax[1],(wid*scale)+moveid[a-1],hei*scale) for a in range(1,len(mtext[meid])+1))

@@ -250,7 +250,7 @@ def main(screen,w,h):
         button = button = renderapi.draw_button(screen,((0,h-60,100,60),(100,h-60,100,60),(200,h,100,60),),('Back',modtext,'Quest'),border_radius=0)
         tmp = renderapi.getfonts(0).render(title,True,(255,255,255))
         screen.blit(tmp,(20,20))
-        screen.blit(renderapi.getfonts(1).render(str(obj)+' out of '+str((id,oid))+' Objects ('+str(pos)+' pos)',True,(255,255,255)),(10,10))
+#        screen.blit(renderapi.getfonts(1).render(str(obj)+' out of '+str((id,oid))+' Objects ('+str(pos)+' pos)',True,(255,255,255)),(10,10))
         
 
 # MSG tooltip

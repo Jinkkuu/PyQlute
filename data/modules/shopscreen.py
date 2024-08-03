@@ -1,7 +1,7 @@
 import threading,pygame,io,requests,json
 from data.modules.bootstrap import getactivity,transitionprep,scrollbar,notification,clockify
 from data.modules.beatmap_processor import getpoint,rankmodes
-from data.modules.colours import maincolour
+from data.modules.colours import maincolour,shopscheme
 from data.modules.input import get_input
 from data.modules.onlineapi import downloadmap,getqueue
 from data.modules.renderapi import getfonts,draw_button,textbox,center_text
@@ -81,6 +81,15 @@ def shop_refresh(usecached):
     except Exception as err:
         print(err,'> Store')
         serr=1
+def dimcolour(base,dimness):
+    t=base[0]-dimness,base[1]-dimness,base[2]-dimness
+    x=[]
+    for a in t:
+        if a<0:
+            x.append(0)
+        else:
+            x.append(a)
+    return tuple(x)
 def downloads(screen,w,h):
     global sysbutton,dq,dqs,serr,shopscroll
     if getactivity()==8:
@@ -118,7 +127,7 @@ def shopdirect(screen,w,h):
             shopref=0
             usecache=0
             serr=0
-        pygame.draw.rect(screen,maincolour[1],(0,100,w,h-160))
+        pygame.draw.rect(screen,dimcolour(shopscheme,40),(0,100,w,h-160))
         obj=0
         id=0
         mouse=pygame.mouse.get_pos()
@@ -144,10 +153,10 @@ def shopdirect(screen,w,h):
                 screen.blit(scr,(0,offset))
                 obj+=1
             id+=1
-        pygame.draw.rect(screen,maincolour[8],(w-400,100,400,h-160))
-        pygame.draw.rect(screen,maincolour[2],(0,h-60,w,60))
-        pygame.draw.rect(screen,maincolour[2],(0,100,w-400,20))
-        pygame.draw.rect(screen,maincolour[2],(0,0,w,100))
+        pygame.draw.rect(screen,dimcolour(shopscheme,60),(w-400,100,400,h-160))
+        pygame.draw.rect(screen,dimcolour(shopscheme,20),(0,h-60,w,60))
+        pygame.draw.rect(screen,dimcolour(shopscheme,80),(0,100,w-400,20))
+        pygame.draw.rect(screen,dimcolour(shopscheme,20),(0,0,w,100))
         screen.blit(getfonts(2).render('Browse',True,(255,255,255)),(20,20))
         shopbutton2=draw_button(screen,((0,100,100,20),(300,80,100,20),(100,100,100,20),(200,100,100,20),(300,100,100,20),), ('Refresh','Search','Ranked','Unranked','Special'),fonttype=1,border_radius=0,selected_button=srank+3)
         textbox(screen,(0,80,300),20,text=search,center=True,min=True,bg_colour=maincolour[8])
