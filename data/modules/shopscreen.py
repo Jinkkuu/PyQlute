@@ -135,6 +135,7 @@ def shopdirect(screen,w,h):
         click=0
         for a in sbt:
             offset=shopscroll+(80*id)+120
+            boo = dimcolour(shopscheme,25)
             if 0>=-offset and -offset>=-h+80:
                 scr=pygame.surface.Surface((w-400,80))
                 if pygame.Rect.collidepoint(pygame.Rect(0,offset,w//2,80),mouse[0],mouse[1]):
@@ -146,7 +147,7 @@ def shopdirect(screen,w,h):
                 if id==sbid-1:
                     scr.fill(maincolour[3])
                 else:
-                    scr.fill((maincolour[2][0]+hover,maincolour[2][1]+hover,maincolour[2][2]+hover))
+                    scr.fill((boo[0]+hover,boo[1]+hover,boo[2]+hover))
                 meta = getfonts(0).render(a[0],True,(255,255,255)), getfonts(0).render(a[1],True,(255,255,255))
                 scr.blit(meta[0],(15,10))
                 scr.blit(meta[1],(15,50))
@@ -175,7 +176,7 @@ def shopdirect(screen,w,h):
             crok=0
             entry=sentry[sbid-1]
             rank=getrank(entry['RankedStatus'])
-            pygame.draw.rect(screen,(50,50,50),(w-400+25,120,350,180))
+            pygame.draw.rect(screen,dimcolour(shopscheme,70),(w-400+25,120,350,180))
             screen.blit(bgs,(w-400+25,120))
             screen.blit(getfonts(0).render('Title: '+entry['Title'],True,(255,255,255)),(w-400+25,340))
             screen.blit(getfonts(0).render('Artist: '+entry['Artist'],True,(255,255,255)),(w-400+25,370))

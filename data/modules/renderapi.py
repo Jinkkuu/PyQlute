@@ -93,7 +93,7 @@ def drawRhomboid(surf, color, x, y, width, height, offset, thickness=0):
         (x-offset, y + height))
     pygame.gfxdraw.filled_polygon(surf,points,color)
     pygame.gfxdraw.aapolygon(surf,points,color)
-def center_text(screen,text,pos,type='',colour=(255,255,255)): # Can be used for backward compatability but not recommended!
+def center_text(screen,text,pos,type='',colour=(255,255,255)): # Can be used for compatability reasons but not recommended!
     if "bold" in type:
         ftype=3
     elif "min" in type:
