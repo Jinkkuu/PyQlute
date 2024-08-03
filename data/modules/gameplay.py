@@ -103,19 +103,13 @@ def showplayfield(screen,pos,bypass=False):
     count=4
     space=(keymap[0][2]*count//2)
     pygame.draw.rect(screen,(50,50,50),(pos[0]-space,h-60+pos[1]-10,keymap[0][2]*count,10)) # Judgement Line
-    col=(10,30),(20,40)
-    for a in range(1,count+1):
-        b=a-1
-        if a>1 and a<4:
-            bcol=col[1]
-        else:
-            bcol=col[0]
-        co=(100,int(100+(20*keyslight[b].value)),int(100+(120*keyslight[b].value)))
-        cb=(80,int(80+(20*keyslight[b].value)),int(80+(120*keyslight[b].value)))
-        cc=(40,int(40+(bcol[0]*keyslight[b].value)),int(40+(bcol[1]*keyslight[b].value)))
-        pygame.draw.rect(screen,(cc),(keymap[b][0]-((keymap[0][2]*getkeycount()//2))+pos[0],0,keymap[b][2],keymap[b][3]+(h-100)))
-        pygame.draw.rect(screen,(cb),(keymap[b][0]-((keymap[0][2]*getkeycount()//2))+pos[0],h-60+pos[1],keymap[b][2],keymap[b][3]))
-        pygame.draw.rect(screen,(co),(keymap[b][0]-((keymap[0][2]*getkeycount()//2))+pos[0],h-60+pos[1]+(10*-keyslight[b].value),keymap[b][2],keymap[b][3]))
+    col=10,30
+    b=0
+    while b < count:
+        pygame.draw.rect(screen,(40,int(40+(col[0]*keyslight[b].value)),int(40+(col[1]*keyslight[b].value))),(keymap[b][0]-((keymap[0][2]*2))+pos[0],0,keymap[b][2],keymap[b][3]+(h-100)))
+        pygame.draw.rect(screen,(80,int(80+(20*keyslight[b].value)),int(80+(120*keyslight[b].value))),(keymap[b][0]-((keymap[0][2]*2))+pos[0],h-60+pos[1],keymap[b][2],keymap[b][3]))
+        pygame.draw.rect(screen,(100,int(100+(20*keyslight[b].value)),int(100+(120*keyslight[b].value))),(keymap[b][0]-((keymap[0][2]*2))+pos[0],h-60+pos[1]+(10*-keyslight[b].value),keymap[b][2],keymap[b][3]))
+        b+=1
 objecon=0
 def resetcursor():
     global objecon
@@ -173,12 +167,13 @@ def main(screen,w,h):
             obid=1
             objectcache=clickedkeys[objecon:255+objecon]
             tmp=objectcache[:4]
-            if len(objectcache):
+            obcount = len(objectcache)
+            if obcount:
                 firstobject=int(ti-int(objectcache[0][2])+h)
-            for ob in objectcache:
+            while obid < obcount:
+                ob=objectcache[obid-1]
                 block=int(ti-int(ob[2])+h)
                 if ((block <=h+100 and block>=-40 and not modsen[2]) or (block <=h+100 and block>=h//2 and modsen[2])) and ob[0]:
-
                     if obid==1:
                         if health-t1>1 and accuracy<95:
                             health-=t1
