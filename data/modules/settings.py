@@ -164,7 +164,7 @@ def settingspage(screen,w,h):
                                'Save Replays':settingskeystore['sreplay'],
                                'Discord RPC':settingskeystore['discordrpc'],
                                },
-                               'skinning':{},
+                               'skinning':{'Change Skins':''},
                                'audio':{'Hitsounds':settingskeystore['hitsound']
                                         },
                                'graphics':{'FPS':tmp,
@@ -202,26 +202,26 @@ def settingspage(screen,w,h):
                         settingskeystore['sreplay']=not settingskeystore['sreplay']
                     elif bootid == 3:
                         settingskeystore['discordrpc']=not settingskeystore['discordrpc']
-                    elif bootid == 4:
+                    elif bootid == 5:
                         settingskeystore['hitsound'] = not settingskeystore['hitsound']
-                    elif bootid  ==  5:
+                    elif bootid  ==  6:
                         change=True
                         if fpsmode<1:
                             fpsmode=len(fpsmodes)-1
                         else:
                             fpsmode-=1
                         settingskeystore['fps']=fpsmodes[fpsmode]
-                    elif bootid == 6:
-                        settingskeystore['fullscreen'] = not settingskeystore['fullscreen']
                     elif bootid == 7:
-                        settingskeystore['bgmm'] = not settingskeystore['bgmm']
+                        settingskeystore['fullscreen'] = not settingskeystore['fullscreen']
                     elif bootid == 8:
-                        settingskeystore['effects'] = not settingskeystore['effects']
+                        settingskeystore['bgmm'] = not settingskeystore['bgmm']
                     elif bootid == 9:
-                        settingskeystore['animation']=not settingskeystore['animation']
+                        settingskeystore['effects'] = not settingskeystore['effects']
                     elif bootid == 10:
-                        settingskeystore['fpsmetre']=not settingskeystore['fpsmetre']
+                        settingskeystore['animation']=not settingskeystore['animation']
                     elif bootid == 11:
+                        settingskeystore['fpsmetre']=not settingskeystore['fpsmetre']
+                    elif bootid == 12:
                         recalculate()
                         notification('Recalculation',desc='Recalculation is complete!')
                     if bootid:

@@ -23,8 +23,10 @@ modsani=[Tween(begin=0, end=1,duration=350,easing=Easing.CUBIC,easing_mode=Easin
 modsani[0].start()
 modsalias="Auto",'Blind','Slice','EZ','Strict'#,'DT','HT'
 modsaliasab='AT','BD','SL','EZ','SN'#,'DT','HT'
+modspos=(20,20,120,120,220,320,420,480)
 mods=''
 altbutton=0
+msgtip = 'View a perfect play (0)', "Beat to the rhythm (+1.5)", 'Half blind (+0.5)', "makes everything easy (/0.5)", 'You have to aim your hits right! (+0.8)', 'We be easy on you (/0.5)'
 starrating=0 # Star Rating
 if os.path.isfile(getuserdata()+'.developer'):
     modsen[0]=1 # Automatically enables Auto Mod
@@ -71,20 +73,16 @@ def main(screen,w,h):
     global cross,selected,diffsec,modshow,modsani,modsv,modsen,lpanel,panel,olds,altbutton
     from data.modules.mainmenu import getflash
     from data.modules.onlineapi import ranktype
+    from data.modules.beatmap_processor import beatmaplist
     if not "lpanel" in globals():
-        lpanel=pygame.surface.Surface((280,320),pygame.SRCALPHA, 32).convert_alpha()
-    else:
-        lpanel.fill((0,0,0,0))
+        lpanel=pygame.surface.Surface((280,320))
+    elif getsetting('leaderboard') and len(beatmaplist):
+        lpanel.fill((0,0,0))
     if getactivity() == 2:
-        from data.modules.beatmap_processor import beatmaplist
         if olds!=(w,h):
             olds=w,h
-            panel=pygame.surface.Surface((w,h),pygame.SRCALPHA, 32).convert_alpha()
-            pygame.draw.polygon(panel,(0,0,0),((w,h),(0,h),(0,0),(w,0),(w,60),(300,60),(300,h-60),(w,h-60)))
-            panel.set_alpha(100)
         mouse=pygame.mouse.get_pos()
-        parallax=((mouse[0]/w)*10)-5,((mouse[1]/h)*10)-5
-        parallax=(-5-parallax[0],-5-parallax[1])
+        parallax = (mouse[0]/w*10)-5, (mouse[1]/h*10)-5
         mult=getmult()
         modsani[0].update()
         if modsani[0].value==100 or not modshow:
@@ -109,7 +107,6 @@ def main(screen,w,h):
         else:
             modtext='Mods'
         beatcount=len(beatmaplist)
-        diffs=get_info('maps')
         pos=int(-cross[diffsec]//40//2)
         if pos-10>0:
             pos-=10
@@ -119,7 +116,7 @@ def main(screen,w,h):
         id=pos
         oid=0
         if beatcount:
-            i=(beatmaplist,eval(diffs))
+            i=(beatmaplist,diffs)
             for a in i[diffsec][pos:end]:
                 offset=cross[diffsec]+(80*id)+(h//2-80)
                 if 0>=-offset-60 and -offset>=-h:
@@ -146,7 +143,7 @@ def main(screen,w,h):
                     else:
                         meta = renderapi.getfonts(0).render(a,True,(255,255,255))#,renderapi.getfonts(0).render(str()+' Stars',True,(255,255,255))
                         scr.blit(meta,(10,10))
-                        star=round(eval(get_info('starratings'))[id]*(mult+1)/2,2)
+                        star=round(starratings[id]*(mult+1)/2,2)
                         if star>10.99:
                             star=10.99
                         pygame.draw.rect(scr,(50,50,50),(10,50,300,10))
@@ -161,7 +158,7 @@ def main(screen,w,h):
             else:
                 starticon='go.png'
             scrollbar(screen,(w-10,60),(10,h-140),search=cross[diffsec]/80,length=len(i[diffsec]))
-        screen.blit(panel,(0,0))
+        pygame.draw.polygon(screen,songselectcolour,((w,h),(0,h),(0,0),(w,0),(w,60),(300,60),(300,h-60),(w,h-60)))
         if beatcount:
             t=renderapi.getfonts(0).render(rankmodes[ranktype][0],True,(255,255,255))
             rtl=t.get_rect()
@@ -181,7 +178,7 @@ def main(screen,w,h):
                 tmp = renderapi.getfonts(0).render(clockify(eval(get_info('lengths'))[selected[1]]),True,(255,255,255))
             screen.blit(tmp,(10,110))
         
-        if getsetting('leaderboard'): 
+        if getsetting('leaderboard') and beatcount: 
             leadbutton=renderapi.draw_button(screen,((10,h//2-160,140,20),(150,h//2-160,140,20)), ('Local','Online'),fonttype=1,border_radius=0,selected_button=getsetting('leaderboardtype')+1)
             if leadbutton:
                 setsetting('leaderboardtype',leadbutton-1)
@@ -230,21 +227,21 @@ def main(screen,w,h):
         pygame.draw.rect(screen,maincolour[0],pygame.Rect((380*pop)-420,h-170,380,110),border_top_right_radius=10,border_bottom_right_radius=10)
         #(340,h-160,90,40) ~ Placeholder
         # This will be here for now, it WILL get better and more optimized over time
-        t=(20,20,120,120,220,320,420,480)
         tm=[]
-        for b in range(1,len(t)+1): # Ewwwwwww
+        for b in range(1,len(modspos)+1): # Ewwwwwww
             if (b == 2 and modsen[2]) or (b == 3 and modsen[1]):
                 tm.append(-999)
             else:
-                tm.append(t[b-1])
+                tm.append(modspos[b-1])
         mod,modh=renderapi.draw_button(screen,((tm[0]+(100*pop)-110,h-160,90,40) ,(tm[1]+(100*pop)-110,h-110,90,40) ,(tm[2]+(200*pop)-210,h-160,90,40) ,(tm[3]+(200*pop)-210,h-110,90,40) ,(tm[4]+(300*pop)-310,h-160,90,40)),modsalias,return_hover=1,enabled_button=modsen)
         from data.modules.onlineapi import issigned
         if issigned:
-            pygame.draw.rect(screen,songselectcolour,(w//2-80,h-60,300,60))
-            card(screen,(w//2-80,h-55),hidebg=1,overidecolour=(100,100,100),mini=1,accuracy=getmystats()[0],points=getmystats()[1],rank=getmystats()[2],username=getsetting('username'))
+#            pygame.draw.rect(screen,songselectcolour,(w//2-80,h-60,300,60))
+            stats = getmystats()
+            card(screen,(w//2-80,h-55),hidebg=1,overidecolour=(100,100,100),mini=1,accuracy=stats[0],points=stats[1],rank=stats[2],username=getsetting('username'))
         
         
-        if  beatcount:
+        if beatcount:
             title = get_info('songtitle')
             gobutton = renderapi.draw_button(screen,((w-120,h-80,130,90),),('',),border_radius=10,icon=(starticon,),hidetext=1)
         else:
@@ -253,23 +250,12 @@ def main(screen,w,h):
         button = button = renderapi.draw_button(screen,((0,h-60,100,60),(100,h-60,100,60),(200,h,100,60),),('Back',modtext,'Quest'),border_radius=0)
         tmp = renderapi.getfonts(0).render(title,True,(255,255,255))
         screen.blit(tmp,(20,20))
-        #screen.blit(renderapi.getfonts(1).render(str(obj)+' out of '+str((id,oid))+' Objects ('+str(pos)+' pos)',True,(255,255,255)),(10,10))
+        screen.blit(renderapi.getfonts(1).render(str(obj)+' out of '+str((id,oid))+' Objects ('+str(pos)+' pos)',True,(255,255,255)),(10,10))
         
 
 # MSG tooltip
-        if modh==0:
-            setmsg('View a perfect play (0)')
-        elif modh==1:
-            setmsg("Beat to the rhythm (+1.5)")
-        elif modh==2:
-            setmsg('Half blind (+0.5)')
-        elif modh==3:
-            setmsg("makes everything easy (/0.5)")
-        elif modh==4:
-            setmsg('You have to aim your hits right! (+0.8)')
-        elif modh==5:
-            setmsg('We be easy on you (/0.5)')
-
+        if not modh == -1:
+            setmsg(msgtip[modh])
 
 
 
@@ -319,7 +305,7 @@ def main(screen,w,h):
                     altbutton=0
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_END and len(beatmaplist):
-                    i=(beatmaplist,eval(diffs))
+                    i=(beatmaplist,diffs)
                     selected[diffsec]=len(i[diffsec])-1
                     prepare(selected[diffsec],reloadmusic=not diffsec,getranky=not diffsec)
                     resetdcursor()
@@ -386,9 +372,14 @@ def getmaxpoints():
     return maxpoints      
 def reloadpoints():
     global maxpoints
-    maxpoints = int(getpoint(len(getobjects()),0,0,0,1,len(getobjects()),int)*getmult())
+    ob = getobjects()
+    if not ob:
+        ob = 0
+    else:
+        ob = len(ob)
+    maxpoints = int(getpoint(ob,0,0,0,1,ob,int)*getmult())
 def prepare(buttonid,reloadmusic=True,reloadleaderboard=True,getranky=False):
-    global selected,starrating,maxpoints
+    global selected,starrating,maxpoints,diffs,starratings
     from data.modules.beatmap_processor import beatmaplist
     reset_score()
     selected[diffsec]=buttonid
@@ -396,16 +387,18 @@ def prepare(buttonid,reloadmusic=True,reloadleaderboard=True,getranky=False):
         selected[1]=0
         cross[1]=0
     selid=0
-    if get_info('maps'):
-        if selected[1]<=len(get_info('maps')):
-            selid=selected[1]
-        diff=get_info('maps')[selid]
-        acc=1
-    else:
-        acc=0
     selectedqueue = beatmaplist[selected[0]]['songtitle'],beatmaplist[selected[0]]['raw'],beatmaplist[selected[0]]['audiofile'],eval(beatmaplist[selected[0]]['diffurl'])[selid]
     cache_beatmap(selected[0])
     resetcursor()
+    diffs=eval(get_info('maps'))
+    starratings = eval(get_info('starratings'))
+    if diffs:
+        if selected[1]<=len(diffs):
+            selid=selected[1]
+        diff=diffs[selid]
+        acc=1
+    else:
+        acc=0
     mod=selectedqueue[0].replace(' [no video]','')
     reloadbg(gamepath+selectedqueue[1]+'/'+selectedqueue[3],gamepath+selectedqueue[1]+'/')
     if reloadleaderboard:

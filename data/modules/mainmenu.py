@@ -59,14 +59,14 @@ def main(screen,w,h):
             bladeani[0].start()    
         bladeani[0].update()
         mouse=pygame.mouse.get_pos()
-        parallax=((mouse[0]/w)*10)-5,((mouse[1]/h)*10)-5
-        parallax=(-5-parallax[0],-5-parallax[1])
+        parallax = (mouse[0]/w*10)-5, (mouse[1]/h*10)-5
         bgs=getbackground(w,h)
         if getsetting('bgmm') and bgs and len(beatmaplist):
             bg.blit(bgs,parallax)
         else:
             bg.fill((maincolour[0][0],maincolour[0][1],maincolour[0][2]))
-        screen.blits(((bg,(0,0)),(flashscr,(0,0))))
+        #screen.blits(((bg,(0,0)),(flashscr,(0,0))))
+        screen.blit(bg,(0,0))
         micon='logomini.png','edit.png','browse.png','exit.png'
         if version()=='0.0.0':
             gameverstr=''
@@ -83,10 +83,12 @@ def main(screen,w,h):
         mmenu=[]
         notice=getnotice()
         if notice!='':
-            tmp = getfonts(0).render(notice,  True,  (0,0,0))
-            txtrect=tmp.get_rect()
-            pygame.draw.rect(screen,maincolour[1],pygame.Rect(w//2-(txtrect[2]//2)-10-parallax[0],h//2-170-parallax[1],txtrect[2]+20,50),border_radius=10)
-            center_text(screen,notice,(w//2-(txtrect[2]//2)-10-parallax[0],h//2-170-parallax[1],txtrect[2]+20,50),'',(255,255,255))
+            #tmp = getfonts(0).render(notice,  True,  (0,0,0))
+            #txtrect=tmp.get_rect()
+            #pygame.draw.rect(screen,maincolour[1],pygame.Rect(w//2-(txtrect[2]//2)-10-parallax[0],h//2-170-parallax[1],txtrect[2]+20,50),border_radius=10)
+            pygame.draw.rect(screen,(maincolour[1]),(0,h//2-90-parallax[1],w+10,32))
+            #screen.blit(getfonts(0).render(notice,True,(255,255,255)),(10-parallax[0],h//2-85-parallax[1]))
+            center_text(screen,notice,(10-parallax[0],h//2-90-parallax[1],w+10,30),'',(255,255,255))
         if getsigned():
             card(screen,(w//2-150-parallax[0],h//2+120-parallax[1]),accuracy=getmystats()[0],points=getmystats()[1],rank=getmystats()[2],score=getmystats()[3],level=getmystats()[4],username=getsetting('username'))
         mmenu = ((fmove[a-1]+(bla-parallax[0]+(w//2-((wid*scale)*(len(mtext[meid])/2))+((wid*scale)*(a-1))))-(moveid[a-1]//2)-pmove[a-1],h//2-(75*scale)-parallax[1],(wid*scale)+moveid[a-1],hei*scale) for a in range(1,len(mtext[meid])+1))
