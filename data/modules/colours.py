@@ -8,6 +8,8 @@ scrollfront=(255,255,255)
 scrollback=(50,50,50)
 rankcolour=(145, 144, 64),(83, 88, 148),(148, 114, 83),(163, 72, 81),(42, 135, 34)
 shopscheme = (112, 73, 140)
+volcolour = 168, 232, 255
+volback = 60,60,100
 applicable_colours = [a for a in globals()][8:]
 def setcolour(base,val): # Skin purpose!!
     global shopscheme,scrollback,scrollfront,mapidlecolour,mapselectetopbarcolour,songselectcolour,emblemcolour,maincolour,topbarcolour
