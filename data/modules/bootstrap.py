@@ -92,7 +92,6 @@ def reloadimg(): # This reloads the images from the game
             custom=1
             for a in open(currentskin+'skin.cfg').read().split('\n'):                
                 entry=a.split(':')
-                print(entry)
                 if entry[0] in applicable_colours:
                     setcolour(entry[0],entry[1])
 #                if entry[0]=='colour':
