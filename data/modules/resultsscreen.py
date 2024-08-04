@@ -2,7 +2,6 @@ import pygame
 from data.modules.bootstrap import getactivity,transitionprep
 from data.modules.renderapi import draw_button,center_text,getfonts
 from data.modules.songselect import getmaxpoints,getmult
-from data.modules.colours import maincolour
 from data.modules.settings import getsetting
 
 gradecolour=(114, 180, 181),(114, 142, 179),(105, 173, 99),(113, 85, 173),(173, 136, 61),(168, 70, 50),(20,20,20)
@@ -11,6 +10,7 @@ replaymen=0
 resulttxt='Ranking','Performance','Accuracy','Ranked Score'
 def beatres(screen,w,h):
     if getactivity()==9 or testing:
+        from data.modules.colours import maincolour
         from data.modules.gameplay import points,accuracy,hits
         from data.modules.onlineapi import oldstats,issubmiting,level,totacc,totrank,totperf,totscore,prevrank
         screen.fill(maincolour[0])

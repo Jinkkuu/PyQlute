@@ -1,6 +1,5 @@
 from data.modules.bootstrap import getactivity,setactivity,getimg,clockify
 import pygame
-from data.modules.colours import maincolour
 from data.modules.renderapi import getfonts,draw_button
 from data.modules.gameplay import showplayfield,pos
 from data.modules.input import get_input
@@ -8,6 +7,7 @@ edittmp=[]
 editmode=1
 ti=0
 def editmenu(screen,w,h):
+    from data.modules.colours import maincolour
     global ti
     if getactivity() == 3:
         mouse=pygame.mouse.get_pos()

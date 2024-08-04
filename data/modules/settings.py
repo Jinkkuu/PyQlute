@@ -1,7 +1,6 @@
 from data.modules.bootstrap import getuserdata,getactivity,setmsg,transitionprep,gamever,gamename,notification
 from data.modules.beatmap_processor import recalculate
 from data.modules.renderapi import getfonts,draw_button
-from data.modules.colours import maincolour
 from data.modules.input import get_input
 from tweener import *
 import json,os,pygame
@@ -80,6 +79,7 @@ def chkset():
 def controlsetup(screen,w,h):
     global sysbutton,cset
     if getactivity()==13:
+        from data.modules.colours import maincolour
         pygame.draw.rect(screen,(42,40,95),pygame.Rect(0,0,w,h))
         pygame.draw.rect(screen,maincolour[0],pygame.Rect(0,h-60,w,60))
         screen.blit(getfonts(2).render('Controls',True,(255,255,255)),(20,20))
@@ -91,6 +91,7 @@ obut=0
 setani=Tween(begin=0, end=0,duration=350,easing=Easing.CUBIC,easing_mode=EasingMode.OUT)
 setani.start()
 settingscroll=0
+skinscroll = 0
 clickcol=(10,10,10),(150,150,255)
 def checkbutton(screen,buttonpos,buttontext,buttonticked,title='Test'):
     screen.blit(getfonts(0).render(title,True,(210, 158, 255)),(10,buttonpos[0][1]-40))
@@ -139,6 +140,41 @@ def togset():
     setani=Tween(begin=setshow, end=not setshow,duration=200,easing=Easing.CUBIC,easing_mode=EasingMode.OUT)
     setani.start()
     setshow=not setshow
+def customization(screen,w,h):
+    global sysbutton,skinbutton
+    if getactivity()==14:
+        from data.modules.colours import maincolour
+        from data.modules.gameplay import showplayfield,notecolour
+        from data.modules.bootstrap import getimg,reloadimg,skins,skinid,setskinid
+        from data.modules.renderapi import draw_button,getfonts
+        sb=[]
+        pygame.draw.rect(screen,maincolour[0], (0,0,w,h))
+        for a in range(1,len(skins)+1):
+            sb.append((400*((w/800)-1),skinscroll+100+(80*(a-1)),400,80))
+        skinbutton = draw_button(screen,sb,(skins),border_radius=0,selected_button=skinid)
+        pygame.draw.rect(screen,(20,20,20), (w-400,100,400,h-100))
+        pygame.draw.rect(screen,(255,255,255), (w-380,110,200,10))
+        showplayfield(screen,(w-200,-30))
+        bar=getimg('note.png')
+        if bar:
+            keyoffset=bar.get_rect()[3]
+            screen.blit(bar,(w-400,320-keyoffset))
+            screen.blit(bar,(w-400+200,250-keyoffset))
+        else:
+            pygame.draw.rect(screen,notecolour[0],(w-400,290,100,30))
+            pygame.draw.rect(screen,notecolour[0],(w-200,250,100,30))
+        pygame.draw.rect(screen,maincolour[1], (0,h-60,w,60))
+        pygame.draw.rect(screen,maincolour[1], (0,0,w,100))
+        screen.blit(getfonts(2).render('Skinning',1,(255,255,255)),offset)
+        if sysbutton == 1:
+            transitionprep(1)
+        elif sysbutton == 2:
+            setskinid(0)
+        elif skinbutton:
+            setskinid(skinbutton)
+#        if len(sb):
+#            scrollbar((0,100),(10,h-160),search=shopscroll//80,length=len(sb),colour=hcol[0])
+        sysbutton = draw_button(screen,((0,h-60,100,60),(100,h-60,100,60),),('Back','Defaults'),border_radius=0)
 def settingspage(screen,w,h):
     global setupid,fpsmode,setbutton,catbutton,ctrl,obut,setshow,setani,settingscroll,setpage,sh,sw,blackout,sysbutton
     setani.update()
@@ -202,6 +238,9 @@ def settingspage(screen,w,h):
                         settingskeystore['sreplay']=not settingskeystore['sreplay']
                     elif bootid == 3:
                         settingskeystore['discordrpc']=not settingskeystore['discordrpc']
+                    elif bootid == 4:
+                        transitionprep(14)
+                        togset()
                     elif bootid == 5:
                         settingskeystore['hitsound'] = not settingskeystore['hitsound']
                     elif bootid  ==  6:

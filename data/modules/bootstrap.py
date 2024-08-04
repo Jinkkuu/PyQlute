@@ -8,7 +8,6 @@ gameeditions='stable','beta','canary','dev'
 gameauthor='Jinkku'
 from tweener import *
 import os,pygame,zipfile,time,gc
-from data.modules.colours import maincolour,scrollfront,scrollback
 gc.enable()
 def resource_path(relative_path):
     from os.path import abspath, join
@@ -64,13 +63,53 @@ def getname():
     return gamename,gameedition
 def version():
     return gamever,gamever.split('.')
+def setskinid(id):
+    global skinid
+    from data.modules.settings import setsetting
+    skinid = id
+    if id:
+        setsetting('skin',skins[id-1])
+    else:
+        setsetting('skin',None)
+    reloadimg()
 def reloadimg(): # This reloads the images from the game
+    global skins,skinid,img
     import os
     import pygame.image
+    from data.modules.settings import getsetting
+    icons={}
+    skins=[]
+    skinid=0
+    custom = 0
+    for a in os.listdir(skinpath):
+        if os.path.isdir(skinpath+a):
+            skins.append(a)
+    if getsetting('skin') and getsetting('skin') in skins:
+        currentskin=skinpath+getsetting('skin')+'/'
+        skinid=skins.index(getsetting('skin'))+1
+        if os.path.isfile(currentskin+'skin.cfg'):
+            from data.modules.colours import setcolour,applicable_colours
+            custom=1
+            for a in open(currentskin+'skin.cfg').read().split('\n'):                
+                entry=a.split(':')
+                print(entry)
+                if entry[0] in applicable_colours:
+                    setcolour(entry[0],entry[1])
+#                if entry[0]=='colour':
+#                    setcolour(entry[0],)
+#                    hcol=eval(entry[1])
+    else:
+        currentskin=None
     img={}
-    for a in os.listdir(getsysdata()+'images/'):
-        img[a]=pygame.image.load(getsysdata()+'images/'+a).convert_alpha()
-    return img
+    for pa in (resource_path(getsysdata()+'images/'),currentskin):
+        if pa:
+            for a in os.listdir(pa):
+                try:
+                    if os.path.isfile(pa+a) and not a.endswith('.cfg'):
+                        img[a]=pygame.image.load(pa+a).convert_alpha() # Icons!
+                except Exception as err:
+                    print(a,err)
+                    pass
 def timeform(t):
     if t==None:
         return 'Never Played'
@@ -153,6 +192,7 @@ def sify(val1,val2):
 def getcopyrighttext():
     return gameauthor+' 2023-2024'
 def scrollbar(screen,startpos,endsize,search=3,length=5,colour=None):
+    from data.modules.colours import scrollfront,scrollback
     barheight=150
     if not colour:
         colour=scrollfront
@@ -171,6 +211,7 @@ vol=100
 volvisual=0
 def volchg(t):
     global vol,voltime,volani
+    from data.modules.colours import maincolour
     from data.modules.settings import setsetting
     voltime=time.time()+1
     step=5
@@ -217,7 +258,7 @@ def main():
     fps=1
     fpsl=[]
     upl=[]
-    img=reloadimg()
+    reloadimg()
     threading.Thread(target=check_gameversion).start()
     threading.Thread(target=ondemand).start()
     seeyanexttimetext = renderapi.getfonts(2).render('See you next time~',True,(255,255,255))
@@ -232,6 +273,7 @@ def main():
     volani=Tween(begin=volvisual, end=vol,duration=250,easing=Easing.CUBIC,easing_mode=EasingMode.OUT)
     volani.start()
     while 1:
+        from data.modules.colours import maincolour
         upd=time.time()
         poll()
         for a in os.listdir(downpath):
@@ -271,6 +313,9 @@ def main():
                 elif event.key == pygame.K_F10:
                     title,desc = rndmsg()
                     notification(title,desc=desc)
+                elif event.key  ==  pygame.K_F3:
+                    notification('Reloaded',desc='Reloaded sprites for you!')
+                    reloadimg()
                 elif event.key == pygame.K_F12:
                     sub = screen.subsurface(pygame.Rect(0,0,w,h))
                     scid=settings.getsetting('screenshot_id')
@@ -296,6 +341,7 @@ def main():
         shopdirect(screen,w,h)
         downloads(screen,w,h)
         loginscreen(screen,w,h)
+        settings.customization(screen,w,h)
         settings.settingspage(screen,w,h)
         if activity==-1:
             stopnow()

@@ -10,7 +10,6 @@ from data.modules.onlineapi import getmystats,getsigned,getnotice
 from tweener import *
 import pygame,sys
 from random import randint
-from data.modules.colours import *
 meid=0
 wid=180
 hei=149
@@ -55,6 +54,7 @@ def main(screen,w,h):
     elif settingskeystore['effects'] and getactivity() == 1:
         bg.set_alpha(235+(20*flashylights))
     if getactivity()==1:
+        from data.modules.colours import maincolour, topbarcolour
         screen.fill((bgcolour,bgcolour,bgcolour))
         if not bladeani[1] and getactivity()==1:
             bladeani[1]=1
@@ -94,7 +94,7 @@ def main(screen,w,h):
         if getsigned():
             card(screen,(w//2-150-parallax[0],h//2+120-parallax[1]),accuracy=getmystats()[0],points=getmystats()[1],rank=getmystats()[2],score=getmystats()[3],level=getmystats()[4],username=getsetting('username'))
         mmenu = ((fmove[a-1]+(bla-parallax[0]+(w//2-((wid*scale)*(len(mtext[meid])/2))+((wid*scale)*(a-1))))-(moveid[a-1]//2)-pmove[a-1],h//2-(75*scale)-parallax[1],(wid*scale)+moveid[a-1],hei*scale) for a in range(1,len(mtext[meid])+1))
-        drawRhomboid(screen,dcolour,bla-25-parallax[0],h//2-(76*scale)+1-parallax[1],w+80,hei*scale,26)
+        drawRhomboid(screen,topbarcolour,bla-25-parallax[0],h//2-(76*scale)+1-parallax[1],w+80,hei*scale,26)
         tmenu=((w-(40*a),0,40,40) for a in range(1,4))
         button, highlight=draw_button(screen,mmenu,mtext[meid],isblade=1,return_hover=1,icon=micon,textoffset=(-10,25),iconoffset=(-7,-10))
         topbutton=draw_button(screen,tmenu,'',hidetext=1,icon=('settings.png','user.png','download.png'),border_radius=0)

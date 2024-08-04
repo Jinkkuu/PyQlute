@@ -2,7 +2,6 @@ import pygame.gfxdraw,time,threading,os
 import data.modules.renderapi as renderapi
 from data.modules.bootstrap import getactivity,setactivity,transitionprep,gamepath,sify,clockify,scrollbar,getact,getimg,setmsg,timeform,getuserdata
 from data.modules.beatmap_processor import get_info,cache_beatmap,grabobjects,getobjects,random_beatmap,reloadbg,getbackground,loadstats,beatmaplist,getkeycount,suna
-from data.modules.colours import maincolour,emblemcolour,songselectcolour,mapidlecolour,mapselectedcolour
 from data.modules.audio import load_music,music_control,set_gametime
 from data.modules.input import get_input
 from data.modules.gameplay import resetcursor,reset_score,getpoint
@@ -44,6 +43,7 @@ def getmult():
     return scoremult
 def get_mods(screen,bpos):
     global mods
+    from data.modules.colours import emblemcolour
     b=0
     tap=0
     mods=''
@@ -79,6 +79,7 @@ def main(screen,w,h):
     elif getsetting('leaderboard') and len(beatmaplist):
         lpanel.fill((0,0,0))
     if getactivity() == 2:
+        from data.modules.colours import maincolour,emblemcolour,songselectcolour,mapidlecolour,mapselectetopbarcolour
         if olds!=(w,h):
             olds=w,h
         mouse=pygame.mouse.get_pos()
@@ -125,13 +126,13 @@ def main(screen,w,h):
                         buttonid=id
                         click=1
                         if id==selected[diffsec]:
-                            col = mapselectedcolour
+                            col = mapselectetopbarcolour
                         else:
                             col=(mapidlecolour[0]+hover,mapidlecolour[1]+hover,mapidlecolour[2]+hover)
                     else:
                         hover=0
                         if id==selected[diffsec]:
-                            col = mapselectedcolour
+                            col = mapselectetopbarcolour
                         else:
                             col=mapidlecolour
                     scr=pygame.surface.Surface((w//2,80))

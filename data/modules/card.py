@@ -1,7 +1,8 @@
 import pygame,time,sys
 from data.modules.renderapi import getfonts
-from data.modules.colours import maincolour,rankcolour
+from data.modules.colours import rankcolour
 def main(screen,pos,points=0,score=0,overidecolour=0,hidebg=0,level=0,rank=0,accuracy=69,username=None,mini=False):
+    from data.modules.colours import maincolour
     ticker=time.time()
     p=points
     r=rank

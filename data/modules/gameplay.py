@@ -1,6 +1,5 @@
 
 from data.modules.input import get_input
-from data.modules.colours import maincolour
 from data.modules.settings import getsetting,setsetting
 from data.modules.audio import load_music,get_pos,music_control
 from data.modules.beatmap_processor import get_info,getobjects,getpoint,getkeycount,getkeypos,gettiming
@@ -117,6 +116,7 @@ def resetcursor():
 def main(screen,w,h):
     global objecon, points,combo,maxcombo,hits,clickedkeys,judgewindow, ncombo,keyslight,keys , combotime,accuracy,health,score,kiai,timestep
     if getactivity() == 5:
+        from data.modules.colours import maincolour
         score.update()
         tick=time.time()
         from data.modules.mainmenu import flashylights

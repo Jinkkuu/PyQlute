@@ -1,7 +1,6 @@
 import threading,pygame,io,requests,json
 from data.modules.bootstrap import getactivity,transitionprep,scrollbar,notification,clockify
 from data.modules.beatmap_processor import getpoint,rankmodes
-from data.modules.colours import maincolour,shopscheme
 from data.modules.input import get_input
 from data.modules.onlineapi import downloadmap,getqueue
 from data.modules.renderapi import getfonts,draw_button,textbox,center_text
@@ -93,6 +92,7 @@ def dimcolour(base,dimness):
 def downloads(screen,w,h):
     global sysbutton,dq,dqs,serr,shopscroll
     if getactivity()==8:
+        from data.modules.colours import maincolour
         dq=[]
         dqu=[]
         dqh=''
@@ -122,6 +122,7 @@ def downloads(screen,w,h):
 def shopdirect(screen,w,h):
     global shopref,sysbutton,shopbutton,serr,shopbutton2,usecache,shopscroll,sbid,sbt,srank,search
     if getactivity()==4:
+        from data.modules.colours import shopscheme,maincolour
         if shopref or serr:
             threading.Thread(target=shop_refresh, args=(usecache,)).start()
             shopref=0

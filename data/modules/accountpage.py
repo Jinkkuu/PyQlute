@@ -1,6 +1,5 @@
 from data.modules.onlineapi import restrictedmsg,togsign,rsus,reloadprofile
 from data.modules.input import get_input
-from data.modules.colours import maincolour
 from data.modules.renderapi import getfonts,draw_button,textbox
 from data.modules.bootstrap import getactivity,transitionprep,notification
 from data.modules.settings import getsetting,setsetting
@@ -14,6 +13,7 @@ usrtxt=getfonts(0).render('Username:',True,(255,255,255)) , getfonts(0).render('
 def loginscreen(screen,w,h):
     global sysbutton,l,logbutton,logintext,textboxid
     from data.modules.onlineapi import restricted,issigned
+    from data.modules.colours import maincolour
     if getactivity()==7:
         pygame.draw.rect(screen,(20,20,20),(0,0,w,h))
         pygame.draw.rect(screen,maincolour[2],(0,h-60,w,60))

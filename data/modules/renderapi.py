@@ -1,6 +1,5 @@
 import pygame, pygame.gfxdraw
 from data.modules.bootstrap import getimg
-from data.modules.colours import maincolour
 from tweener import *
 mainmenucolor=(67, 124, 191),(92, 90, 145),(179, 72, 62)
 def initscreen(): # Initialize the screen
@@ -38,6 +37,7 @@ def textbox(screen,pos,size,text='',center=False,min=False,border_colour=(255,25
     
 def draw_button(surface,buttonpos,buttontext,theme=None,enabled_button=[],fonttype=0,selected_button=None,textoffset=(0,0),iconoffset=(0,0),icon=None, isblade=0,border_radius=10,hidetext=0,return_hover=0): # Draws the buttons on the screen and returns a value if it gotten clicked
     from data.modules.input import get_input
+    from data.modules.colours import maincolour
     id=1
     clicked=0
     hoverid=-1
