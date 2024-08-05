@@ -49,7 +49,7 @@ def loadstats(file,find=0):
 def get_creation_time(item):
     item_path = os.path.join(gamepath, item)
     return os.path.getctime(item_path)
-def addbeatmap(value,save=False):
+def addbeatmap(value,save=False,reloadlive=False):
     global beatmaplist,cache
     difficulties=[]
     starratings=[]
@@ -120,16 +120,20 @@ def addbeatmap(value,save=False):
                 metadata[c]=None
         id+=1
     beatmaplocalapi.execute("INSERT INTO beatmaps (raw,artist,title,creator,beatmapsetid,songtitle,audiofile,maps,diffurl,starratings,beatmapids,bpm,lengths) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",(metadata['raw'],metadata['artist'],metadata['title'],metadata['creator'],metadata['beatmapsetid'],metadata['songtitle'],metadata['audiofile'],metadata['maps'],metadata['diffurl'],metadata['starratings'],metadata['beatmapids'],metadata['bpm'],metadata['lengths']))
-    if save:
+    if save or reloadlive:
         beatmaps.commit()
         beatmaplist=beatmaplocalapi.execute("SELECT * FROM beatmaps;").fetchall()
 def recalculate():
     print('Recalculating..')
+    import threading
+    from data.modules.bootstrap import notification
     beatmaplocalapi.execute('DROP TABLE beatmaps')
-    reloadbeatmaps()
-def reloadbeatmaps():
+    threading.Thread(target=reloadbeatmaps,args=(True,)).start()
+    notification('Recalculation',desc='The game is recalculating, Please wait...')
+def reloadbeatmaps(shownotification=False):
     global beatmaplist,beatmaps,beatmaplocalapi
-    beatmaps = sqlite3.connect(getuserdata()+'qlute.db')
+    from data.modules.bootstrap import notification
+    beatmaps = sqlite3.connect(getuserdata()+'qlute.db', check_same_thread=False)
     beatmaps.row_factory = sqlite3.Row
     beatmaplocalapi = beatmaps.cursor()
     for a in oldnames:
@@ -139,9 +143,11 @@ def reloadbeatmaps():
         beatmaplocalapi.execute("CREATE TABLE beatmaps(raw,artist,title,creator,beatmapsetid INT,songtitle,audiofile,maps,diffurl,starratings,beatmapids,bpm INT,lengths)")
         for a in sorted(os.listdir(gamepath), key=get_creation_time):
             if not a.endswith('.tmp'):
-                addbeatmap(a)
+                addbeatmap(a,reloadlive=shownotification)
         beatmaps.commit()
         beatmaplist=beatmaplocalapi.execute("SELECT * FROM beatmaps;").fetchall()
+        if shownotification:
+            notification('Recalculation',desc='Recalculation is complete!')
     else:
         try:
             uhohmusic=0

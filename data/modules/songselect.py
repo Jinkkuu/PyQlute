@@ -318,7 +318,7 @@ def main(screen,w,h):
                 elif event.key == pygame.K_LALT:
                     altbutton=1
                 elif event.key == pygame.K_RETURN and len(beatmaplist):
-                    if not diffsec and len(eval(diffs))>1:
+                    if not diffsec and len(diffs)>1:
                         diffsec = not diffsec
                     else:
                         transitionprep(5)

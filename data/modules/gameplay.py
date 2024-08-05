@@ -49,9 +49,11 @@ def iscatched(block,isauto,ob,h):
     return (lastcall,tick,tim)
 
 def reset_score():
-    global points,combo,ncombo,maxcombo,hits,clickedkeys, ncombo,keys, combotime, accuracy, timetaken,health,keyslight,firstrow,score,kiai,timestep
+    global points,combo,ncombo,maxcombo,hits,clickedkeys,newpoints,notetime, ncombo,keys, combotime, accuracy, timetaken,health,keyslight,firstrow,score,kiai,timestep
     keyslight = [Tween(begin=0) for a in range(0,getkeycount())]
     points = 0
+    newpoints = 0
+    notetime = time.time()
     health = 10
     timetaken = time.time()
     ob=getobjects()
@@ -114,7 +116,7 @@ def resetcursor():
     global objecon
     objecon = 0
 def main(screen,w,h):
-    global objecon, points,combo,maxcombo,hits,clickedkeys,judgewindow, ncombo,keyslight,keys , combotime,accuracy,health,score,kiai,timestep
+    global objecon, points,combo,maxcombo,hits,clickedkeys,judgewindow,notetime, ncombo,keyslight,keys , combotime,accuracy,health,score,kiai,timestep, newpoints
     if getactivity() == 5:
         from data.modules.colours import maincolour
         score.update()
@@ -196,6 +198,15 @@ def main(screen,w,h):
                         if maxpoints:
                             score=Tween(begin=score.value,end=int((points/maxpoints)*(1000000*getmult())),duration=150)
                             score.start()
+                        formulated = (1-(time.time()-notetime))*(combo//100+1)
+                        if formulated < 0:
+                            formulated = 0
+                        #print(formulated,newpoints)
+                        if judge[1] != 3:
+                            newpoints+=formulated
+                        elif judge[1] == 3:
+                            newpoints-=formulated
+                        notetime=time.time()
                         hit=judge[1]
                         keys[ob[1]]=0
                         if objecon+obid-1 < len(clickedkeys):
@@ -294,6 +305,7 @@ def main(screen,w,h):
             renderapi.center_text(screen,format(end,','),(w//2-200,30,401,60),'score',(255,255,255))
             renderapi.center_text(screen,str(accuracy)+'% ',(w//2-200,85,200,20),'',(255,255,255))
             renderapi.center_text(screen,format(int(points),',')+'pp',(w//2,85,200,20),'',(255,255,255))
+#            screen.blit(renderapi.getfonts(0).render('ppv2 - '+format(round(newpoints,2),','),1,(255,255,255)),(20,h-100))
             tmp=(health/100)*400
             if tmp<0:
                 tmp=0

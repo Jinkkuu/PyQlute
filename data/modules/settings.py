@@ -262,7 +262,6 @@ def settingspage(screen,w,h):
                         settingskeystore['fpsmetre']=not settingskeystore['fpsmetre']
                     elif bootid == 12:
                         recalculate()
-                        notification('Recalculation',desc='Recalculation is complete!')
                     if bootid:
                         reloadsettings()
                 else:
