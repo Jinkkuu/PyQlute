@@ -159,7 +159,7 @@ def main(screen,w,h):
             else:
                 starticon='go.png'
             scrollbar(screen,(w-10,60),(10,h-140),search=cross[diffsec]/80,length=len(i[diffsec]))
-        pygame.draw.polygon(screen,songselectcolour,((w,h),(0,h),(0,0),(w,0),(w,60),(300,60),(300,h-60),(w,h-60)))
+        pygame.draw.polygon(screen,songselectcolour,((w,h),(0,h),(0,0),(w,0),(w,60),(300,60),(300,160),(0,160),(0,h-60),(w,h-60)))
         if beatcount:
             t=renderapi.getfonts(0).render(rankmodes[ranktype][0],True,(255,255,255))
             rtl=t.get_rect()
