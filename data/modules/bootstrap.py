@@ -315,7 +315,7 @@ def main():
                 elif event.key == pygame.K_F10:
                     title,desc = rndmsg()
                     notification(title,desc=desc)
-                elif event.key  ==  pygame.K_F3:
+                elif event.key  ==  pygame.K_F6:
                     notification('Reloaded',desc='Reloaded sprites for you!')
                     reloadimg()
                 elif event.key == pygame.K_F12:
