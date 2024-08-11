@@ -179,9 +179,9 @@ def shopdirect(screen,w,h):
             rank=getrank(entry['RankedStatus'])
             pygame.draw.rect(screen,dimcolour(shopscheme,70),(w-400+25,120,350,180))
             screen.blit(bgs,(w-400+25,120))
-            screen.blit(getfonts(0).render('Title: '+entry['Title'],True,(255,255,255)),(w-400+25,340))
-            screen.blit(getfonts(0).render('Artist: '+entry['Artist'],True,(255,255,255)),(w-400+25,370))
-            screen.blit(getfonts(0).render('Created by: '+entry['Creator'],True,(255,255,255)),(w-400+25,400))
+            screen.blit(getfonts(1).render('Title: '+entry['Title'],True,(255,255,255)),(w-400+25,340))
+            screen.blit(getfonts(1).render('Artist: '+entry['Artist'],True,(255,255,255)),(w-400+25,360))
+            screen.blit(getfonts(1).render('Created by '+entry['Creator'],True,(255,255,255)),(w-400+25,380))
             if entry['ChildrenBeatmaps'][0]['MaxCombo']:
                 com=entry['ChildrenBeatmaps'][0]['MaxCombo']
             else:
