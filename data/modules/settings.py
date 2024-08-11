@@ -267,7 +267,7 @@ def settingspage(screen,w,h):
                 else:
                     suck+=len(tmpt)
                     suckt+=1
-        sysbutton=draw_button(setpage,((10,h-70,100,60),),('Back',),border_radius=10)
+        sysbutton=draw_button(setpage,((0,h-60,100,60),),('Back',),border_radius=0)
 
         screen.blit(blackout,(0,0))
         screen.blit(setpage,(-400+(400*setani.value),0))
