@@ -2,13 +2,18 @@ import pygame, pygame.gfxdraw
 from data.modules.bootstrap import getimg
 from tweener import *
 mainmenucolor=(67, 124, 191),(92, 90, 145),(179, 72, 62)
+refreshrate = 60
 def initscreen(): # Initialize the screen
+    global refreshrate
     from data.modules.bootstrap import resource_path,getsysdata,getname,version
     t=pygame.display.set_mode((800,600),pygame.RESIZABLE,vsync=0)
+    refreshrate = pygame.display.get_current_refresh_rate()
     name=getname()
     pygame.display.set_caption(f'{name[0]}/{name[1]} {version()[0]}')
     pygame.display.set_icon(pygame.image.load(getsysdata()+'icon.png'))
     return t
+def get_refreshrate():
+    return refreshrate
 def initfont():
     from data.modules.bootstrap import getsysdata,fontpath
     pygame.font.init()

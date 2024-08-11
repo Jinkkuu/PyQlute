@@ -291,8 +291,10 @@ def main():
                     os.remove(downpath+a)
             except Exception:
                 pass
-        if focused:
+        if focused and getactivity() == 5:
             disactivity=settings.getsetting('fps')
+        elif focused and not getactivity() == 5: # Other menus don't need full processing power
+            disactivity=renderapi.get_refreshrate()
         else:
             disactivity=30
         w=screen.get_width()
@@ -343,7 +345,7 @@ def main():
         shopdirect(screen,w,h)
         downloads(screen,w,h)
         loginscreen(screen,w,h)
-        settings.customization(screen,w,h)
+        settings.customization(screen,w,h)  
         settings.settingspage(screen,w,h)
         if activity==-1:
             stopnow()
