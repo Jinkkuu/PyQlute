@@ -5,7 +5,7 @@
 # Qlute
 ~ Your Keys/Your Rhythm ~
 
-[![CodeFactor](https://www.codefactor.io/repository/github/jinkkuu/pyqlute/badge/refurn-v3)](https://www.codefactor.io/repository/github/jinkkuu/pyqlute/overview/refurn-v3)
+[![CodeFactor](https://www.codefactor.io/repository/github/jinkkuu/qlute/badge/refurn-v3)](https://www.codefactor.io/repository/github/jinkkuu/qlute/overview/refurn-v3)
 # Downloads
 | [Windows 10+ (x64)](https://github.com/Jinkkuu/PyQlute/releases/latest/download/qlute.exe) | [Linux (x64)](https://github.com/Jinkkuu/PyQlute/releases/latest/download/qlute)   |
 |--------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
