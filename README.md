@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="300" alt="Qlute Logo" src="https://github.com/Jinkkuu/PyQlute/blob/6fbf9e57af58e4af38b8dfb37f0fef1acefaaeb9/assets/full-logo.png?raw=true">
+  <img width="300" alt="Qlute Logo" src="https://github.com/user-attachments/assets/054c298a-7379-4608-a615-15dc80dff883">
 </p>
 
 # Qlute
