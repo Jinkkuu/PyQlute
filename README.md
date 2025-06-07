@@ -2,10 +2,22 @@
   <img width="300" alt="Qlute Logo" src="https://github.com/user-attachments/assets/054c298a-7379-4608-a615-15dc80dff883">
 </p>
 
+> [!IMPORTANT]
+> (≧◡≦) ♡ **Important Update!** ♡ (≧◡≦)  
+> This repo — **[Jinkkuu/PyQlute](https://github.com/Jinkkuu/PyQlute)** — is now *retired*~ ✨💤  
+> But don’t worry! There’s a shiny new client ready for you:
+>  
+> 🌟 Please use **[Jinkkuu/Qlute](https://github.com/Jinkkuu/Qlute)** from now on! 🌟  
+> It’s faster, cleaner, and all-around better~ (๑˃ᴗ˂)ﻭ  
+>  
+> This repo will stay available for reference, but won’t receive any updates anymore (；ω；)  
+>  
+> Thank you for your support~! ♡
+
+Jinkkuu/PyQlute
 # Qlute
 ~ Your Keys/Your Rhythm ~
 
-[![CodeFactor](https://www.codefactor.io/repository/github/jinkkuu/qlute/badge/refurn-v3)](https://www.codefactor.io/repository/github/jinkkuu/qlute/overview/refurn-v3)
 # Downloads
 | [Windows 10+ (x64)](https://github.com/Jinkkuu/PyQlute/releases/latest/download/qlute.exe) | [Linux (x64)](https://github.com/Jinkkuu/PyQlute/releases/latest/download/qlute)   |
 |--------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
