@@ -14,7 +14,6 @@
 >  
 > Thank you for your support~! ♡
 
-Jinkkuu/PyQlute
 # Qlute
 ~ Your Keys/Your Rhythm ~
 
